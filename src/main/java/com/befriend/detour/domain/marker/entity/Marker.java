@@ -4,12 +4,8 @@ import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.place.entity.Place;
 import com.befriend.detour.global.entity.TimeStamped;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.awt.*;
 
 @Entity
 @Getter
@@ -22,12 +18,12 @@ public class Marker extends TimeStamped {
     private Long id;
 
     @Column(nullable = false)
-    private Long latitude;
+    private Double latitude;
 
     @Column(nullable = false)
-    private Long longitude;
+    private Double longitude;
 
-    @Column(nullable = false)
+    @Column
     private String content;
 
     @Column
@@ -41,7 +37,7 @@ public class Marker extends TimeStamped {
     @JoinColumn(name = "place_id", nullable = false)
     private Place place;
 
-    public Marker(Long latitude, Long longitude, String content, String images) {
+    public Marker(Double latitude, Double longitude, String content, String images) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.content = content;

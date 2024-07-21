@@ -20,6 +20,6 @@ public class DailyPlan {
     private Schedule schedule;
 
     @Column(nullable = false)
-    private Long index;
+    private Long idx;
 
 }

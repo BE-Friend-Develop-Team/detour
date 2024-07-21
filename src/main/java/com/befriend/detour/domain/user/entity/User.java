@@ -13,16 +13,30 @@ public class User extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private Long id;
 
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String loginId;
+
+    @Column
     private String kakaoId;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
     private String nickname;
+
+    @Column
     private String refreshToken;
+
+    @Column(nullable = false)
     private UserStatusEnum status;
+
+    @Column(nullable = false)
     private UserRoleEnum role;
 
 }

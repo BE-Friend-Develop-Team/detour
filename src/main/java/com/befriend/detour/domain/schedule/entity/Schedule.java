@@ -33,14 +33,14 @@ public class Schedule extends TimeStamped {
     @Column(nullable = false)
     private Long likeCount = 0L;
 
-    @OneToMany(mappedBy = "likes", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes;
 
-    @OneToMany(mappedBy = "daily_plans", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DailyPlan> dailyPlans;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public void addLikeCount() {
@@ -48,7 +48,7 @@ public class Schedule extends TimeStamped {
     }
 
     public void minusLikeCount() {
-        this.likeCount++;
+        this.likeCount--;
     }
 
 }

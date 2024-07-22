@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "loginId": "username1",
-  "password": "password1!"
+  "password": "Password1!"
 }
 
 > {%
@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
   "loginId": "username2",
-  "password": "password2!"
+  "password": "Password2!"
 }
 
 > {%

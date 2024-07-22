@@ -10,13 +10,12 @@ import lombok.Getter;
 public class SignupRequestDto {
 
     @NotBlank(message = "사용자 ID는 비워둘 수 없습니다.")
-    @Pattern(regexp = "^[a-z0-9]{4,10}$", message = "사용자 ID는 알파벳 소문자와 숫자로 이루어진 4자에서 10자 사이여야 합니다.")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{4,10}$", message = "사용자 ID는 알파벳 소문자와 숫자로 이루어진 4자에서 10자 사이여야 합니다.")
     private String loginId;
 
     @NotBlank(message = "비밀번호는 필수 입력 값 입니다.")
     @Size(min = 8, max = 15, message = "비밀번호는 8자 이상, 15자 이하여야 합니다.")
-    @Pattern(regexp = "(?=.*[a-zA-Z0-9])(?=.*[!@#$%^&*()_+=?<>{};:'/]).+", message = "비밀번호는 영문 대소문자와 숫자, 특수 문자로 이루어져야 합니다.")
-    @Size(min = 8, max = 12)
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_])\\S{10,}$", message = "password는 알파벳 대소문자(a~z, A~Z), 숫자(0~9), 특수문자로만 구성되어야 합니다.")
     private String password;
 
     @NotBlank(message = "email은 비워둘 수 없습니다.")

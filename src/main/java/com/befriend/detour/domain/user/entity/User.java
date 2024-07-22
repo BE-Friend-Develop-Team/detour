@@ -54,4 +54,8 @@ public class User extends TimeStamped {
         this.password = password;
     }
 
+    public void updateRefresh(String refresh) {
+        this.refreshToken = refresh;
+    }
+
 }

@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
   "loginId" : "username1",
-  "password" : "password1!",
+  "password" : "Password1!",
   "email" : "abc@naver.com",
-  "nickname" : "bro-진창",
+  "nickname" : "bro-진창1",
   "isAdmin" : false
 }
 
@@ -17,7 +17,7 @@ Content-Type: application/json
 
 {
   "loginId" : "username2",
-  "password" : "password2!",
+  "password" : "Password2!",
   "email" : "abcd@naver.com",
   "nickname" : "창봉",
   "isAdmin" : true,

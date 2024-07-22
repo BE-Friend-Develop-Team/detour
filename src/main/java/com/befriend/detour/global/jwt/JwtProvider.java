@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
@@ -29,7 +28,6 @@ public class JwtProvider {
     long refreshTokenExpiration;
 
     private static final String BEARER_PREFIX = "Bearer ";
-    private Key key;
 
 
     public JwtProvider(@Value("${jwt.secret.key}") String secretKey) {
@@ -152,7 +150,7 @@ public class JwtProvider {
 
     public Claims getClaimsFromToken(String token) {
 
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
     }
 
 }

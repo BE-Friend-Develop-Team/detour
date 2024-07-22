@@ -55,6 +55,13 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(signupRequestDto.getPassword());
 
         user.encryptionPassword(encodedPassword);
+
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void logout(User user) {
+        user.updateRefresh(null);
         userRepository.save(user);
     }
 

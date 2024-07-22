@@ -34,9 +34,11 @@ public class User extends TimeStamped {
     @Column
     private String refreshToken;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserStatusEnum status;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRoleEnum role;
 
@@ -49,7 +51,7 @@ public class User extends TimeStamped {
     }
 
     public void encryptionPassword(String password) {
-            this.password = password;
+        this.password = password;
     }
 
 }

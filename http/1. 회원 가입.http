@@ -16,7 +16,7 @@ POST http://localhost:8081/api/users/signup
 Content-Type: application/json
 
 {
-  "username" : "username2",
+  "loginId" : "username2",
   "password" : "password2!",
   "email" : "abcd@naver.com",
   "nickname" : "창봉",

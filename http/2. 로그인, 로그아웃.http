@@ -8,9 +8,8 @@ Content-Type: application/json
 }
 
 > {%
-    client.global.set("access_token", response.body.data.accessToken);
+    client.global.set("access_token", response.headers.valueOf("Authorization"));
 %}
-
 
 ### 2-2. 로그인 - ADMIN
 POST http://localhost:8081/api/users/login
@@ -22,13 +21,13 @@ Content-Type: application/json
 }
 
 > {%
-    client.global.set("access_token", response.body.data.accessToken);
+    client.global.set("access_token", response.headers.valueOf("Authorization"));
 %}
 
 ### 2-2-1. 액세스 토큰 재발급
 POST http://localhost:8081/api/users/token
 Content-Type: application/json
-Authorization: Bearer {{access_token}}
+Authorization: {{access_token}}
 
 {
   "nickname" : "bro-진창"
@@ -36,6 +35,6 @@ Authorization: Bearer {{access_token}}
 
 ### 2-3. 로그아웃
 
-PATCH http://localhost:8081/api/users/logout
-Authorization: Bearer {{access_token}}
+POST http://localhost:8081/api/users/logout
+Authorization: {{access_token}}
 

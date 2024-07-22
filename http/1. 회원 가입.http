@@ -1,0 +1,25 @@
+### 1-1. 회원가입 - USER
+POST http://localhost:8081/api/users/signup
+Content-Type: application/json
+
+{
+  "loginId" : "username1",
+  "password" : "password1!",
+  "email" : "abc@naver.com",
+  "nickname" : "bro-진창",
+  "isAdmin" : false
+}
+
+
+### 1-2. 회원가입 - ADMIN
+POST http://localhost:8081/api/users/signup
+Content-Type: application/json
+
+{
+  "username" : "username2",
+  "password" : "password2!",
+  "email" : "abcd@naver.com",
+  "nickname" : "창봉",
+  "isAdmin" : true,
+  "adminToken" : "{ADMIN_KEY}"
+}

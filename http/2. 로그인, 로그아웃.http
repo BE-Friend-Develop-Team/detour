@@ -1,0 +1,40 @@
+### 2-1. 로그인 - USER
+POST http://localhost:8081/api/users/login
+Content-Type: application/json
+
+{
+  "loginId": "username1",
+  "password": "Password1!"
+}
+
+> {%
+    client.global.set("access_token", response.headers.valueOf("Authorization"));
+%}
+
+### 2-2. 로그인 - ADMIN
+POST http://localhost:8081/api/users/login
+Content-Type: application/json
+
+{
+  "loginId": "username2",
+  "password": "Password2!"
+}
+
+> {%
+    client.global.set("access_token", response.headers.valueOf("Authorization"));
+%}
+
+### 2-2-1. 액세스 토큰 재발급
+POST http://localhost:8081/api/users/token
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "nickname" : "bro-진창"
+}
+
+### 2-3. 로그아웃
+
+POST http://localhost:8081/api/users/logout
+Authorization: {{access_token}}
+

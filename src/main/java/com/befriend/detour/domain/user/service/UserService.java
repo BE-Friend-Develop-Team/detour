@@ -47,7 +47,7 @@ public class UserService {
             if (!ADMIN_TOKEN.equals(signupRequestDto.getAdminToken())) {
                 throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
             }
-            userRole = userRole.MANAGER;
+            userRole = userRole.ADMIN;
         }
 
         UserStatusEnum userStatus = UserStatusEnum.ACTIVE;

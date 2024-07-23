@@ -45,10 +45,6 @@ public class KakaoService {
         return null;
     }
 
-    private KaKaoUserInfoDto getKakaoUserInfo(String accessToken) {
-        return null;
-    }
-
     private String getToken(String code) throws JsonProcessingException {
         // 요청 URL 만들기
         URI uri = UriComponentsBuilder
@@ -69,7 +65,7 @@ public class KakaoService {
         body.add("redirect_uri", kakaoRedirectUri);
         body.add("code", code);
 
-        RequestEntity<MultiValueMap<String,String>> requestEntity = RequestEntity
+        RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
                 .post(uri) // POST 메서드로 요청
                 .headers(headers) // 헤더 설정
                 .body(body); // 바디 설정
@@ -87,5 +83,43 @@ public class KakaoService {
         // 액세스 토큰 추출 및 반환
         return jsonNode.get("access_token").asText();
     }
+
+    private KaKaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+        // 요청 URL 만들기
+        URI uri = UriComponentsBuilder
+                .fromUriString("https://kapi.kakao.com") // 카카오 API 서버 URI
+                .path("/users/info") // 사용자 정보 요청 경로
+                .encode()
+                .build()
+                .toUri();
+
+        // HTTP Header 생성
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
+                .post(uri)
+                .headers(headers)
+                .body(new LinkedMultiValueMap<>());
+
+        // HTTP 요청 보내기
+        ResponseEntity<String> response = restTemplate.exchange(
+                requestEntity,
+                String.class
+        );
+
+        JsonNode jsonNode = new ObjectMapper().readTree(response.getBody());
+        Long id = jsonNode.get("id").asLong();
+        String nickname = jsonNode.get("properties")
+                .get("nickname").asText();
+        String email = jsonNode.get("kakao_account")
+                .get("email").asText();
+
+        return new KaKaoUserInfoDto(id, nickname, email);
+    }
+
+
+
 
 }

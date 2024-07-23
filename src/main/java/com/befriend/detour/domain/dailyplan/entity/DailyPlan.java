@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.dailyplan.entity;
 
+import com.befriend.detour.domain.dailyplan.dto.DailyPlanRequestDto;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -20,6 +21,11 @@ public class DailyPlan {
     private Schedule schedule;
 
     @Column(nullable = false)
-    private Long idx;
+    private Long day;
+
+    public DailyPlan(Schedule checkSchedule, DailyPlanRequestDto dailyPlanRequestDto) {
+        this.schedule = checkSchedule;
+        this.day = dailyPlanRequestDto.getDay();
+    }
 
 }

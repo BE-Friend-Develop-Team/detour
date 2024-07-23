@@ -4,6 +4,7 @@ import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
 import com.befriend.detour.domain.marker.entity.Marker;
+import com.befriend.detour.domain.marker.entity.MarkerStatusEnum;
 import com.befriend.detour.domain.marker.repository.MarkerRepository;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.domain.user.entity.UserStatusEnum;
@@ -26,12 +27,14 @@ public class MarkerService {
 //    private final PlaceService placeService;
 
     // 마커 생성
+    @Transactional
     public MarkerResponseDto createMarker(String nickname, Long dailyPlanId, Long placeId, MarkerRequestDto requestDto) {
         /*
         - 지도에서 장소를 검색하고 선택한 후에 저장버튼을 누르면 마커 생성
         - 프론트에서 placeId를 넘겨주면 해당 아이디로 place와 연관관계 설정
          */
         User user = getUserByNickname(nickname);
+
         if (!isActiveUser(user)) {
             throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
         }
@@ -58,7 +61,7 @@ public class MarkerService {
 
         // 해당 데일리 플랜에 마커가 존재하는지 판단
         if (!isMarkerExist(dailyPlanId)) {
-            throw new CustomException(ErrorCode.MARKER_NOT_FOUND);
+            throw new CustomException(ErrorCode.MARKER_NOT_FOUND_IN_DAILY_PLAN);
         }
 
         return markerRepository.findByDailyPlanId(dailyPlanId);
@@ -77,7 +80,7 @@ public class MarkerService {
 
         // 해당 데일리 플랜에 마커가 존재하는지 판단
         if (!isMarkerExist(dailyPlanId)) {
-            throw new CustomException(ErrorCode.MARKER_NOT_FOUND);
+            throw new CustomException(ErrorCode.MARKER_NOT_FOUND_IN_DAILY_PLAN);
         }
 
         // 특정 마커 조회
@@ -102,6 +105,17 @@ public class MarkerService {
         marker.updateContent(requestDto);
 
         return new MarkerResponseDto(marker);
+    }
+
+    @Transactional
+    public void deleteMarker(User user, Long markerId) {
+
+        // 권한 로직 추가 부분
+
+        Marker marker = findMarker(user, markerId);
+        marker.delete();
+        markerRepository.save(marker);
+
     }
 
     // ID로 마커 찾기
@@ -134,6 +148,20 @@ public class MarkerService {
     // nickname으로 유저 찾기
     private User getUserByNickname(String nickname) {
         return userService.findUserByNickName(nickname);
+    }
+
+    public Marker findMarker(User user, Long markerId)
+    {
+        Marker marker = markerRepository.findById(markerId).orElseThrow(()
+                -> new CustomException(ErrorCode.MARKER_NOT_FOUND)
+        );
+
+        if(marker.getStatus() == MarkerStatusEnum.DELETED)
+        {
+            throw new CustomException(ErrorCode.ALREADY_IS_DELETED);
+        }
+
+        return marker;
     }
 
 }

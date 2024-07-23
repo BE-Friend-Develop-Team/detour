@@ -30,6 +30,10 @@ public class Marker extends TimeStamped {
     @Column
     private String images;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MarkerStatusEnum status = MarkerStatusEnum.ACTIVE;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "daily_plan_id", nullable = false)
     private DailyPlan dailyPlan;
@@ -43,9 +47,15 @@ public class Marker extends TimeStamped {
         this.longitude = longitude;
         this.dailyPlan = dailyPlan;
         this.place = place;
+        this.status = MarkerStatusEnum.ACTIVE;
     }
 
     public void updateContent(MarkerContentRequestDto requestDto) {
         this.content = requestDto.getContent();
     }
+
+    public void delete() {
+        this.status = MarkerStatusEnum.DELETED;
+    }
+
 }

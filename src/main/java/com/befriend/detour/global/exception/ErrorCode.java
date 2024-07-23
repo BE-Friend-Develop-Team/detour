@@ -17,7 +17,10 @@ public enum ErrorCode {
     USER_NOT_ACTIVE(500, "현재 활동 가능한 사용자가 아닙니다."),
 
     // marker 관련 오류 처리
-    MARKER_NOT_FOUND(400, "해당 데일리 플랜에 대한 마커가 없습니다."),
+    MARKER_NOT_FOUND_IN_DAILY_PLAN(404, "해당 데일리 플랜에 대한 마커가 없습니다."),
+    USER_IS_BLOCK(404,"차단된 사용자입니다."),
+    MARKER_NOT_FOUND(404,"마커를 찾을 수 없습니다."),
+    ALREADY_IS_DELETED(404,"이미 차단된 마커입니다."),
     USER_NOT_MATCH_WITH_MARKER (404, "해당 마커의 작성자가 아닙니다.");
 
     private int status;

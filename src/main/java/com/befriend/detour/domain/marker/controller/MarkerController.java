@@ -62,12 +62,20 @@ public class MarkerController {
 
     // 마커 단건 조회
     @GetMapping("{dailyPlanId}/markers/{markerId}")
-    public ResponseEntity<CommonResponseDto> getMarker(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                       @PathVariable Long dailyPlanId,
-                                                       @PathVariable Long markerId) {
+    public ResponseEntity<CommonResponseDto> getMarker( @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                        @PathVariable Long dailyPlanId,
+                                                        @PathVariable Long markerId) {
         MarkerResponseDto responseDto = markerService.getMarker(userDetails.getUser().getNickname(), dailyPlanId, markerId);
         return ResponseEntity.ok(new CommonResponseDto(200, "마커 조회에 성공하였습니다. 🎉", responseDto));
 
+    }
+
+    // 마커 삭제
+    @DeleteMapping("/markers/{markerId}")
+    public ResponseEntity<CommonResponseDto> deleteMarker( @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                           @PathVariable Long markerId) {
+        markerService.deleteMarker(userDetails.getUser(), markerId);
+        return ResponseEntity.ok(new CommonResponseDto(200, "마커 삭제에 성공하였습니다. 🎉", null));
     }
 
 }

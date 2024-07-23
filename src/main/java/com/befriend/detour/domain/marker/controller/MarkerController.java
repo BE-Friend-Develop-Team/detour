@@ -43,14 +43,22 @@ public class MarkerController {
 
     // 특정 데일리 플랜 마커 전체 조회
     @GetMapping("/{dailyPlanId}/marker")
-    public ResponseEntity<CommonResponseDto> getAllBoards( @AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity<CommonResponseDto> getAllMarker( @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                            @PathVariable Long dailyPlanId) {
 
-        List<Marker> marker = markerService.getAllBoards(userDetails.getUser().getNickname() ,dailyPlanId);
-        return ResponseEntity.ok(new CommonResponseDto(200, dailyPlanId + "번 데일리 플랜의 마커 전체 조회에 성공하였습니다. 🎉", marker));
+        List<MarkerResponseDto> responseDto = markerService.getAllMarker(userDetails.getUser().getNickname(), dailyPlanId);
+        return ResponseEntity.ok(new CommonResponseDto(200, dailyPlanId + "번 데일리 플랜의 마커 전체 조회에 성공하였습니다. 🎉", responseDto));
 
     }
 
+    // 마커 단건 조회
+    @GetMapping("{dailyPlanId}/markers/{markerId}")
+    public ResponseEntity<CommonResponseDto> getMarker(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                       @PathVariable Long dailyPlanId,
+                                                       @PathVariable Long markerId) {
+        MarkerResponseDto responseDto = markerService.getMarker(userDetails.getUser().getNickname(), dailyPlanId, markerId);
+        return ResponseEntity.ok(new CommonResponseDto(200, "마커 조회에 성공하였습니다. 🎉", responseDto));
 
+    }
 
 }

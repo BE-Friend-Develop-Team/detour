@@ -43,16 +43,41 @@ public class MarkerService {
     }
 
     // 마거 전체 조회
-    public List<Marker> getAllBoards(String nickname, Long dailyPlanId) {
+    public List<MarkerResponseDto> getAllMarker(String nickname, Long dailyPlanId) {
 
         User user = getUserByNickname(nickname);
-        //  DailyPlan dailyPlan = dailyPlanService.findDailyPlanById(dailyPlanId); // 데일리 플랜 생성 후 수정할 예정
 
+        // 해당 데일리 플랜이 존재하는지 메서드 필요
+
+        // 해당 데일리 플랜에 마커가 존재하는지 판단
         if (!isMarkerExist(dailyPlanId)) {
             throw new CustomException(ErrorCode.MARKER_NOT_FOUND);
         }
 
         return markerRepository.findByDailyPlanId(dailyPlanId);
+    }
+
+    public MarkerResponseDto getMarker(String nickname, Long dailyPlanId, Long markerId) {
+
+        User user = getUserByNickname(nickname);
+
+        // 해당 데일리 플랜이 존재하는지 메서드 필요
+
+        // 해당 데일리 플랜에 마커가 존재하는지 판단
+        if (!isMarkerExist(dailyPlanId)) {
+            throw new CustomException(ErrorCode.MARKER_NOT_FOUND);
+        }
+
+        // 특정 마커 조회
+        Marker marker = markerRepository.findByIdAndDailyPlanId(markerId, dailyPlanId).orElseThrow(
+                () -> new CustomException(ErrorCode.MARKER_NOT_FOUND)
+        );
+
+        return new MarkerResponseDto(marker);
+    }
+
+    private User getUserByNickname(String nickname) {
+        return userService.findUserByNickName(nickname);
     }
 
     // 마커 글 생성
@@ -70,7 +95,6 @@ public class MarkerService {
         return new MarkerResponseDto(marker);
     }
 
-
     // ID로 마커 찾기
     public Marker findMarkerById(Long markerId) {
         return markerRepository.findById(markerId).orElseThrow(() ->
@@ -79,13 +103,10 @@ public class MarkerService {
 
     // dailyPlanId로 존재하는 마커인지 찾기
     public boolean isMarkerExist(Long dailyPlanId) {
-        List<Marker> markers = markerRepository.findByDailyPlanId(dailyPlanId);
-        return !markers.isEmpty();
-    }
 
-    // nickname으로 유저 찾기
-    private User getUserByNickname(String nickname) {
-        return userService.findUserByNickName(nickname);
+        List<MarkerResponseDto> markers = markerRepository.findByDailyPlanId(dailyPlanId);
+        return !markers.isEmpty();
+
     }
 
     // 동일한 유저인지 비교하기

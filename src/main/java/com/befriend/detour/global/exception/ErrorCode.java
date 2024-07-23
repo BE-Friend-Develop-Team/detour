@@ -17,7 +17,8 @@ public enum ErrorCode {
 
     // marker 관련 오류 처리
     MARKER_NOT_FOUND(400, "존재하지 않는 마커입니다."),
-    USER_NOT_MATCH_WITH_MARKER (404, "해당 마커의 작성자가 아닙니다.");
+    USER_NOT_MATCH_WITH_MARKER (404, "해당 마커의 작성자가 아닙니다."),
+    NOT_FOUND_MARKER(500, "해당 데일리 플랜에 대한 마커가 없습니다.");
 
     private int status;
     private String message;

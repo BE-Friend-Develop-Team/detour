@@ -37,11 +37,10 @@ public class Marker extends TimeStamped {
     @JoinColumn(name = "place_id", nullable = false)
     private Place place;
 
-    public Marker(Double latitude, Double longitude, String content, String images) {
+    public Marker(Double latitude, Double longitude, DailyPlan dailyPlan, Place place) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.content = content;
-        this.images = images;
+        this.dailyPlan = dailyPlan;
+        this.place = place;
     }
-
 }

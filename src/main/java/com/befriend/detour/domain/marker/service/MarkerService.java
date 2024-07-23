@@ -1,11 +1,13 @@
 package com.befriend.detour.domain.marker.service;
 
+import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
 import com.befriend.detour.domain.marker.entity.Marker;
 import com.befriend.detour.domain.marker.entity.MarkerStatusEnum;
 import com.befriend.detour.domain.marker.repository.MarkerRepository;
+import com.befriend.detour.domain.place.entity.Place;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.domain.user.entity.UserStatusEnum;
 import com.befriend.detour.domain.user.service.UserService;
@@ -23,10 +25,11 @@ public class MarkerService {
 
     private final MarkerRepository markerRepository;
     private final UserService userService;
+    // TODO: DailyPlan 생성시 주석 제거 예정
 //    private final DailyPlanService dailyPlanService;
 //    private final PlaceService placeService;
 
-    // 마커 생성
+    // 마커 생성  TODO: DailyPlan 생성시 주석 제거 예정
     @Transactional
     public MarkerResponseDto createMarker(User user, Long dailyPlanId, Long placeId, MarkerRequestDto requestDto) {
         /*
@@ -35,13 +38,14 @@ public class MarkerService {
          */
         validateActiveUser(user);
 
-//        DailyPlan dailyPlan = dailyPlanService.findDailyPlanById(dailPlanId); // 데일리플랜 서비스 생성 후 수정
-//        Place place = placeService.findPlaceById(placeId);
+      //  DailyPlan dailyPlan = dailyPlanService.findDailyPlanById(dailPlanId); // 데일리플랜 서비스 생성 후 수정
+      //  Place place = placeService.findPlaceById(placeId);
 
-        Marker marker = new Marker(requestDto.getLatitude(), requestDto.getLongitude(), dailyPlan, place);
-        markerRepository.save(marker);
+       // Marker marker = new Marker(requestDto.getLatitude(), requestDto.getLongitude(), dailyPlan, place);
+       // markerRepository.save(marker);
 
-        return new MarkerResponseDto(marker);
+       //  return new MarkerResponseDto(marker);
+        return null;
     }
 
     // 마커 전체 조회
@@ -81,7 +85,7 @@ public class MarkerService {
     public MarkerResponseDto updateMarkerContent(User user, Long markerId, MarkerContentRequestDto requestDto) {
 
         validateActiveUser(user);
-        Marker marker = findMarkerById(markerId);
+        Marker marker = findMarker(markerId);
         marker.updateContent(requestDto);
         return new MarkerResponseDto(marker);
 
@@ -91,7 +95,7 @@ public class MarkerService {
     @Transactional
     public void deleteMarker(User user, Long markerId) {
         validateActiveUser(user);
-        Marker marker = findMarker(user, markerId);
+        Marker marker = findMarker(markerId);
 
         if (!isSameUser(user, marker.getDailyPlan().getSchedule().getUser())) {
             throw new CustomException(ErrorCode.NOT_MARKER_WRITER);
@@ -102,12 +106,6 @@ public class MarkerService {
 
     }
 
-    // ID로 마커 찾기
-    public Marker findMarkerById(Long markerId) {
-        return markerRepository.findById(markerId).orElseThrow(() ->
-                new CustomException(ErrorCode.MARKER_NOT_FOUND));
-    }
-
     // dailyPlanId로 존재하는 마커인지 찾기
     public boolean isMarkerExist(Long dailyPlanId) {
         List<MarkerResponseDto> markers = markerRepository.findByDailyPlanId(dailyPlanId);
@@ -116,23 +114,21 @@ public class MarkerService {
 
     // 동일한 유저인지 비교하기
     private boolean isSameUser(User user1, User user2) {
-        return user1.getNickname().equals(user2.getNickname());
-    }
 
-    // 유저 권한 확인 (ACTIVE = true)
-    private boolean isActiveUser(User user) {
-        return user.getStatus().equals(UserStatusEnum.ACTIVE);
+        return user1.getNickname().equals(user2.getNickname());
+
     }
 
     private void validateActiveUser(User user) {
-        if (!isActiveUser(user)) {
+
+        if (user.getStatus().equals(UserStatusEnum.ACTIVE)) {
             throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
         }
+
     }
 
-    public Marker findMarker(User user, Long markerId)
+    public Marker findMarker(Long markerId)
     {
-        validateActiveUser(user);
 
         Marker marker = markerRepository.findById(markerId).orElseThrow(()
                 -> new CustomException(ErrorCode.MARKER_NOT_FOUND)
@@ -144,6 +140,7 @@ public class MarkerService {
         }
 
         return marker;
+
     }
 
 }

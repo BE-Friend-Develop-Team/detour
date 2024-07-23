@@ -27,7 +27,7 @@ public class MarkerController {
                                                           @PathVariable Long placeId,
                                                           MarkerRequestDto requestDto) {
         MarkerResponseDto responseDto = markerService.createMarker(userDetails.getUser().getNickname(), dailPlanId, placeId, requestDto);
-        return ResponseEntity.ok(new CommonResponseDto(201, "마커 생성에 성공하였습니다.", responseDto));
+        return ResponseEntity.ok(new CommonResponseDto(201, "마커 생성에 성공하였습니다. \uD83C\uDF89", responseDto));
     }
 
 }

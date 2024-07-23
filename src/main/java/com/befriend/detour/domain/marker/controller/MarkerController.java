@@ -36,8 +36,17 @@ public class MarkerController {
     public ResponseEntity<CommonResponseDto> createMarkerContent (@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                   @PathVariable Long markerId,
                                                                   MarkerContentRequestDto requestDto) {
-        MarkerResponseDto responseDto = markerService.createMarkerContent(userDetails.getUser().getNickname(), markerId, requestDto);
+        MarkerResponseDto responseDto = markerService.updateMarkerContent(userDetails.getUser().getNickname(), markerId, requestDto);
         return ResponseEntity.ok(new CommonResponseDto(200, "마커 내 글 저장에 성공하였습니다. \uD83C\uDF89", responseDto));
+    }
+
+    // 마커 글 수정
+    @PostMapping("/markers/{markerId}/content")
+    public ResponseEntity<CommonResponseDto> updateMarkerContent (@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                  @PathVariable Long markerId,
+                                                                  MarkerContentRequestDto requestDto) {
+        MarkerResponseDto responseDto = markerService.updateMarkerContent(userDetails.getUser().getNickname(), markerId, requestDto);
+        return ResponseEntity.ok(new CommonResponseDto(200, "마커 내 글 수정에 성공하였습니다. \uD83C\uDF89", responseDto));
     }
 
 

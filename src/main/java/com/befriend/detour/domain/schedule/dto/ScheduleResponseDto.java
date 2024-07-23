@@ -13,6 +13,7 @@ public class ScheduleResponseDto {
     private String title;
     private Date departureDate;
     private Date arrivalDate;
+    // TODO: 사진 파일 관련 코드로 추후 수정 필요
 //    private String mainImage;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -22,6 +23,7 @@ public class ScheduleResponseDto {
         this.title = schedule.getTitle();
         this.departureDate = schedule.getDepartureDate();
         this.arrivalDate = schedule.getArrivalDate();
+        // TODO: 사진 파일 관련 코드로 추후 수정 필요
 //        this.mainImage = Image.getFilePath();
         this.createdAt = schedule.getCreatedAt();
         this.modifiedAt = schedule.getModifiedAt();

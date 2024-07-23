@@ -1,13 +1,12 @@
 package com.befriend.detour.domain.marker.service;
 
-import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
 import com.befriend.detour.domain.marker.entity.Marker;
 import com.befriend.detour.domain.marker.repository.MarkerRepository;
-import com.befriend.detour.domain.place.entity.Place;
 import com.befriend.detour.domain.user.entity.User;
+import com.befriend.detour.domain.user.entity.UserStatusEnum;
 import com.befriend.detour.domain.user.service.UserService;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
@@ -27,12 +26,16 @@ public class MarkerService {
 //    private final PlaceService placeService;
 
     // 마커 생성
-    public MarkerResponseDto createMarker(String nickname, Long dailPlanId, Long placeId, MarkerRequestDto requestDto) {
+    public MarkerResponseDto createMarker(String nickname, Long dailyPlanId, Long placeId, MarkerRequestDto requestDto) {
         /*
         - 지도에서 장소를 검색하고 선택한 후에 저장버튼을 누르면 마커 생성
         - 프론트에서 placeId를 넘겨주면 해당 아이디로 place와 연관관계 설정
          */
         User user = getUserByNickname(nickname);
+        if (!isActiveUser(user)) {
+            throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
+        }
+
 //        DailyPlan dailyPlan = dailyPlanService.findDailyPlanById(dailPlanId); // 데일리플랜 서비스 생성 후 수정
 //        Place place = placeService.findPlaceById(placeId);
 
@@ -42,10 +45,13 @@ public class MarkerService {
         return new MarkerResponseDto(marker);
     }
 
-    // 마거 전체 조회
+    // 마커 전체 조회
     public List<MarkerResponseDto> getAllMarker(String nickname, Long dailyPlanId) {
 
         User user = getUserByNickname(nickname);
+        if (!isActiveUser(user)) {
+            throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
+        }
 
         // 해당 데일리 플랜이 존재하는지 메서드 필요
 
@@ -57,9 +63,13 @@ public class MarkerService {
         return markerRepository.findByDailyPlanId(dailyPlanId);
     }
 
+    // 마커 단건 조회
     public MarkerResponseDto getMarker(String nickname, Long dailyPlanId, Long markerId) {
 
         User user = getUserByNickname(nickname);
+        if (!isActiveUser(user)) {
+            throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
+        }
 
         // 해당 데일리 플랜이 존재하는지 메서드 필요
 
@@ -76,21 +86,17 @@ public class MarkerService {
         return new MarkerResponseDto(marker);
     }
 
-    private User getUserByNickname(String nickname) {
-        return userService.findUserByNickName(nickname);
-    }
-
     // 마커 글 생성
     @Transactional
-    public MarkerResponseDto createMarkerContent(String nickname, Long markerId, MarkerContentRequestDto requestDto) {
+    public MarkerResponseDto updateMarkerContent(String nickname, Long markerId, MarkerContentRequestDto requestDto) {
         User user = getUserByNickname(nickname);
+        if (!isActiveUser(user)) {
+            throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
+        }
+
         Marker marker = findMarkerById(markerId);
 
-        if (isSameUser(user, marker.getDailyPlan().getSchedule().getUser())){
-            marker.updateContent(requestDto);
-        } else {
-            throw new CustomException(ErrorCode.USER_NOT_MATCH_WITH_MARKER);
-        }
+        marker.updateContent(requestDto);
 
         return new MarkerResponseDto(marker);
     }
@@ -106,7 +112,6 @@ public class MarkerService {
 
         List<MarkerResponseDto> markers = markerRepository.findByDailyPlanId(dailyPlanId);
         return !markers.isEmpty();
-
     }
 
     // 동일한 유저인지 비교하기
@@ -115,6 +120,16 @@ public class MarkerService {
         String nickname2 = user2.getNickname();
 
         return nickname1.equals(nickname2);
+    }
+
+    // 유저 권한 확인 (ACTIVE = true)
+    private boolean isActiveUser(User user) {
+        return user.getStatus().equals(UserStatusEnum.ACTIVE);
+    }
+
+    // nickname으로 유저 찾기
+    private User getUserByNickname(String nickname) {
+        return userService.findUserByNickName(nickname);
     }
 
 }

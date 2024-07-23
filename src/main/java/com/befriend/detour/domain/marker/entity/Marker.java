@@ -1,6 +1,7 @@
 package com.befriend.detour.domain.marker.entity;
 
 import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
+import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
 import com.befriend.detour.domain.place.entity.Place;
 import com.befriend.detour.global.entity.TimeStamped;
 import jakarta.persistence.*;
@@ -42,5 +43,9 @@ public class Marker extends TimeStamped {
         this.longitude = longitude;
         this.dailyPlan = dailyPlan;
         this.place = place;
+    }
+
+    public void updateContent(MarkerContentRequestDto requestDto) {
+        this.content = requestDto.getContent();
     }
 }

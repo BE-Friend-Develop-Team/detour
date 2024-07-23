@@ -1,6 +1,7 @@
 package com.befriend.detour.domain.marker.service;
 
 import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
+import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
 import com.befriend.detour.domain.marker.entity.Marker;
@@ -8,8 +9,11 @@ import com.befriend.detour.domain.marker.repository.MarkerRepository;
 import com.befriend.detour.domain.place.entity.Place;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.domain.user.service.UserService;
+import com.befriend.detour.global.exception.CustomException;
+import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,4 +41,23 @@ public class MarkerService {
     }
 
 
+    // 마커 글 생성
+    @Transactional
+    public MarkerResponseDto createMarkerContent(String nickname, Long markerId, MarkerContentRequestDto requestDto) {
+        User user = userService.findUserByNickName(nickname);
+        Marker marker = findMarkerById(markerId);
+
+        if (user.getId().equals(marker.getDailyPlan().getSchedule().getUser().getId())) {
+            marker.updateContent(requestDto);
+        } else {
+            throw new CustomException(ErrorCode.USER_NOT_MATCH_WITH_MARKER);
+        }
+        return new MarkerResponseDto(marker);
+    }
+
+    // ID로 마커 찾기
+    public Marker findMarkerById(Long markerId) {
+        return markerRepository.findById(markerId).orElseThrow(() ->
+                new CustomException(ErrorCode.MARKER_NOT_FOUND));
+    }
 }

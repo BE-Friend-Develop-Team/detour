@@ -2,6 +2,7 @@ package com.befriend.detour.domain.schedule.entity;
 
 import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.like.entity.Like;
+import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.global.entity.TimeStamped;
 import jakarta.persistence.*;
@@ -28,7 +29,7 @@ public class Schedule extends TimeStamped {
     private Date departureDate;
 
     @Column(nullable = false)
-    private Date arrirvalDate;
+    private Date arrivalDate;
 
     @Column(nullable = false)
     private Long likeCount = 0L;
@@ -49,6 +50,13 @@ public class Schedule extends TimeStamped {
 
     public void minusLikeCount() {
         this.likeCount--;
+    }
+
+    public Schedule(ScheduleRequestDto scheduleRequestDto, User user) {
+        this.title = scheduleRequestDto.getTitle();
+        this.departureDate = scheduleRequestDto.getDepartureDate();
+        this.arrivalDate = scheduleRequestDto.getArrivalDate();
+        this.user = user;
     }
 
 }

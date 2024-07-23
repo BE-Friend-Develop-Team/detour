@@ -45,4 +45,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return Optional.ofNullable(result);
     }
 
+    @Override
+    public Optional<User> findByKakaoId(Long kakaoId) {
+
+        User result = jpaQueryFactory.selectFrom(user)
+                .where(user.kakaoId.eq(kakaoId))
+                .fetchOne();
+
+        return Optional.ofNullable(result);
+    }
+
 }

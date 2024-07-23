@@ -37,3 +37,4 @@ out/
 .vscode/
 
 db/mysql/data/
+http/http-client.private.env.json

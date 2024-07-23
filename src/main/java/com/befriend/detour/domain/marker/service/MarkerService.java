@@ -49,6 +49,7 @@ public class MarkerService {
     public List<MarkerResponseDto> getAllMarker(String nickname, Long dailyPlanId) {
 
         User user = getUserByNickname(nickname);
+
         if (!isActiveUser(user)) {
             throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
         }
@@ -67,6 +68,7 @@ public class MarkerService {
     public MarkerResponseDto getMarker(String nickname, Long dailyPlanId, Long markerId) {
 
         User user = getUserByNickname(nickname);
+
         if (!isActiveUser(user)) {
             throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
         }
@@ -90,6 +92,7 @@ public class MarkerService {
     @Transactional
     public MarkerResponseDto updateMarkerContent(String nickname, Long markerId, MarkerContentRequestDto requestDto) {
         User user = getUserByNickname(nickname);
+
         if (!isActiveUser(user)) {
             throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
         }
@@ -112,6 +115,7 @@ public class MarkerService {
 
         List<MarkerResponseDto> markers = markerRepository.findByDailyPlanId(dailyPlanId);
         return !markers.isEmpty();
+
     }
 
     // 동일한 유저인지 비교하기

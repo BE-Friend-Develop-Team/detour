@@ -22,6 +22,7 @@ public class MarkerRepositoryImpl implements MarkerRepositoryCustom {
     public List<MarkerResponseDto> findByDailyPlanId(Long dailyPlanId) {
         return jpaQueryFactory.selectFrom(marker)
                 .where(marker.dailyPlan.id.eq(dailyPlanId))
+                .orderBy(marker.id.asc())
                 .fetch()
                 .stream()
                 .map(MarkerResponseDto::new)

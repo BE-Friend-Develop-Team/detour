@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.user.controller;
 
+import com.befriend.detour.domain.user.dto.ProfileResponseDto;
 import com.befriend.detour.domain.user.dto.SignupRequestDto;
 import com.befriend.detour.domain.user.service.KakaoService;
 import com.befriend.detour.domain.user.service.UserService;
@@ -42,6 +43,13 @@ public class UserController {
         kakaoService.kakaoLogin(code, response);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "카카오톡 로그인에 성공하였습니다. 🌠", null));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<CommonResponseDto> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ProfileResponseDto profileResponseDto = userService.getProfile(userDetails.getUser());
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "프로필 조회에 성공하였습니다. 🎉", profileResponseDto));
     }
 
 }

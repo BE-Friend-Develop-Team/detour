@@ -15,7 +15,7 @@ public class DailyPlanController {
 
     private final DailyPlanService dailyPlanService;
 
-    @PostMapping("/schedules/{scheduleId}/dailyPlans")
+    @PostMapping("/schedules/{scheduleId}/daily-plans")
     public ResponseEntity<CommonResponseDto> createDailyPlan(@PathVariable(name = "scheduleId") Long scheduleId,
                                                              @RequestBody DailyPlanRequestDto dailyPlanRequestDto) {
         dailyPlanService.createDailyPlan(scheduleId, dailyPlanRequestDto);

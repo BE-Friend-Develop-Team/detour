@@ -19,11 +19,11 @@ public class User extends TimeStamped {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String loginId;
 
     @Column
-    private String kakaoId;
+    private Long kakaoId;
 
     @Column(nullable = false)
     private String password;
@@ -50,12 +50,27 @@ public class User extends TimeStamped {
         this.role = userRole;
     }
 
+    public User(String email, String encodedPassword, String nickname, UserStatusEnum userStatusEnum, UserRoleEnum userRoleEnum, Long kakaoId) {
+        this.password = encodedPassword;
+        this.nickname = nickname;
+        this.email = email;
+        this.status = userStatusEnum;
+        this.role = userRoleEnum;
+        this.kakaoId = kakaoId;
+    }
+
     public void encryptionPassword(String password) {
         this.password = password;
     }
 
     public void updateRefresh(String refresh) {
         this.refreshToken = refresh;
+    }
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+
+        return this;
     }
 
 }

@@ -9,5 +9,25 @@ Content-Type: application/json
 Authorization: {{access_token}}
 
 {
-  "nickname" : "변경"
+  "nickname" : "창브로"
+}
+
+#### 7-3. 이메일 수정
+PATCH http://localhost:8081/api/users/profiles/email
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "email" : "shlee509@nate.com"
+}
+
+#### 7-4. 비밀번호 수정
+PATCH http://localhost:8081/api/users/profiles/password
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "password": "Password1!",
+  "newPassword": "Password2!",
+  "confirmNewPassword": "Password3!"
 }

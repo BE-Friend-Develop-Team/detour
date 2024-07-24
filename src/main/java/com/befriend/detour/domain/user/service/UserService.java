@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.user.service;
 
+import com.befriend.detour.domain.user.dto.ProfileResponseDto;
 import com.befriend.detour.domain.user.dto.SignupRequestDto;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.domain.user.entity.UserRoleEnum;
@@ -63,6 +64,12 @@ public class UserService {
     public void logout(User user) {
         user.updateRefresh(null);
         userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public ProfileResponseDto getProfile(User user) {
+
+        return new ProfileResponseDto(user.getId(), user.getLoginId(), user.getKakaoId(), user.getEmail(), user.getNickname());
     }
 
     public boolean isLoginIdExist(String loginId) {

@@ -1,0 +1,8 @@
+### 5-1. 데일리플랜 생성
+POST http://localhost:8081/api/schedules/1/dailyPlans
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "day": 2
+}

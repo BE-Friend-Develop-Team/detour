@@ -7,6 +7,8 @@ import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.schedule.repository.ScheduleRepository;
 import com.befriend.detour.domain.user.entity.User;
+import com.befriend.detour.global.exception.CustomException;
+import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,13 @@ public class ScheduleService {
         invitationRepository.save(invitation);
 
         return new ScheduleResponseDto(schedule);
+    }
+
+    @Transactional(readOnly = true)
+    public Schedule findById(Long scheduleId) {
+        return scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND)
+        );
     }
 
 }

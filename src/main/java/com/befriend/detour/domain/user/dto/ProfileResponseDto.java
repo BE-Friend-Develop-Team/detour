@@ -18,4 +18,5 @@ public class ProfileResponseDto {
         this.email = email;
         this.nickname = nickname;
     }
+
 }

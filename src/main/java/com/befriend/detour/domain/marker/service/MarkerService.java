@@ -31,12 +31,11 @@ public class MarkerService {
 
     // 마커 생성  TODO: DailyPlan 생성시 주석 제거 예정
     @Transactional
-    public MarkerResponseDto createMarker(User user, Long dailyPlanId, Long placeId, MarkerRequestDto requestDto) {
-        /*
+    public MarkerResponseDto createMarker( Long dailyPlanId, Long placeId, MarkerRequestDto requestDto) {
+         /*
         - 지도에서 장소를 검색하고 선택한 후에 저장버튼을 누르면 마커 생성
         - 프론트에서 placeId를 넘겨주면 해당 아이디로 place와 연관관계 설정
          */
-        validateActiveUser(user);
 
       //  DailyPlan dailyPlan = dailyPlanService.findDailyPlanById(dailPlanId); // 데일리플랜 서비스 생성 후 수정
       //  Place place = placeService.findPlaceById(placeId);
@@ -49,9 +48,7 @@ public class MarkerService {
     }
 
     // 마커 전체 조회
-    public List<MarkerResponseDto> getAllMarker(User user, Long dailyPlanId) {
-
-       validateActiveUser(user);
+    public List<MarkerResponseDto> getAllMarker(Long dailyPlanId) {
 
         // 해당 데일리 플랜이 존재하는지 메서드 필요
 
@@ -63,9 +60,8 @@ public class MarkerService {
     }
 
     // 마커 단건 조회
-    public MarkerResponseDto getMarker(User user, Long dailyPlanId, Long markerId) {
+    public MarkerResponseDto getMarker( Long dailyPlanId, Long markerId) {
 
-        validateActiveUser(user);
 
         // 해당 데일리 플랜이 존재하는지 메서드 필요
 
@@ -82,9 +78,8 @@ public class MarkerService {
 
     // 마커 글 생성
     @Transactional
-    public MarkerResponseDto updateMarkerContent(User user, Long markerId, MarkerContentRequestDto requestDto) {
+    public MarkerResponseDto updateMarkerContent(Long markerId, MarkerContentRequestDto requestDto) {
 
-        validateActiveUser(user);
         Marker marker = findMarker(markerId);
         marker.updateContent(requestDto);
         return new MarkerResponseDto(marker);
@@ -94,7 +89,7 @@ public class MarkerService {
     // 마커 삭제
     @Transactional
     public void deleteMarker(User user, Long markerId) {
-        validateActiveUser(user);
+
         Marker marker = findMarker(markerId);
 
         if (!isSameUser(user, marker.getDailyPlan().getSchedule().getUser())) {
@@ -108,8 +103,10 @@ public class MarkerService {
 
     // dailyPlanId로 존재하는 마커인지 찾기
     public boolean isMarkerExist(Long dailyPlanId) {
+
         List<MarkerResponseDto> markers = markerRepository.findByDailyPlanId(dailyPlanId);
         return !markers.isEmpty();
+
     }
 
     // 동일한 유저인지 비교하기
@@ -119,23 +116,13 @@ public class MarkerService {
 
     }
 
-    private void validateActiveUser(User user) {
-
-        if (user.getStatus().equals(UserStatusEnum.ACTIVE)) {
-            throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
-        }
-
-    }
-
-    public Marker findMarker(Long markerId)
-    {
+    public Marker findMarker(Long markerId) {
 
         Marker marker = markerRepository.findById(markerId).orElseThrow(()
                 -> new CustomException(ErrorCode.MARKER_NOT_FOUND)
         );
 
-        if(marker.getStatus() == MarkerStatusEnum.DELETED)
-        {
+        if(marker.getStatus() == MarkerStatusEnum.DELETED) {
             throw new CustomException(ErrorCode.ALREADY_IS_DELETED);
         }
 

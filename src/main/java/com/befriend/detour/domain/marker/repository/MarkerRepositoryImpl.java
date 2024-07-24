@@ -20,6 +20,7 @@ public class MarkerRepositoryImpl implements MarkerRepositoryCustom {
 
     @Override
     public List<MarkerResponseDto> findByDailyPlanId(Long dailyPlanId) {
+
         return jpaQueryFactory.selectFrom(marker)
                 .where(marker.dailyPlan.id.eq(dailyPlanId))
                 .orderBy(marker.id.asc())
@@ -36,6 +37,8 @@ public class MarkerRepositoryImpl implements MarkerRepositoryCustom {
                 .where(marker.id.eq(markerId)
                         .and(marker.dailyPlan.id.eq(dailyPlanId)))
                 .fetchOne();
+
         return Optional.ofNullable(result);
     }
+
 }

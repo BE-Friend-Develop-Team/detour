@@ -16,5 +16,4 @@ public enum MarkerStatusEnum {
         public static final String DELETED = "DELETED";
     }
 
-
 }

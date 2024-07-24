@@ -1,5 +1,5 @@
 ### 6-1. 마커 생성
-POST http://localhost:8081/api/dailPlan/{dailPlanId}/markers/{placeId}
+POST http://localhost:8081/api/daily-plans/{dailPlanId}/markers/{placeId}
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -9,17 +9,17 @@ Authorization: {{access_token}}
 }
 
 ### 6-2. 마커 전체조회
-POST http://localhost:8081/api/dailPlan/{dailyPlanId}/markers
+POST http://localhost:8081/api/daily-plans/{dailyPlanId}/markers
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 6-3. 마커 단건 조회
-POST http://localhost:8081/api/dailPlan/{dailyPlanId}/markers/{markerId}
+POST http://localhost:8081/api/daily-plans/{dailyPlanId}/markers/{markerId}
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 6-4. 마커 글 저장
-POST http://localhost:8081/api/dailyPlans/markers/{markerId}/content
+POST http://localhost:8081/api/daily-plans/markers/{markerId}/content
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -28,7 +28,7 @@ Authorization: {{access_token}}
 }
 
 ### 6-5. 마커 글 수정
-POST http://localhost:8081/api/dailyPlans/markers/{markerId}/content
+POST http://localhost:8081/api/daily-plans/markers/{markerId}/content
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -37,6 +37,6 @@ Authorization: {{access_token}}
 }
 
 ### 6-6. 마커 삭제
-POST http://localhost:8081/api/dailyPlans/markers/{markerId}
+POST http://localhost:8081/api/daily-plans/markers/{markerId}
 Content-Type: application/json
 Authorization: {{access_token}}

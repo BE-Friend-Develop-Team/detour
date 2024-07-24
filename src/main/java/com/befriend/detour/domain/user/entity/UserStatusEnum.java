@@ -3,7 +3,7 @@ package com.befriend.detour.domain.user.entity;
 public enum UserStatusEnum {
 
     ACTIVE(UserStatusEnum.Status.ACTIVE),  // 사용자 권한
-    MANAGER(UserStatusEnum.Status.BLOCK);  // 관리자 권한
+    BLOCK(UserStatusEnum.Status.BLOCK);  // 관리자 권한
 
     private final String status;
 

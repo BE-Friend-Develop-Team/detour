@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MarkerRepositoryCustom {
+
     List<MarkerResponseDto> findByDailyPlanId(Long dailyPlanId);
 
     Optional<Marker> findByIdAndDailyPlanId(Long markerId, Long dailyPlanId);

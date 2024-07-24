@@ -85,4 +85,8 @@ public class User extends TimeStamped {
         this.password = password;
     }
 
+    public void updateStatus(UserStatusEnum status) {
+        this.status = status;
+    }
+
 }

@@ -108,7 +108,12 @@ public class UserService {
     }
 
     @Transactional
-    public void withdrawalUser(User user) {
+    public void withdrawalUser(User user, String password) {
+        // 비밀번호 확인
+        if(!passwordEncoder.matches(password, user.getPassword())) {
+            throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
+        }
+
         user.updateStatus(UserStatusEnum.WITHDRAWAL);
         userRepository.save(user);
     }

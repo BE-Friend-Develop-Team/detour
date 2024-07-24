@@ -1,6 +1,6 @@
 package com.befriend.detour.domain.user.controller;
 
-import com.befriend.detour.domain.user.dto.SignupRequestDto;
+import com.befriend.detour.domain.user.dto.*;
 import com.befriend.detour.domain.user.service.KakaoService;
 import com.befriend.detour.domain.user.service.UserService;
 import com.befriend.detour.global.dto.CommonResponseDto;
@@ -42,6 +42,34 @@ public class UserController {
         kakaoService.kakaoLogin(code, response);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "카카오톡 로그인에 성공하였습니다. 🌠", null));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<CommonResponseDto> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ProfileResponseDto profileResponseDto = userService.getProfile(userDetails.getUser());
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "프로필 조회에 성공하였습니다. 🎉", profileResponseDto));
+    }
+
+    @PatchMapping("/profiles/nickname")
+    public ResponseEntity<CommonResponseDto> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditNicknameRequestDto editNicknameRequestDto) {
+        ProfileResponseDto profileResponseDto = userService.updateNickname(userDetails.getUser(), editNicknameRequestDto.getNickname());
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "닉네임 수정에 성공하였습니다. 🎉", profileResponseDto));
+    }
+
+    @PatchMapping("/profiles/email")
+    public ResponseEntity<CommonResponseDto> updateEmail(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditEmailRequestDto editEmailRequestDto) {
+        ProfileResponseDto profileResponseDto = userService.updateEmail(userDetails.getUser(), editEmailRequestDto.getEmail());
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "이메일 수정에 성공하였습니다. 🎉", profileResponseDto));
+    }
+
+    @PatchMapping("/profiles/password")
+    public ResponseEntity<CommonResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditPasswordDto editPasswordDto) {
+        userService.updatePassword(userDetails.getUser(), editPasswordDto);
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "비밀번호 수정에 성공하였습니다. 🎉", null));
     }
 
 }

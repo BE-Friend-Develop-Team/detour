@@ -1,5 +1,7 @@
 package com.befriend.detour.domain.user.service;
 
+import com.befriend.detour.domain.user.dto.EditPasswordDto;
+import com.befriend.detour.domain.user.dto.ProfileResponseDto;
 import com.befriend.detour.domain.user.dto.SignupRequestDto;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.domain.user.entity.UserRoleEnum;
@@ -62,6 +64,46 @@ public class UserService {
     @Transactional
     public void logout(User user) {
         user.updateRefresh(null);
+        userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public ProfileResponseDto getProfile(User user) {
+
+        return new ProfileResponseDto(user.getId(), user.getLoginId(), user.getKakaoId(), user.getEmail(), user.getNickname());
+    }
+
+    @Transactional
+    public ProfileResponseDto updateNickname(User user, String nickname) {
+        user.updateNickname(nickname);
+        userRepository.save(user);
+
+        return getProfile(user);
+    }
+
+    @Transactional
+    public ProfileResponseDto updateEmail(User user, String email) {
+        user.updateEmail(email);
+        userRepository.save(user);
+
+        return getProfile(user);
+    }
+
+    @Transactional
+    public void updatePassword(User user, EditPasswordDto editPasswordDto) {
+        // 현재 비밀번호 체크
+        if(!passwordEncoder.matches(editPasswordDto.getPassword(), user.getPassword())) {
+            throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
+        }
+
+        // 새로운 비밀번호 체크
+        if(!editPasswordDto.getNewPassword().equals(editPasswordDto.getConfirmNewPassword())) {
+            throw new CustomException(ErrorCode.CONFIRM_NEW_PASSWORD_NOT_MATCH);
+        }
+
+        String encodePassword = passwordEncoder.encode(editPasswordDto.getNewPassword());
+
+        user.updatePassword(encodePassword);
         userRepository.save(user);
     }
 

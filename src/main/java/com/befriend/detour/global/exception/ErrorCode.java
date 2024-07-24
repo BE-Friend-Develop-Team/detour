@@ -15,6 +15,8 @@ public enum ErrorCode {
     LOGIN_FAIL(404, "로그인에 실패했습니다."),
     WRONG_HTTP_REQUEST(500, "잘못된 http 요청입니다."),
     USER_NOT_ACTIVE(500, "차단된 사용자입니다."),
+    INCORRECT_PASSWORD(500, "현재 비밀번호가 일치하지 않습니다."),
+    CONFIRM_NEW_PASSWORD_NOT_MATCH(500, "새로운 비밀번호가 서로 일치하지 않습니다."),
 
     // schedule 관련 오류 처리
     SCHEDULE_NOT_FOUND(404, "존재하지 않는 일정입니다."),

@@ -73,4 +73,8 @@ public class User extends TimeStamped {
         return this;
     }
 
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
 }

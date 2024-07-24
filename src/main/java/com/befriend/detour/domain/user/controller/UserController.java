@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.user.controller;
 
+import com.befriend.detour.domain.user.dto.EditNicknameRequestDto;
 import com.befriend.detour.domain.user.dto.ProfileResponseDto;
 import com.befriend.detour.domain.user.dto.SignupRequestDto;
 import com.befriend.detour.domain.user.service.KakaoService;
@@ -50,6 +51,13 @@ public class UserController {
         ProfileResponseDto profileResponseDto = userService.getProfile(userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto(200, "프로필 조회에 성공하였습니다. 🎉", profileResponseDto));
+    }
+
+    @PatchMapping("/profiles/nickname")
+    public ResponseEntity<CommonResponseDto> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditNicknameRequestDto editNicknameRequestDto) {
+        ProfileResponseDto profileResponseDto = userService.updateNickname(userDetails.getUser(), editNicknameRequestDto.getNickname());
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "닉네임 수정에 성공하였습니다. 🎉", profileResponseDto));
     }
 
 }

@@ -1,4 +1,4 @@
-### 1-1. 회원가입 - USER
+### 1-1-1. 회원가입 - USER
 POST http://localhost:8081/api/users/signup
 Content-Type: application/json
 
@@ -10,6 +10,17 @@ Content-Type: application/json
   "isAdmin" : false
 }
 
+### 1-1-2. 회원가입 - USER
+POST http://localhost:8081/api/users/signup
+Content-Type: application/json
+
+{
+  "loginId" : "subong123",
+  "password" : "Password1!",
+  "email" : "def@naver.com",
+  "nickname" : "subong",
+  "isAdmin" : false
+}
 
 ### 1-2. 회원가입 - ADMIN
 POST http://localhost:8081/api/users/signup

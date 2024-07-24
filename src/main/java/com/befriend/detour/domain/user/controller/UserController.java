@@ -60,4 +60,18 @@ public class UserController {
         return ResponseEntity.ok(new CommonResponseDto(200, "닉네임 수정에 성공하였습니다. 🎉", profileResponseDto));
     }
 
+    @PatchMapping("/profiles/email")
+    public ResponseEntity<CommonResponseDto> updateEmail(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditEmailRequestDto editEmailRequestDto) {
+        ProfileResponseDto profileResponseDto = userService.updateEmail(userDetails.getUser(), editEmailRequestDto.getEmail());
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "이메일 수정에 성공하였습니다. 🎉", profileResponseDto));
+    }
+
+    @PatchMapping("/profiles/password")
+    public ResponseEntity<CommonResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditPasswordDto editPasswordDto) {
+        userService.updatePassword(userDetails.getUser(), editPasswordDto);
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "비밀번호 수정에 성공하였습니다. 🎉", null));
+    }
+
 }

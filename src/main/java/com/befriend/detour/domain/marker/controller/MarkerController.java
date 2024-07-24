@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.marker.controller;
 
+import com.befriend.detour.domain.file.service.FileService;
 import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ import java.util.List;
 public class MarkerController {
 
     private final MarkerService markerService;
+    private final FileService fileService;
 
     // 마커 생성
     @PostMapping("/{dailyPlanId}/markers/{placeId}")
@@ -73,4 +76,23 @@ public class MarkerController {
         return ResponseEntity.ok(new CommonResponseDto(200, "마커 삭제에 성공하였습니다. 🎉", null));
     }
 
+    // 이미지 저장
+    @PostMapping("/markers/{markerId}/image")
+    public ResponseEntity<CommonResponseDto<List<String>>> uploadFile( @PathVariable Long markerId,
+                                                                       @RequestPart(value = "file", required = false) List<MultipartFile> multipartFiles){
+
+        fileService.uploadFile(markerId, multipartFiles);
+
+        return new ResponseEntity<>(new CommonResponseDto<>(201, "파일 업로드에 성공하였습니다. 🎉", null), HttpStatus.CREATED);
+    }
+
+    //이미지 삭제
+    @DeleteMapping("/markers/{markerId}/image")
+    public ResponseEntity<CommonResponseDto<String>> deleteFile(  @PathVariable Long markerId,
+                                                                  @RequestParam String fileUrl){
+
+        fileService.deleteFile(markerId, fileUrl);
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, "파일 삭제에 성공하였습니다. 🎉", null));
+    }
 }

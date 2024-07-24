@@ -11,3 +11,8 @@ Authorization: {{access_token}}
 GET http://localhost:8081/api/schedules/1/daily-plans
 Content-Type: application/json
 Authorization: {{access_token}}
+
+### 5-3. DailyPlan 단건 조회
+GET http://localhost:8081/api/daily-plans/1
+Content-Type: application/json
+Authorization: {{access_token}}

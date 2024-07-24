@@ -107,6 +107,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void withdrawalUser(User user) {
+        user.updateStatus(UserStatusEnum.WITHDRAWAL);
+        userRepository.save(user);
+    }
+
     public boolean isLoginIdExist(String loginId) {
         Optional<User> user = userRepository.findByLoginId(loginId);
 

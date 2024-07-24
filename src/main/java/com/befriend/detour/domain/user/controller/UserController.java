@@ -72,4 +72,12 @@ public class UserController {
         return ResponseEntity.ok(new CommonResponseDto(200, "비밀번호 수정에 성공하였습니다. 🎉", null));
     }
 
+
+    @PatchMapping("/withdrawal")
+    public ResponseEntity<CommonResponseDto> withdrawalUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.withdrawalUser(userDetails.getUser());
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "회원 탈퇴에 성공하였습니다. 🎉", null));
+    }
+
 }

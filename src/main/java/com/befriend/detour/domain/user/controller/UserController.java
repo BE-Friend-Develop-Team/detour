@@ -1,8 +1,6 @@
 package com.befriend.detour.domain.user.controller;
 
-import com.befriend.detour.domain.user.dto.EditNicknameRequestDto;
-import com.befriend.detour.domain.user.dto.ProfileResponseDto;
-import com.befriend.detour.domain.user.dto.SignupRequestDto;
+import com.befriend.detour.domain.user.dto.*;
 import com.befriend.detour.domain.user.service.KakaoService;
 import com.befriend.detour.domain.user.service.UserService;
 import com.befriend.detour.global.dto.CommonResponseDto;

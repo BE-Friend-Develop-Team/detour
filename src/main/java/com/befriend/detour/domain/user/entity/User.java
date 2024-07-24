@@ -77,4 +77,12 @@ public class User extends TimeStamped {
         this.nickname = nickname;
     }
 
+    public void updateEmail(String email) {
+        this.email = email;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
 }

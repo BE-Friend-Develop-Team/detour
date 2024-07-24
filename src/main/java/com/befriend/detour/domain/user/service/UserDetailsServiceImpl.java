@@ -1,7 +1,10 @@
 package com.befriend.detour.domain.user.service;
 
 import com.befriend.detour.domain.user.entity.User;
+import com.befriend.detour.domain.user.entity.UserStatusEnum;
 import com.befriend.detour.domain.user.repository.UserRepository;
+import com.befriend.detour.global.exception.CustomException;
+import com.befriend.detour.global.exception.ErrorCode;
 import com.befriend.detour.global.security.UserDetailsImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,6 +32,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         User user = userOptional.get();
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
+
+        if(user.getStatus().equals(UserStatusEnum.BLOCK))
+        {
+            throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
+        }
 
         return userDetails;
 

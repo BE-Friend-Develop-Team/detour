@@ -1,6 +1,7 @@
 package com.befriend.detour.domain.marker.entity;
 
 import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
+import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
 import com.befriend.detour.domain.place.entity.Place;
 import com.befriend.detour.global.entity.TimeStamped;
 import jakarta.persistence.*;
@@ -29,6 +30,10 @@ public class Marker extends TimeStamped {
     @Column
     private String images;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MarkerStatusEnum status = MarkerStatusEnum.ACTIVE;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "daily_plan_id", nullable = false)
     private DailyPlan dailyPlan;
@@ -37,11 +42,20 @@ public class Marker extends TimeStamped {
     @JoinColumn(name = "place_id", nullable = false)
     private Place place;
 
-    public Marker(Double latitude, Double longitude, String content, String images) {
+    public Marker(Double latitude, Double longitude, DailyPlan dailyPlan, Place place) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.content = content;
-        this.images = images;
+        this.dailyPlan = dailyPlan;
+        this.place = place;
+        this.status = MarkerStatusEnum.ACTIVE;
+    }
+
+    public void updateContent(MarkerContentRequestDto requestDto) {
+        this.content = requestDto.getContent();
+    }
+
+    public void delete() {
+        this.status = MarkerStatusEnum.DELETED;
     }
 
 }

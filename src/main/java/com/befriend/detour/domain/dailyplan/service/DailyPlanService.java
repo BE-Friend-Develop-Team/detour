@@ -5,6 +5,8 @@ import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.dailyplan.repository.DailyPlanRepository;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.schedule.service.ScheduleService;
+import com.befriend.detour.global.exception.CustomException;
+import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,4 +25,9 @@ public class DailyPlanService {
         dailyPlanRepository.save(dailyPlan);
     }
 
+    // dailyPlanId로 데일리플랜 찾기
+    public DailyPlan findDailyPlanById(Long dailyPlanId) {
+        return dailyPlanRepository.findById(dailyPlanId).orElseThrow(() ->
+                new CustomException(ErrorCode.DAILY_PLAN_NOT_FOUND));
+    }
 }

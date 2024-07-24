@@ -46,6 +46,13 @@ public class DailyPlanService {
         return responseDtoList;
     }
 
+    @Transactional(readOnly = true)
+    public DailyPlanResponseDto getDailyPlan(Long dailyPlanId) {
+        DailyPlan checkDailyPlan = findDailyPlanById(dailyPlanId);
+
+        return new DailyPlanResponseDto(checkDailyPlan);
+    }
+
     // dailyPlanId로 데일리플랜 찾기
     public DailyPlan findDailyPlanById(Long dailyPlanId) {
         return dailyPlanRepository.findById(dailyPlanId).orElseThrow(() ->

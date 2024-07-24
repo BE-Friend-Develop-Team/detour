@@ -33,4 +33,11 @@ public class DailyPlanController {
         return ResponseEntity.ok(new CommonResponseDto<>(200, "해당 일정에 대한 데일리 플랜 목록 조회에 성공하였습니다. 🎉", responseDtoList));
     }
 
+    @GetMapping("/daily-plans/{dailyPlanId}")
+    public ResponseEntity<CommonResponseDto<DailyPlanResponseDto>> getDailyPlan(@PathVariable(name = "dailyPlanId") Long dailyPlanId) {
+        DailyPlanResponseDto responseDto = dailyPlanService.getDailyPlan(dailyPlanId);
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, "데일리 플랜 단건 조회에 성공하였습니다. 🎉", responseDto));
+    }
+
 }

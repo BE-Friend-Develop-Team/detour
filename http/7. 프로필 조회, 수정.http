@@ -1,0 +1,4 @@
+### 7-1. 프로필 조회
+GET http://localhost:8081/api/users/profile
+Content-Type: application/json
+Authorization: {{access_token}}

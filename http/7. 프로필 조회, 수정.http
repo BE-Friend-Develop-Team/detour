@@ -2,3 +2,12 @@
 GET http://localhost:8081/api/users/profile
 Content-Type: application/json
 Authorization: {{access_token}}
+
+#### 7-2. 닉네임 수정
+PATCH http://localhost:8081/api/users/profiles/nickname
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "nickname" : "변경"
+}

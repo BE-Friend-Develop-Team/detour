@@ -72,6 +72,14 @@ public class UserService {
         return new ProfileResponseDto(user.getId(), user.getLoginId(), user.getKakaoId(), user.getEmail(), user.getNickname());
     }
 
+    @Transactional
+    public ProfileResponseDto updateNickname(User user, String nickname) {
+        user.updateNickname(nickname);
+        userRepository.save(user);
+
+        return getProfile(user);
+    }
+
     public boolean isLoginIdExist(String loginId) {
         Optional<User> user = userRepository.findByLoginId(loginId);
 

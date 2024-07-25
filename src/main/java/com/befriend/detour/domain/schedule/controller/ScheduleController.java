@@ -44,6 +44,15 @@ public class ScheduleController {
         return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 기간 수정에 성공하였습니다. 🎉", scheduleResponseDto));
     }
 
+    @PatchMapping("/{scheduleId}/main-image")
+    public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> updateScheduleMainImage(@PathVariable(value = "scheduleId") Long scheduleId,
+                                                                                      @Valid @RequestBody EditMainImageRequestDto editMainImageRequestDto,
+                                                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ScheduleResponseDto scheduleResponseDto = scheduleService.updateScheduleMainImage(scheduleId, editMainImageRequestDto, userDetails.getUser());
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 메인 이미지 수정에 성공하였습니다. 🎉", scheduleResponseDto));
+    }
+
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<CommonResponseDto> deleteSchedule(@PathVariable(value = "scheduleId") Long scheduleId,
                                                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {

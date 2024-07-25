@@ -52,6 +52,16 @@ public class ScheduleService {
     }
 
     @Transactional
+    public ScheduleResponseDto updateScheduleMainImage(Long scheduleId, EditMainImageRequestDto editMainImageRequestDto, User user) {
+        Schedule checkSchedule = findById(scheduleId);
+        checkIfMemberOfSchedule(checkSchedule, user);
+        checkSchedule.updateScheduleMainImage(editMainImageRequestDto);
+        scheduleRepository.save(checkSchedule);
+
+        return new ScheduleResponseDto(checkSchedule);
+    }
+
+    @Transactional
     public void deleteSchedule(Long scheduleId, User user) {
         Schedule checkSchedule = findById(scheduleId);
         checkIfMemberOfSchedule(checkSchedule, user);

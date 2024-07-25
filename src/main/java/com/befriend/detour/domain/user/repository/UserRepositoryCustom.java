@@ -1,8 +1,10 @@
 package com.befriend.detour.domain.user.repository;
 
 import com.befriend.detour.domain.user.entity.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,5 +17,7 @@ public interface UserRepositoryCustom {
     Optional<User> findByEmail(String Email);
 
     Optional<User> findByKakaoId(Long kakaoId);
+
+    Optional<List<User>> findAllUser(Pageable pageable);
 
 }

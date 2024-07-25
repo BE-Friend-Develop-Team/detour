@@ -5,6 +5,7 @@ import com.befriend.detour.domain.dailyplan.service.DailyPlanService;
 import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.file.repository.FileRepository;
 import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
+import com.befriend.detour.domain.marker.dto.MarkerLocationResponseDto;
 import com.befriend.detour.domain.marker.dto.MarkerRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
 import com.befriend.detour.domain.marker.entity.Marker;
@@ -78,6 +79,13 @@ public class MarkerService {
         return new MarkerResponseDto(marker, imageUrls);
     }
 
+    // 위도 경도 조회
+    public MarkerLocationResponseDto getPosition(Long markerId) {
+        Marker marker = findMarker(markerId);
+        MarkerLocationResponseDto responseDto = new MarkerLocationResponseDto(marker.getLatitude(), marker.getLatitude());
+
+        return responseDto;
+    }
 
     // 마커 글 생성, 수정
     @Transactional

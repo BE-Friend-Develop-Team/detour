@@ -1,13 +1,14 @@
 package com.befriend.detour.domain.marker.controller;
 
-import com.befriend.detour.domain.file.service.FileService;
 import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
+import com.befriend.detour.domain.marker.dto.MarkerLocationResponseDto;
 import com.befriend.detour.domain.marker.dto.MarkerRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
 import com.befriend.detour.domain.marker.service.MarkerFileService;
 import com.befriend.detour.domain.marker.service.MarkerService;
 import com.befriend.detour.global.dto.CommonResponseDto;
 import com.befriend.detour.global.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +71,15 @@ public class MarkerController {
         MarkerResponseDto responseDto = markerService.getMarker(dailyPlanId, markerId);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "마커 조회에 성공하였습니다. 🎉", responseDto));
+    }
 
+    // 위도 경도 조회
+    @GetMapping("/markers/{markerId}/location")
+    public ResponseEntity<CommonResponseDto> getPosition(@PathVariable Long markerId) {
+
+        MarkerLocationResponseDto responseDto = markerService.getPosition(markerId);
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "위도, 경도 조회에 성공하였습니다. 🎉", responseDto));
     }
 
     // 마커 삭제

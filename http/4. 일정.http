@@ -26,3 +26,12 @@ Authorization: {{access_token}}
 {
   "nickname" : "subongbong"
 }
+
+### 4-3. 일행 초대 취소
+DELETE http://localhost:8081/api/schedules/1/invitation
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "nickname" : "subong"
+}

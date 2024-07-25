@@ -2,6 +2,7 @@ package com.befriend.detour.domain.marker.repository;
 
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
 import com.befriend.detour.domain.marker.entity.Marker;
+import com.befriend.detour.domain.marker.entity.MarkerStatusEnum;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -22,13 +23,13 @@ public class MarkerRepositoryImpl implements MarkerRepositoryCustom {
     public List<MarkerResponseDto> findByDailyPlanId(Long dailyPlanId) {
 
         return jpaQueryFactory.selectFrom(marker)
-                .where(marker.dailyPlan.id.eq(dailyPlanId))
+                .where(marker.dailyPlan.id.eq(dailyPlanId),
+                        marker.status.ne(MarkerStatusEnum.DELETED))
                 .orderBy(marker.id.asc())
                 .fetch()
                 .stream()
                 .map(MarkerResponseDto::new)
                 .collect(Collectors.toList());
-
     }
 
     @Override

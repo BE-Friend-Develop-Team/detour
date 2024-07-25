@@ -1,4 +1,4 @@
-### 2-1-1. 로그인 - USER
+### 2-1-1. 로그인 - USER_1
 POST http://localhost:8081/api/users/login
 Content-Type: application/json
 
@@ -11,7 +11,7 @@ Content-Type: application/json
     client.global.set("access_token", response.headers.valueOf("Authorization"));
 %}
 
-### 2-1-2. 로그인 - USER
+### 2-1-2. 로그인 - USER_2
 POST http://localhost:8081/api/users/login
 Content-Type: application/json
 

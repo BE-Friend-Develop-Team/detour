@@ -8,3 +8,30 @@ Authorization: {{access_token}}
   "departureDate" : "2024-07-22",
   "arrivalDate" : "2024-07-26"
 }
+
+### 4-2-1. 해당 일정에 대한 일행 초대
+POST http://localhost:8081/api/schedules/1/invitation
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "nickname" : "subong"
+}
+
+### 4-2-2. 초대할 아이디가 존재하지 않는 사용자인 경우
+POST http://localhost:8081/api/schedules/1/invitation
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "nickname" : "subongbong"
+}
+
+### 4-3. 일행 초대 취소
+DELETE http://localhost:8081/api/schedules/1/invitation
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "nickname" : "subong"
+}

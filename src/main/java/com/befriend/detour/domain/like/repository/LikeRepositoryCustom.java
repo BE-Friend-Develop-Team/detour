@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface LikeRepositoryCustom {
+
     Optional<Like> findLikeByUserAndSchedule(User user, Schedule schedule);
 
 }

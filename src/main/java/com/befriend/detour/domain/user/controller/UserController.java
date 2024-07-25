@@ -66,8 +66,8 @@ public class UserController {
     }
 
     @PatchMapping("/profiles/password")
-    public ResponseEntity<CommonResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditPasswordDto editPasswordDto) {
-        userService.updatePassword(userDetails.getUser(), editPasswordDto);
+    public ResponseEntity<CommonResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditPasswordRequestDto editPasswordRequestDto) {
+        userService.updatePassword(userDetails.getUser(), editPasswordRequestDto);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "비밀번호 수정에 성공하였습니다. 🎉", null));
     }

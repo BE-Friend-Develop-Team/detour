@@ -48,4 +48,5 @@ public class Place extends TimeStamped {
             this.telNumber = placeRequestDto.getTelNumber();
         }
     }
+
 }

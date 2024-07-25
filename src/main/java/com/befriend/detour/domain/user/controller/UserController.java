@@ -79,4 +79,11 @@ public class UserController {
         return ResponseEntity.ok(new CommonResponseDto(200, "회원 탈퇴에 성공하였습니다. 🎉", null));
     }
 
+    @PostMapping("/token")
+    public ResponseEntity<CommonResponseDto> refreshAccessToken(@RequestBody RefreshAccessTokenRequestDto refreshAccessTokenRequestDto, HttpServletResponse response) {
+        userService.refreshAccessToken(refreshAccessTokenRequestDto.getNickname(), response);
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "액세스 토큰 재발급에 성공하였습니다. 🎉", null));
+    }
+
 }

@@ -50,3 +50,13 @@ Authorization: {{access_token}}
 DELETE http://localhost:8081/api/schedules/1
 Content-Type: application/json
 Authorization: {{access_token}}
+
+### 4-7. 일정 기간 수정
+PATCH http://localhost:8081/api/schedules/2/date
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "departureDate" : "2024-08-01",
+  "arrivalDate" : "2024-08-12"
+}

@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +23,14 @@ public class LikeController {
         likeService.createScheduleLike(scheduleId, userDetails.getUser());
 
         return new ResponseEntity<>(new CommonResponseDto<>(201, scheduleId + "번 일정에 대한 좋아요 등록을 성공하였습니다. 🎉", null), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/likes/{likeId}")
+    public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> deleteScheduleLike(@PathVariable(value = "likeId") Long likeId,
+                                                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        likeService.deleteScheduleLike(likeId, userDetails.getUser());
+
+        return new ResponseEntity<>(new CommonResponseDto<>(200, likeId + "번 좋아요 취소에 성공하였습니다. 🎉", null), HttpStatus.OK);
     }
 
 }

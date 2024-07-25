@@ -31,4 +31,18 @@ public class LikeService {
         foundschedule.addLikeCount();
     }
 
+    @Transactional
+    public void deleteScheduleLike(Long likeId, User user) {
+        Like foundLike = likeRepository.findById(likeId).orElseThrow(
+                () -> new CustomException(ErrorCode.LIKE_NOT_EXIST));
+        Schedule foundSchedule = scheduleService.findById(foundLike.getSchedule().getId());
+
+        if (!user.getId().equals(foundLike.getUser().getId())) {
+            throw new CustomException(ErrorCode.CANNOT_CANCEL_OTHERS_LIKE);
+        }
+
+        likeRepository.delete(foundLike);
+        foundSchedule.minusLikeCount();
+    }
+
 }

@@ -33,6 +33,11 @@ public enum ErrorCode {
     ALREADY_INVITED(409, "이미 해당 일정에 초대된 사용자입니다."),
     USER_NOT_MEMBER(404, "해당 일정에 존재하지 않는 일행입니다."),
 
+    // like 관련 오류 처리
+    ALREADY_LIKED(409, "이미 좋아요를 누른 일정입니다."),
+    LIKE_NOT_EXIST(404, "해당 좋아요가 존재하지 않습니다."),
+    CANNOT_CANCEL_OTHERS_LIKE(403, "다른 사람의 좋아요는 취소할 수 없습니다."),
+
     // daily plan 관련 오류 처리
     DAILY_PLAN_NOT_FOUND(404, "존재하지 않는 데일리플랜입니다."),
 

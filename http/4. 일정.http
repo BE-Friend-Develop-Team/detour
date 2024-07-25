@@ -35,3 +35,8 @@ Authorization: {{access_token}}
 {
   "nickname" : "subong"
 }
+
+### 4-4. 일정 좋아요 등록
+POST http://localhost:8081/api/schedules/1/likes
+Content-Type: application/json
+Authorization: {{access_token}}

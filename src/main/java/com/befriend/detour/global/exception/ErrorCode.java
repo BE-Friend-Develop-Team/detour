@@ -27,6 +27,9 @@ public enum ErrorCode {
 
     // schedule 관련 오류 처리
     SCHEDULE_NOT_FOUND(404, "존재하지 않는 일정입니다."),
+    NOT_SCHEDULE_MEMBER(404, "해당 일정의 일행이어야 일정에 대한 권한이 있습니다."),
+    ALREADY_INVITED(409, "이미 해당 일정에 초대된 사용자입니다."),
+    USER_NOT_MEMBER(404, "해당 일정에 존재하지 않는 일행입니다."),
 
     // daily plan 관련 오류 처리
     DAILY_PLAN_NOT_FOUND(404, "존재하지 않는 데일리플랜입니다."),

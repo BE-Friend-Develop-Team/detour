@@ -4,6 +4,7 @@ import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.like.entity.Like;
 import com.befriend.detour.domain.schedule.dto.EditDateRequestDto;
+import com.befriend.detour.domain.schedule.dto.EditMainImageRequestDto;
 import com.befriend.detour.domain.schedule.dto.EditTitleRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.user.entity.User;
@@ -21,12 +22,17 @@ import java.util.List;
 @Table(name = "schedules")
 public class Schedule extends TimeStamped {
 
+    private static final String DEFAULT_IMAGE_URL = "https://detour1.s3.ap-northeast-2.amazonaws.com/a7397a75-99d5-4c94-9abf-d5cccac8c464.png";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
+    private String imageUrl;
 
     @Column(nullable = false)
     private Date departureDate;
@@ -60,6 +66,7 @@ public class Schedule extends TimeStamped {
 
     public Schedule(ScheduleRequestDto scheduleRequestDto, User user) {
         this.title = scheduleRequestDto.getTitle();
+        this.imageUrl = DEFAULT_IMAGE_URL;
         this.departureDate = scheduleRequestDto.getDepartureDate();
         this.arrivalDate = scheduleRequestDto.getArrivalDate();
         this.user = user;
@@ -72,6 +79,10 @@ public class Schedule extends TimeStamped {
     public void updateScheduleDate(EditDateRequestDto editDateRequestDto) {
         this.departureDate = editDateRequestDto.getDepartureDate();
         this.arrivalDate = editDateRequestDto.getArrivalDate();
+    }
+
+    public void updateScheduleMainImage(EditMainImageRequestDto editMainImageRequestDto) {
+        this.imageUrl = editMainImageRequestDto.getMainImage();
     }
 
 }

@@ -1,13 +1,11 @@
 package com.befriend.detour.domain.file.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.file.repository.FileRepository;
-import com.befriend.detour.domain.marker.service.MarkerService;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -39,16 +37,12 @@ public class FileService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
-    private final MarkerService markerService;
     private final AmazonS3 amazonS3;
     private final FileRepository fileRepository;
 
-    public List<String> uploadFile(Long markerId, List<MultipartFile> multipartFiles) {
+    public List<File> uploadFile(List<MultipartFile> multipartFiles) {
 
-        markerService.findMarker(markerId);
-
-        List<String> fileUrlList = new ArrayList<>();
+        List<File> fileEntities = new ArrayList<>();
 
         multipartFiles.forEach(file -> {
             String originalFilename = file.getOriginalFilename();
@@ -61,37 +55,40 @@ public class FileService {
             objectMetadata.setContentType(file.getContentType());
 
             try (InputStream inputStream = file.getInputStream()) {
-                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
+                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata));
             } catch (IOException e) {
                 throw new CustomException(ErrorCode.PUT_OBJECT_EXCEPTION);
             }
 
             String fileUrl = amazonS3.getUrl(bucket, fileName).toString();
-            fileUrlList.add(fileUrl);
 
             // 파일 정보 데이터베이스에 저장
             File fileEntity = new File(fileName, fileUrl, file.getContentType(), file.getSize());
             fileRepository.save(fileEntity);
+            fileEntities.add(fileEntity);
         });
 
-        return fileUrlList;
+        return fileEntities;
     }
 
     private String createFileName(String fileName) {
+
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
     private String getFileExtension(String fileName) {
+
         try {
             validateImageFileExtension(fileName);
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
             throw new CustomException(ErrorCode.FILE_NAME_INVALID);
         }
+
     }
 
     private void validateImageFileExtension(String filename) {
+
         int lastDotIndex = filename.lastIndexOf(".");
 
         if (lastDotIndex == -1) {
@@ -104,40 +101,46 @@ public class FileService {
         if (!allowedExtensionList.contains(extension)) {
             throw new CustomException(ErrorCode.EXTENSION_INVALID);
         }
+
     }
 
     private void validateFileSize(long size, String extension) {
+
         if (isImageFile(extension) && size > MAX_IMAGE_SIZE) {
             throw new IllegalArgumentException("이미지 파일 크기는 10MB를 초과할 수 없습니다.");
         } else if (isVideoFile(extension) && size > MAX_VIDEO_SIZE) {
             throw new IllegalArgumentException("비디오 파일 크기는 200MB를 초과할 수 없습니다.");
         }
+
     }
 
     private boolean isImageFile(String extension) {
+
         return extension.equals("jpeg") || extension.equals("jpg") || extension.equals("png");
     }
 
     private boolean isVideoFile(String extension) {
+
         return extension.equals("mp4") || extension.equals("avi") || extension.equals("gif");
     }
 
-    public String deleteFile(Long markerId, String fileUrl) {
-
-        markerService.findMarker(markerId);
-
+    public void deleteFile(String fileUrl) {
+        // 파일 URL로 S3에서 삭제
         String key = getKeyFromFileAddress(fileUrl);
 
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, key));
-            return null;
+            // 파일 URL로 데이터베이스에서 삭제
+            fileRepository.deleteByFileUrl(fileUrl);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error occurred while deleting the file", e);
             throw new CustomException(ErrorCode.IO_EXCEPTION_ON_IMAGE_DELETE);
         }
+
     }
 
     private String getKeyFromFileAddress(String fileAddress) {
+
         try {
             URL url = new URL(fileAddress);
             String decodingKey = URLDecoder.decode(url.getPath(), StandardCharsets.UTF_8);
@@ -146,7 +149,7 @@ public class FileService {
             e.printStackTrace();
             throw new CustomException(ErrorCode.IO_EXCEPTION_ON_IMAGE_DELETE);
         }
-    }
 
+    }
 
 }

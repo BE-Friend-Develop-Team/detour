@@ -51,6 +51,24 @@ public class ScheduleService {
         invitationRepository.save(invitation);
     }
 
+    @Transactional
+    public void cancelInvitation(Long scheduleId, InvitationRequestDto invitationRequestDto, User user) {
+        Schedule checkSchedule = findById(scheduleId);
+
+        // 초대취소자가 해당 Schedule에 대한 권한이 있는 사용자인지 확인
+        checkIfMemberOfSchedule(checkSchedule, user);
+
+        User invitee = userService.findUserByNickName(invitationRequestDto.getNickname());
+
+        // 초대를 취소할 사람이 해당 일정의 일행인지 확인
+        Invitation invitation = invitationRepository.findInvitationByScheduleAndUser(checkSchedule, invitee);
+        if (invitation == null) {
+            throw new CustomException(ErrorCode.USER_NOT_MEMBER);
+        }
+
+        invitationRepository.delete(invitation);
+    }
+
     private void checkIfMemberOfSchedule(Schedule schedule, User user) {
         if (invitationRepository.findInvitationByScheduleAndUser(schedule, user) == null) {
             throw new CustomException(ErrorCode.NOT_SCHEDULE_MEMBER);

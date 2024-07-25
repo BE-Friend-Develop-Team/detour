@@ -23,16 +23,13 @@ public class Marker extends TimeStamped {
     private Long id;
 
     @Column(nullable = false)
-    private Double latitude;
+    private Double latitude = 0.0;
 
     @Column(nullable = false)
-    private Double longitude;
+    private Double longitude = 0.0;
 
     @Column
     private String content;
-
-    @Column
-    private String images;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

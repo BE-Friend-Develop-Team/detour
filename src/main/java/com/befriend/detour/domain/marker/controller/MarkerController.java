@@ -26,11 +26,11 @@ public class MarkerController {
     private final MarkerFileService markerFileService;
 
     // 마커 생성
-    @PostMapping("/{dailyPlanId}/markers/{placeId}")
-    public ResponseEntity<CommonResponseDto> createMarker(@PathVariable Long dailPlanId,
+    @PostMapping("/{dailyPlanId}/place/{placeId}/markers")
+    public ResponseEntity<CommonResponseDto> createMarker(@PathVariable Long dailyPlanId,
                                                           @PathVariable Long placeId,
-                                                          MarkerRequestDto requestDto) {
-        MarkerResponseDto responseDto = markerService.createMarker(dailPlanId, placeId, requestDto);
+                                                          @Valid @RequestBody MarkerRequestDto requestDto) {
+        MarkerResponseDto responseDto = markerService.createMarker(dailyPlanId, placeId, requestDto);
 
         return new ResponseEntity<>(new CommonResponseDto<>(201, "마커 생성에 성공하였습니다. 🎉", responseDto), HttpStatus.CREATED);
     }
@@ -38,7 +38,7 @@ public class MarkerController {
     // 마커 글 생성
     @PostMapping("/markers/{markerId}/content")
     public ResponseEntity<CommonResponseDto> createMarkerContent(@PathVariable Long markerId,
-                                                                 MarkerContentRequestDto requestDto) {
+                                                                 @Valid @RequestBody MarkerContentRequestDto requestDto) {
         MarkerResponseDto responseDto = markerService.updateMarkerContent(markerId, requestDto);
 
         return new ResponseEntity<>(new CommonResponseDto<>(201, "마커 내 글 저장에 성공하였습니다. 🎉", responseDto), HttpStatus.CREATED);
@@ -47,7 +47,7 @@ public class MarkerController {
     // 마커 글 수정
     @PatchMapping("/markers/{markerId}/content")
     public ResponseEntity<CommonResponseDto> updateMarkerContent(@PathVariable Long markerId,
-                                                                 MarkerContentRequestDto requestDto) {
+                                                                 @Valid @RequestBody MarkerContentRequestDto requestDto) {
         MarkerResponseDto responseDto = markerService.updateMarkerContent(markerId, requestDto);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "마커 내 글 수정에 성공하였습니다. 🎉", responseDto));
@@ -64,7 +64,7 @@ public class MarkerController {
     }
 
     // 마커 단건 조회
-    @GetMapping("{dailyPlanId}/markers/{markerId}")
+    @GetMapping("/{dailyPlanId}/markers/{markerId}")
     public ResponseEntity<CommonResponseDto> getMarker(@PathVariable Long dailyPlanId,
                                                        @PathVariable Long markerId) {
         MarkerResponseDto responseDto = markerService.getMarker(dailyPlanId, markerId);
@@ -82,15 +82,16 @@ public class MarkerController {
         return ResponseEntity.ok(new CommonResponseDto(200, "마커 삭제에 성공하였습니다. 🎉", null));
     }
 
-    // 파일 저장,  TODO : place CRUD 완료시 markerId 추가 필요
-    @PostMapping("/markers/files")
-    public ResponseEntity<CommonResponseDto<List<MarkerResponseDto>>> uploadFile(@RequestPart(value = "file", required = false) List<MultipartFile> multipartFiles) {
-        List<MarkerResponseDto> responseDto = markerFileService.uploadFiles(multipartFiles);
+    // 파일 저장
+    @PostMapping("/markers/{markerId}/files")
+    public ResponseEntity<CommonResponseDto<List<MarkerResponseDto>>> uploadFile(@PathVariable Long markerId,
+                                                                                 @RequestPart(value = "file", required = false) List<MultipartFile> multipartFiles) {
+        List<MarkerResponseDto> responseDto = markerFileService.uploadFiles(markerId, multipartFiles);
 
         return new ResponseEntity<>(new CommonResponseDto<>(201, "파일 업로드에 성공하였습니다. 🎉", responseDto), HttpStatus.CREATED);
     }
 
-    // 파일 삭제, TODO : place CRUD 완료시 markerId 추가 필요
+    // 파일 삭제
     @DeleteMapping("/markers/{markerId}/files")
     public ResponseEntity<CommonResponseDto<String>> deleteFile(@PathVariable Long markerId,
                                                                 @RequestParam String fileUrl) {

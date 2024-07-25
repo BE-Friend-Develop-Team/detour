@@ -27,25 +27,19 @@ public class MarkerService {
     private final MarkerRepository markerRepository;
     private final DailyPlanService dailyPlanService;
     private final FileRepository fileRepository;
-//    private final PlaceService placeService;
+    private final PlaceService placeService;
 
     // 마커 생성
-    // TODO: place 생성시 주석 제거 예정
     @Transactional
     public MarkerResponseDto createMarker(Long dailyPlanId, Long placeId, MarkerRequestDto requestDto) {
-         /*
-        - 지도에서 장소를 검색하고 선택한 후에 저장버튼을 누르면 마커 생성
-        - 프론트에서 placeId를 넘겨주면 해당 아이디로 place와 연관관계 설정
-         */
 
         DailyPlan dailyPlan = dailyPlanService.findDailyPlanById(dailyPlanId);
-        //  Place place = placeService.findPlaceById(placeId);
+        Place place = placeService.findPlaceById(placeId);
 
-        // Marker marker = new Marker(requestDto.getLatitude(), requestDto.getLongitude(), dailyPlan, place);
-        // markerRepository.save(marker);
+        Marker marker = new Marker(requestDto.getLatitude(), requestDto.getLongitude(), dailyPlan, place);
+        markerRepository.save(marker);
 
-        //  return new MarkerResponseDto(marker);
-        return null;
+        return new MarkerResponseDto(marker);
     }
 
     // 마커 전체 조회
@@ -70,6 +64,8 @@ public class MarkerService {
         Marker marker = markerRepository.findByIdAndDailyPlanId(markerId, dailyPlanId).orElseThrow(
                 () -> new CustomException(ErrorCode.MARKER_NOT_FOUND)
         );
+
+        findMarker(markerId);
 
         // 파일 URL 목록 가져오기
         List<File> files = fileRepository.findByMarkerId(markerId);

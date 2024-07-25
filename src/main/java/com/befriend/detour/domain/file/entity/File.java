@@ -26,11 +26,12 @@ public class File extends TimeStamped {
     @JoinColumn(name = "marker_id")
     private Marker marker;
 
-    public File(String fileName, String fileUrl, String fileType, long fileSize) {
+    public File(String fileName, String fileUrl, String fileType, long fileSize, Marker marker) {
         this.fileName = fileName;
         this.fileUrl = fileUrl;
         this.fileType = fileType;
         this.fileSize = fileSize;
+        this.marker = marker;
     }
 
 }

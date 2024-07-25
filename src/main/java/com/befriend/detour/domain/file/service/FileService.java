@@ -84,6 +84,7 @@ public class FileService {
 
         try {
             validateImageFileExtension(fileName);
+
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
             throw new CustomException(ErrorCode.FILE_NAME_INVALID);
@@ -148,6 +149,7 @@ public class FileService {
         try {
             URL url = new URL(fileAddress);
             String decodingKey = URLDecoder.decode(url.getPath(), StandardCharsets.UTF_8);
+
             return decodingKey.substring(1); // 맨 앞의 '/' 제거
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -157,6 +159,7 @@ public class FileService {
     }
 
     public File findFileByUrl(String fileUrl) {
+
         return fileRepository.findByFileUrl(fileUrl)
                 .orElseThrow(() -> new CustomException(ErrorCode.EXTENSION_IS_EMPTY));
     }

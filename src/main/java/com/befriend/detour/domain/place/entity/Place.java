@@ -26,7 +26,7 @@ public class Place extends TimeStamped {
     @Column
     private String telNumber;
 
-    @OneToOne(mappedBy = "place", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "place", fetch = FetchType.LAZY)
     private Marker marker;
 
     public Place(PlaceRequestDto placeRequestDto) {

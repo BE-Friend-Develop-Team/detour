@@ -2,6 +2,7 @@ package com.befriend.detour.domain.user.service;
 
 import com.befriend.detour.domain.user.dto.ProfileResponseDto;
 import com.befriend.detour.domain.user.entity.User;
+import com.befriend.detour.domain.user.entity.UserStatusEnum;
 import com.befriend.detour.domain.user.repository.UserRepository;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
@@ -29,6 +30,20 @@ public class AdminService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(profileResponseDtos, pageable, profileResponseDtos.size());
+    }
+
+    public User changeUserStatus(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if(user.getStatus() == UserStatusEnum.ACTIVE) {
+            user.updateStatus(UserStatusEnum.BLOCK);
+            userRepository.save(user);
+        } else {
+            user.updateStatus(UserStatusEnum.ACTIVE);
+            userRepository.save(user);
+        }
+
+        return user;
     }
 
 }

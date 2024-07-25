@@ -1,4 +1,4 @@
-### 1-1-1. 회원가입 - USER
+### 1-1-1. 회원가입 - USER_1
 POST http://localhost:8081/api/users/signup
 Content-Type: application/json
 
@@ -10,7 +10,7 @@ Content-Type: application/json
   "isAdmin" : false
 }
 
-### 1-1-2. 회원가입 - USER
+### 1-1-2. 회원가입 - USER_2
 POST http://localhost:8081/api/users/signup
 Content-Type: application/json
 

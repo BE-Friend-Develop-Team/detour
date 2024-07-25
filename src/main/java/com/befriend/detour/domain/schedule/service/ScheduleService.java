@@ -43,7 +43,7 @@ public class ScheduleService {
         User invitee = userService.findUserByNickName(invitationRequestDto.getNickname());
 
         // 초대할 사람이 이미 초대 받은 사용자인지 확인
-        if (invitationRepository.isMemberOfSchedule(checkSchedule, invitee)) {
+        if (invitationRepository.findInvitationByScheduleAndUser(checkSchedule, invitee) != null) {
             throw new CustomException(ErrorCode.ALREADY_INVITED);
         }
 
@@ -52,8 +52,7 @@ public class ScheduleService {
     }
 
     private void checkIfMemberOfSchedule(Schedule schedule, User user) {
-        boolean isMemberOfSchedule = invitationRepository.isMemberOfSchedule(schedule, user);
-        if (!isMemberOfSchedule) {
+        if (invitationRepository.findInvitationByScheduleAndUser(schedule, user) == null) {
             throw new CustomException(ErrorCode.NOT_SCHEDULE_MEMBER);
         }
     }

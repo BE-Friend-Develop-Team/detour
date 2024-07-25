@@ -45,3 +45,8 @@ Authorization: {{access_token}}
 DELETE http://localhost:8081/api/schedules/likes/2
 Content-Type: application/json
 Authorization: {{access_token}}
+
+### 4-6. 일정 삭제
+DELETE http://localhost:8081/api/schedules/1
+Content-Type: application/json
+Authorization: {{access_token}}

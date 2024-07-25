@@ -10,6 +10,8 @@ import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
 import com.befriend.detour.domain.marker.entity.Marker;
 import com.befriend.detour.domain.marker.entity.MarkerStatusEnum;
 import com.befriend.detour.domain.marker.repository.MarkerRepository;
+import com.befriend.detour.domain.place.entity.Place;
+import com.befriend.detour.domain.place.service.PlaceService;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;

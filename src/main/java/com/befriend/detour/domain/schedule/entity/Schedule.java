@@ -1,6 +1,7 @@
 package com.befriend.detour.domain.schedule.entity;
 
 import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
+import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.like.entity.Like;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.user.entity.User;
@@ -36,6 +37,9 @@ public class Schedule extends TimeStamped {
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes;
+
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Invitation> invitations;
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DailyPlan> dailyPlans;

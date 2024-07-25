@@ -8,6 +8,7 @@ import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +16,6 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
 
-    // 장소 생성
     public PlaceResponseDto createPlace(PlaceRequestDto placeRequestDto) {
         Place place = new Place(placeRequestDto);
         placeRepository.save(place);
@@ -25,6 +25,15 @@ public class PlaceService {
 
     public PlaceResponseDto getPlace(Long placeId) {
         Place place = findPlaceById(placeId);
+
+        return new PlaceResponseDto(place);
+    }
+
+    @Transactional
+    public PlaceResponseDto updatePlace(Long placeId, PlaceRequestDto placeRequestDto) {
+        Place place = findPlaceById(placeId);
+        place.update(placeRequestDto);
+        placeRepository.save(place);
 
         return new PlaceResponseDto(place);
     }

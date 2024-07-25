@@ -29,4 +29,13 @@ public class PlaceController {
 
         return new ResponseEntity<>(new CommonResponseDto<>(200, "장소 조회에 성공하였습니다. 🎉", responseDto), HttpStatus.OK);
     }
+
+    @PatchMapping("/place/{placeId}")
+    public ResponseEntity<CommonResponseDto<PlaceResponseDto>> updatePlace(@PathVariable Long placeId,
+                                                                           @RequestBody PlaceRequestDto placeRequestDto) {
+        PlaceResponseDto responseDto = placeService.updatePlace(placeId, placeRequestDto);
+
+        return new ResponseEntity<>(new CommonResponseDto<>(200, "장소 수정에 성공하였습니다. 🎉", responseDto), HttpStatus.OK);
+    }
+
 }

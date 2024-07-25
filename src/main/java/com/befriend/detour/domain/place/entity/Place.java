@@ -35,4 +35,17 @@ public class Place extends TimeStamped {
         this.telNumber = placeRequestDto.getTelNumber();
     }
 
+    public void update(PlaceRequestDto placeRequestDto) {
+        if(placeRequestDto.getName() != null) {
+            this.name = placeRequestDto.getName();
+        }
+
+        if(placeRequestDto.getAddress() != null) {
+            this.address = placeRequestDto.getAddress();
+        }
+
+        if(placeRequestDto.getTelNumber() != null) {
+            this.telNumber = placeRequestDto.getTelNumber();
+        }
+    }
 }

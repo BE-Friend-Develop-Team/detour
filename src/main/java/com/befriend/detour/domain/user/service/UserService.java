@@ -70,7 +70,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public ProfileResponseDto getProfile(User user) {
 
-        return new ProfileResponseDto(user.getId(), user.getLoginId(), user.getKakaoId(), user.getEmail(), user.getNickname());
+        return new ProfileResponseDto(user.getId(), user.getLoginId(), user.getKakaoId(), user.getEmail(), user.getNickname(), user.getStatus(), user.getRole());
     }
 
     @Transactional

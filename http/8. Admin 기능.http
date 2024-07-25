@@ -1,0 +1,9 @@
+### 8-1. 전체 회원 조회
+GET http://localhost:8081/api/admin/users?page=1
+Accept: application/json
+Authorization: {{access_token}}
+
+### 8-2 회원 상태 변경
+PATCH http://localhost:8081/api/admin/users?userId=1
+Accept: application/json
+Authorization: {{access_token}}

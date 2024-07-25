@@ -40,3 +40,8 @@ Authorization: {{access_token}}
 POST http://localhost:8081/api/schedules/1/likes
 Content-Type: application/json
 Authorization: {{access_token}}
+
+### 4-5. 일정 좋아요 취소
+DELETE http://localhost:8081/api/schedules/likes/2
+Content-Type: application/json
+Authorization: {{access_token}}

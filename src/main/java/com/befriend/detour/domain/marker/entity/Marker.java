@@ -1,12 +1,16 @@
 package com.befriend.detour.domain.marker.entity;
 
 import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
+import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
 import com.befriend.detour.domain.place.entity.Place;
 import com.befriend.detour.global.entity.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,16 +23,13 @@ public class Marker extends TimeStamped {
     private Long id;
 
     @Column(nullable = false)
-    private Double latitude;
+    private Double latitude = 0.0;
 
     @Column(nullable = false)
-    private Double longitude;
+    private Double longitude = 0.0;
 
     @Column
     private String content;
-
-    @Column
-    private String images;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -41,6 +42,9 @@ public class Marker extends TimeStamped {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id", nullable = false)
     private Place place;
+
+    @OneToMany(mappedBy = "marker", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<File> files = new ArrayList<>();
 
     public Marker(Double latitude, Double longitude, DailyPlan dailyPlan, Place place) {
         this.latitude = latitude;

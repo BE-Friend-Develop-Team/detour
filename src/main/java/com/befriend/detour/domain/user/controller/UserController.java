@@ -66,8 +66,8 @@ public class UserController {
     }
 
     @PatchMapping("/profiles/password")
-    public ResponseEntity<CommonResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditPasswordDto editPasswordDto) {
-        userService.updatePassword(userDetails.getUser(), editPasswordDto);
+    public ResponseEntity<CommonResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditPasswordRequestDto editPasswordRequestDto) {
+        userService.updatePassword(userDetails.getUser(), editPasswordRequestDto);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "비밀번호 수정에 성공하였습니다. 🎉", null));
     }
@@ -77,6 +77,13 @@ public class UserController {
         userService.withdrawalUser(userDetails.getUser(), withDrawalDto.getPassword());
 
         return ResponseEntity.ok(new CommonResponseDto(200, "회원 탈퇴에 성공하였습니다. 🎉", null));
+    }
+
+    @PostMapping("/token")
+    public ResponseEntity<CommonResponseDto> refreshAccessToken(@RequestBody RefreshAccessTokenRequestDto refreshAccessTokenRequestDto, HttpServletResponse response) {
+        userService.refreshAccessToken(refreshAccessTokenRequestDto.getNickname(), response);
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "액세스 토큰 재발급에 성공하였습니다. 🎉", null));
     }
 
 }

@@ -1,0 +1,8 @@
+### 9-1. 액세스 토큰 재발급
+POST http://localhost:8081/api/users/token
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "nickname" : "창봉"
+}

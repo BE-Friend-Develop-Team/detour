@@ -34,6 +34,13 @@ public class ScheduleService {
     }
 
     @Transactional
+    public void deleteSchedule(Long scheduleId, User user) {
+        Schedule checkSchedule = findById(scheduleId);
+        checkIfMemberOfSchedule(checkSchedule, user);
+        scheduleRepository.delete(checkSchedule);
+    }
+
+    @Transactional
     public void inviteMember(Long scheduleId, InvitationRequestDto invitationRequestDto, User user) {
         Schedule checkSchedule = findById(scheduleId);
 

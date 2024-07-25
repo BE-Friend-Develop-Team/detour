@@ -28,6 +28,14 @@ public class ScheduleController {
         return new ResponseEntity<>(new CommonResponseDto<>(201, "일정 생성에 성공하였습니다. 🎉", scheduleResponseDto), HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<CommonResponseDto> deleteSchedule(@PathVariable(value = "scheduleId") Long scheduleId,
+                                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        scheduleService.deleteSchedule(scheduleId, userDetails.getUser());
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 삭제에 성공하였습니다. 🎉", null));
+    }
+
     @PostMapping("/{scheduleId}/invitation")
     public ResponseEntity<CommonResponseDto> inviteMember(@PathVariable(value = "scheduleId") Long scheduleId,
                                                            @Valid @RequestBody InvitationRequestDto invitationRequestDto,

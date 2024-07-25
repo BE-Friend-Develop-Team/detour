@@ -60,3 +60,12 @@ Authorization: {{access_token}}
   "departureDate" : "2024-08-01",
   "arrivalDate" : "2024-08-12"
 }
+
+### 4-8. 일정 제목 수정
+PATCH http://localhost:8081/api/schedules/2/title
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "title" : "수정한 일정 1 제목"
+}

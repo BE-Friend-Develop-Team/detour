@@ -22,7 +22,7 @@ public class AdminService {
     private final UserRepository userRepository;
 
     public Page<ProfileResponseDto> getAllUsers(Pageable pageable) {
-        List<User> users = userRepository.findAllUser(pageable).orElseThrow(() -> new CustomException(ErrorCode.NO_MEMBERS_FOUND));
+        List<User> users = userRepository.findAllUser(pageable).orElseThrow(() -> new CustomException(ErrorCode.NO_USERS_FOUND));
 
         // User 객체를 ProfileResponseDto로 변환
         List<ProfileResponseDto> profileResponseDtos = users.stream()

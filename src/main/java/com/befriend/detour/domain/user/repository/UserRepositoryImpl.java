@@ -69,7 +69,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-
         return Optional.ofNullable(users);
     }
 

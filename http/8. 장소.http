@@ -8,3 +8,8 @@ Authorization: {{access_token}}
   "address" : "전북 전주시 만성북1길 3 1층",
   "telNumber" : "063-211-1234"
 }
+
+### 8-1. 장소 생성
+GET http://localhost:8081/api/place/4
+Content-Type: application/json
+Authorization: {{access_token}}

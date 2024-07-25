@@ -29,7 +29,10 @@ public enum ErrorCode {
     MARKER_NOT_FOUND_IN_DAILY_PLAN(404, "해당 데일리 플랜에 대한 마커가 없습니다."),
     MARKER_NOT_FOUND(404,"마커를 찾을 수 없습니다."),
     ALREADY_IS_DELETED(404,"이미 차단된 마커입니다."),
-    USER_NOT_MATCH_WITH_MARKER (404, "해당 마커의 작성자가 아닙니다.");
+    USER_NOT_MATCH_WITH_MARKER (404, "해당 마커의 작성자가 아닙니다."),
+
+    // place 관련 오류 처리
+    PLACE_NOT_FOUND(404, "장소를 찾을 수 없습니다.");
 
     private int status;
     private String message;

@@ -2,6 +2,7 @@ package com.befriend.detour.domain.schedule.service;
 
 import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.invitation.repository.InvitationRepository;
+import com.befriend.detour.domain.schedule.dto.EditDateRequestDto;
 import com.befriend.detour.domain.schedule.dto.InvitationRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
@@ -31,6 +32,16 @@ public class ScheduleService {
         invitationRepository.save(invitation);
 
         return new ScheduleResponseDto(schedule);
+    }
+
+    @Transactional
+    public ScheduleResponseDto updateScheduleDate(Long scheduleId, EditDateRequestDto editDateRequestDto, User user) {
+        Schedule checkSchedule = findById(scheduleId);
+        checkIfMemberOfSchedule(checkSchedule, user);
+        checkSchedule.updateScheduleDate(editDateRequestDto);
+        scheduleRepository.save(checkSchedule);
+
+        return new ScheduleResponseDto(checkSchedule);
     }
 
     @Transactional

@@ -7,6 +7,13 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
+    //s3
+    PUT_OBJECT_EXCEPTION(500, "s3 업로드에 문제가 발생했습니다."),
+    FILE_NAME_INVALID(400, "잘못된 파일명입니다."),
+    EXTENSION_IS_EMPTY(404,"파일을 찾을 수 없습니다."),
+    EXTENSION_INVALID(404,"잘못된 확장자명입니다."),
+    IO_EXCEPTION_ON_IMAGE_DELETE(404,"업로드에 문제가 발생했습니다."),
+
     // user 관련 오류 처리
     DUPLICATE_NICKNAME(500, "이미 사용중인 닉네임입니다."),
     DUPLICATE_USER_ID(500,"이미 사용중인 ID입니다."),

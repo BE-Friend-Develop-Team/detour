@@ -155,7 +155,6 @@ public class UserService {
         // 통과했으면 AccessToken 생성
         String accessToken = jwtProvider.createAccessToken(user.getNickname(), user.getRole());
 
-
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         response.setStatus(HttpServletResponse.SC_OK);
     }

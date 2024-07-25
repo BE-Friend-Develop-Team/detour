@@ -1,6 +1,6 @@
 package com.befriend.detour.domain.user.service;
 
-import com.befriend.detour.domain.user.dto.EditPasswordDto;
+import com.befriend.detour.domain.user.dto.EditPasswordRequestDto;
 import com.befriend.detour.domain.user.dto.ProfileResponseDto;
 import com.befriend.detour.domain.user.dto.SignupRequestDto;
 import com.befriend.detour.domain.user.entity.User;
@@ -90,18 +90,18 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePassword(User user, EditPasswordDto editPasswordDto) {
+    public void updatePassword(User user, EditPasswordRequestDto editPasswordRequestDtoDto) {
         // 현재 비밀번호 체크
-        if(!passwordEncoder.matches(editPasswordDto.getPassword(), user.getPassword())) {
+        if(!passwordEncoder.matches(editPasswordRequestDtoDto.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
         }
 
         // 새로운 비밀번호 체크
-        if(!editPasswordDto.getNewPassword().equals(editPasswordDto.getConfirmNewPassword())) {
+        if(!editPasswordRequestDtoDto.getNewPassword().equals(editPasswordRequestDtoDto.getConfirmNewPassword())) {
             throw new CustomException(ErrorCode.CONFIRM_NEW_PASSWORD_NOT_MATCH);
         }
 
-        String encodePassword = passwordEncoder.encode(editPasswordDto.getNewPassword());
+        String encodePassword = passwordEncoder.encode(editPasswordRequestDtoDto.getNewPassword());
 
         user.updatePassword(encodePassword);
         userRepository.save(user);

@@ -4,6 +4,7 @@ import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.like.entity.Like;
 import com.befriend.detour.domain.schedule.dto.EditDateRequestDto;
+import com.befriend.detour.domain.schedule.dto.EditTitleRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.global.entity.TimeStamped;
@@ -62,6 +63,10 @@ public class Schedule extends TimeStamped {
         this.departureDate = scheduleRequestDto.getDepartureDate();
         this.arrivalDate = scheduleRequestDto.getArrivalDate();
         this.user = user;
+    }
+
+    public void updateScheduleTitle(EditTitleRequestDto editTitleRequestDto) {
+        this.title = editTitleRequestDto.getTitle();
     }
 
     public void updateScheduleDate(EditDateRequestDto editDateRequestDto) {

@@ -1,9 +1,6 @@
 package com.befriend.detour.domain.schedule.controller;
 
-import com.befriend.detour.domain.schedule.dto.EditDateRequestDto;
-import com.befriend.detour.domain.schedule.dto.InvitationRequestDto;
-import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
-import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
+import com.befriend.detour.domain.schedule.dto.*;
 import com.befriend.detour.domain.schedule.service.ScheduleService;
 import com.befriend.detour.global.dto.CommonResponseDto;
 import com.befriend.detour.global.security.UserDetailsImpl;
@@ -27,6 +24,15 @@ public class ScheduleController {
         ScheduleResponseDto scheduleResponseDto = scheduleService.createSchedule(scheduleRequestDto, userDetails.getUser());
 
         return new ResponseEntity<>(new CommonResponseDto<>(201, "일정 생성에 성공하였습니다. 🎉", scheduleResponseDto), HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{scheduleId}/title")
+    public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> updateScheduleTitle(@PathVariable(value = "scheduleId") Long scheduleId,
+                                                                                     @Valid @RequestBody EditTitleRequestDto editTitleRequestDto,
+                                                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ScheduleResponseDto scheduleResponseDto = scheduleService.updateScheduleTitle(scheduleId, editTitleRequestDto, userDetails.getUser());
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 제목 수정에 성공하였습니다. 🎉", scheduleResponseDto));
     }
 
     @PatchMapping("/{scheduleId}/date")

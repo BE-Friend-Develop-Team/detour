@@ -28,7 +28,7 @@ public class AdminController {
         Pageable pageable = PageRequest.of(page - 1, 10);
         Page<ProfileResponseDto> profileResponseDtos = adminService.getAllUsers(pageable);
 
-        return ResponseEntity.ok(new CommonResponseDto(200, "전체 사용자" + page + "번 페이지 조회 성공하였습니다. 🎉", profileResponseDtos));
+        return ResponseEntity.ok(new CommonResponseDto(200, "전체 사용자 " + page + "번 페이지 조회 성공하였습니다. 🎉", profileResponseDtos));
     }
 
     @PatchMapping("/users")

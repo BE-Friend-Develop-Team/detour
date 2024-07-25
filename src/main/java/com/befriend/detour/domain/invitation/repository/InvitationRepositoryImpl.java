@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.invitation.repository;
 
+import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,15 +16,12 @@ public class InvitationRepositoryImpl implements InvitationRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public boolean isMemberOfSchedule(Schedule schedule, User user){
-        Integer fetchOne = jpaQueryFactory
-                .selectOne()
-                .from(invitation)
+    public Invitation findInvitationByScheduleAndUser(Schedule schedule, User user){
+        return jpaQueryFactory
+                .selectFrom(invitation)
                 .where(invitation.schedule.eq(schedule)
                         .and(invitation.user.eq(user)))
-                .fetchFirst();
-
-        return fetchOne != null;
+                .fetchOne();
     }
 
 }

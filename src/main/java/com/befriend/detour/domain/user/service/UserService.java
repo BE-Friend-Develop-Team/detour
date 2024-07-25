@@ -9,8 +9,11 @@ import com.befriend.detour.domain.user.entity.UserStatusEnum;
 import com.befriend.detour.domain.user.repository.UserRepository;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
+import com.befriend.detour.global.jwt.JwtProvider;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,7 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
@@ -138,6 +142,22 @@ public class UserService {
 
     public User findUserByNickName(String nickname) {
         return userRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public void refreshAccessToken(String nickname, HttpServletResponse response) {
+        User user = userRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 리프레시 토큰 검증
+        if (!jwtProvider.validateRefreshToken(user.getRefreshToken())) {
+            throw new CustomException(ErrorCode.REFRESH_TOKEN_NOT_VALIDATE);
+        }
+
+        // 통과했으면 AccessToken 생성
+        String accessToken = jwtProvider.createAccessToken(user.getNickname(), user.getRole());
+
+
+        response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
 }

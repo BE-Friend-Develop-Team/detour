@@ -6,6 +6,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.file.repository.FileRepository;
+import com.befriend.detour.domain.marker.entity.Marker;
+import com.befriend.detour.domain.marker.service.MarkerService;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -34,13 +36,14 @@ public class FileService {
 
     private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
     private static final long MAX_VIDEO_SIZE = 200 * 1024 * 1024; // 200MB
+    private final MarkerService markerService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     private final AmazonS3 amazonS3;
     private final FileRepository fileRepository;
 
-    public List<File> uploadFile(List<MultipartFile> multipartFiles) {
+    public List<File> uploadFile(List<MultipartFile> multipartFiles, Long markerId) {
 
         List<File> fileEntities = new ArrayList<>();
 
@@ -63,7 +66,8 @@ public class FileService {
             String fileUrl = amazonS3.getUrl(bucket, fileName).toString();
 
             // 파일 정보 데이터베이스에 저장
-            File fileEntity = new File(fileName, fileUrl, file.getContentType(), file.getSize());
+            Marker marker = markerService.findMarker(markerId);
+            File fileEntity = new File(fileName, fileUrl, file.getContentType(), file.getSize(), marker);
             fileRepository.save(fileEntity);
             fileEntities.add(fileEntity);
         });
@@ -150,6 +154,11 @@ public class FileService {
             throw new CustomException(ErrorCode.IO_EXCEPTION_ON_IMAGE_DELETE);
         }
 
+    }
+
+    public File findFileByUrl(String fileUrl) {
+        return fileRepository.findByFileUrl(fileUrl)
+                .orElseThrow(() -> new CustomException(ErrorCode.EXTENSION_IS_EMPTY));
     }
 
 }

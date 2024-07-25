@@ -5,11 +5,14 @@ import com.befriend.detour.domain.dailyplan.service.DailyPlanService;
 import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.file.repository.FileRepository;
 import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
+import com.befriend.detour.domain.marker.dto.MarkerLocationResponseDto;
 import com.befriend.detour.domain.marker.dto.MarkerRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
 import com.befriend.detour.domain.marker.entity.Marker;
 import com.befriend.detour.domain.marker.entity.MarkerStatusEnum;
 import com.befriend.detour.domain.marker.repository.MarkerRepository;
+import com.befriend.detour.domain.place.entity.Place;
+import com.befriend.detour.domain.place.service.PlaceService;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
@@ -27,25 +30,19 @@ public class MarkerService {
     private final MarkerRepository markerRepository;
     private final DailyPlanService dailyPlanService;
     private final FileRepository fileRepository;
-//    private final PlaceService placeService;
+    private final PlaceService placeService;
 
     // 마커 생성
-    // TODO: place 생성시 주석 제거 예정
     @Transactional
     public MarkerResponseDto createMarker(Long dailyPlanId, Long placeId, MarkerRequestDto requestDto) {
-         /*
-        - 지도에서 장소를 검색하고 선택한 후에 저장버튼을 누르면 마커 생성
-        - 프론트에서 placeId를 넘겨주면 해당 아이디로 place와 연관관계 설정
-         */
 
         DailyPlan dailyPlan = dailyPlanService.findDailyPlanById(dailyPlanId);
-        //  Place place = placeService.findPlaceById(placeId);
+        Place place = placeService.findPlaceById(placeId);
 
-        // Marker marker = new Marker(requestDto.getLatitude(), requestDto.getLongitude(), dailyPlan, place);
-        // markerRepository.save(marker);
+        Marker marker = new Marker(requestDto.getLatitude(), requestDto.getLongitude(), dailyPlan, place);
+        markerRepository.save(marker);
 
-        //  return new MarkerResponseDto(marker);
-        return null;
+        return new MarkerResponseDto(marker);
     }
 
     // 마커 전체 조회
@@ -71,6 +68,8 @@ public class MarkerService {
                 () -> new CustomException(ErrorCode.MARKER_NOT_FOUND)
         );
 
+        findMarker(markerId);
+
         // 파일 URL 목록 가져오기
         List<File> files = fileRepository.findByMarkerId(markerId);
         List<String> imageUrls = files.stream()
@@ -80,6 +79,13 @@ public class MarkerService {
         return new MarkerResponseDto(marker, imageUrls);
     }
 
+    // 위도 경도 조회
+    public MarkerLocationResponseDto getPosition(Long markerId) {
+        Marker marker = findMarker(markerId);
+        MarkerLocationResponseDto responseDto = new MarkerLocationResponseDto(marker.getLatitude(), marker.getLatitude());
+
+        return responseDto;
+    }
 
     // 마커 글 생성, 수정
     @Transactional

@@ -1,0 +1,24 @@
+### 8-1. 장소 생성
+POST http://localhost:8081/api/place
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "name" : "오복집",
+  "address" : "전북 전주시 만성북1길 3 1층",
+  "telNumber" : "063-211-1234"
+}
+
+### 8-2. 장소 조회
+GET http://localhost:8081/api/place/4
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 8-3. 장소 수정
+PATCH http://localhost:8081/api/place/3
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "name" : "오복집3"
+}

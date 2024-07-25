@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 public class MarkerResponseDto {
 
+    private Long placeId;
     private Double latitude;
     private Double longitude;
     private String content;
@@ -20,6 +21,7 @@ public class MarkerResponseDto {
     }
 
     public MarkerResponseDto(Marker marker) {
+        this.placeId = marker.getPlace() != null ? marker.getPlace().getId() : null;
         this.latitude = marker.getLatitude();
         this.longitude = marker.getLongitude();
         this.content = marker.getContent();
@@ -28,13 +30,15 @@ public class MarkerResponseDto {
     }
 
     public MarkerResponseDto(Marker marker, List<String> imageUrls) {
+        this.placeId = marker.getPlace() != null ? marker.getPlace().getId() : null;
         this.latitude = marker.getLatitude();
         this.longitude = marker.getLongitude();
         this.content = marker.getContent();
         this.images = imageUrls;
     }
 
-    public MarkerResponseDto(Double latitude, Double longitude, String content, List<String> images) {
+    public MarkerResponseDto(Long placeId, Double latitude, Double longitude, String content, List<String> images) {
+        this.placeId = placeId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.content = content;

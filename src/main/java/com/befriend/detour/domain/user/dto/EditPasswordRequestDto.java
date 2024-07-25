@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class EditPasswordDto {
+public class EditPasswordRequestDto {
 
     private String password;
 

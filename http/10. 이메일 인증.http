@@ -1,0 +1,13 @@
+### 10-1. 인증 이메일 전송
+POST http://localhost:8081/api/users/send-certification
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "email" : "chxngbro@gmail.com"
+}
+
+### 10-2. 이메일 인증 확인
+GET http://localhost:8081/api/users/verify?certificationNumber=434586&email=chxngbro@gmail.com
+Content-Type: application/json
+Authorization: {{access_token}}

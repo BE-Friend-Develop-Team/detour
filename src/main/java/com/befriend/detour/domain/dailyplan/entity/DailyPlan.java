@@ -21,7 +21,7 @@ public class DailyPlan extends TimeStamped {
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "`day`")
     private Long day;
 
     public DailyPlan(Schedule checkSchedule, DailyPlanRequestDto dailyPlanRequestDto) {

@@ -1,5 +1,8 @@
 package com.befriend.detour.global.config;
 
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +17,12 @@ public class RedisConfig {
     private String host;
     @Value("${spring.data.redis.auth.port}")
     private int port; // 인증 서버
+    @Value("6379")
+    private int redis_port;
+
+    private static final String REDISSON_PREFIX = "redis://";
+    public static final Long WAIT_TIME = 30L;
+    public static final Long LEASE_TIME = 10L;
 
     @Bean
     public RedisConnectionFactory redisAuthConnectionFactory() {
@@ -31,6 +40,18 @@ public class RedisConfig {
         stringRedisTemplate.setConnectionFactory(redisAuthConnectionFactory());
 
         return stringRedisTemplate;
+    }
+
+    @Bean
+    public RedissonClient redissonClient() {
+
+        Config config = new Config();
+
+        config.useSingleServer()
+                .setAddress(REDISSON_PREFIX + host + ":" + redis_port);
+
+        return Redisson.create(config);
+
     }
 
 }

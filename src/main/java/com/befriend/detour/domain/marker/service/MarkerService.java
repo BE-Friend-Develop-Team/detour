@@ -2,7 +2,6 @@ package com.befriend.detour.domain.marker.service;
 
 import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.dailyplan.service.DailyPlanService;
-import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.file.repository.FileRepository;
 import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
 import com.befriend.detour.domain.marker.dto.MarkerLocationResponseDto;
@@ -20,9 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,19 +62,9 @@ public class MarkerService {
             throw new CustomException(ErrorCode.MARKER_NOT_FOUND_IN_DAILY_PLAN);
         }
 
-        Marker marker = markerRepository.findByIdAndDailyPlanId(markerId, dailyPlanId).orElseThrow(
+        return markerRepository.findResponseByIdAndDailyPlanId(markerId, dailyPlanId).orElseThrow(
                 () -> new CustomException(ErrorCode.MARKER_NOT_FOUND)
         );
-
-        findMarker(markerId);
-
-        // 파일 URL 목록 가져오기
-        List<File> files = fileRepository.findByMarkerId(markerId);
-        List<String> imageUrls = files.stream()
-                .map(File::getFileUrl)
-                .collect(Collectors.toList());
-
-        return new MarkerResponseDto(marker, imageUrls);
     }
 
     // 위도 경도 조회

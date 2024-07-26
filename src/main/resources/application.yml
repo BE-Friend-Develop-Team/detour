@@ -27,8 +27,12 @@ spring:
     connection-timeout: 30000
   data:
     redis:
-      host: localhost
-      port: 6379
+      cache:
+        host: localhost # Redis 캐시 서버의 호스트 (로컬 호스트 사용)
+        port: 6379 # Redis 캐서 서버의 포트
+      auth:
+        host: localhost # Redis 인증 서버의 호스트 (로컬 호스트 사용)
+        port: 6380 # Redis 인증 서버의 포트
 
   security:
     oauth2:
@@ -51,6 +55,15 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-info-authentication-method: header
             user-name-attribute: id
+
+  mail:
+    host: smtp.gmail.com # Gmail의 SMTP 서버 주소
+    port: 587 # Gmail의 SMTP 서버 포트
+    username: detourOfficial0717@gmail.com
+    password: ${APP_PASSWORD}
+    properties:
+      mail.smtp.auth: true # SMTP 인증 사용
+      mail.smtp.starttls.enable: true # TLS 사용
 
 jwt:
   secret:

@@ -62,7 +62,7 @@ public class MarkerService {
             throw new CustomException(ErrorCode.MARKER_NOT_FOUND_IN_DAILY_PLAN);
         }
 
-        return markerRepository.findResponseByIdAndDailyPlanId(markerId, dailyPlanId).orElseThrow(
+        return markerRepository.fetchMarkerDetails(markerId, dailyPlanId).orElseThrow(
                 () -> new CustomException(ErrorCode.MARKER_NOT_FOUND)
         );
     }

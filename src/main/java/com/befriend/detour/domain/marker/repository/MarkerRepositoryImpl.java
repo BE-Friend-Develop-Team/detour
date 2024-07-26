@@ -36,7 +36,7 @@ public class MarkerRepositoryImpl implements MarkerRepositoryCustom {
     }
 
     @Override
-    public Optional<MarkerResponseDto> findResponseByIdAndDailyPlanId(Long markerId, Long dailyPlanId) {
+    public Optional<MarkerResponseDto> fetchMarkerDetails(Long markerId, Long dailyPlanId) {
 
         return findByIdAndDailyPlanId(markerId, dailyPlanId)
                 .map(this::toMarkerResponseDto);

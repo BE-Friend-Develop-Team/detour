@@ -12,4 +12,6 @@ public interface MarkerRepositoryCustom {
 
     Optional<Marker> findByIdAndDailyPlanId(Long markerId, Long dailyPlanId);
 
+    Optional<MarkerResponseDto> fetchMarkerDetails(Long markerId, Long dailyPlanId);
+
 }

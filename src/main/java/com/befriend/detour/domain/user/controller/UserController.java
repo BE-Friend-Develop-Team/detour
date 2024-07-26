@@ -1,11 +1,14 @@
 package com.befriend.detour.domain.user.controller;
 
+import com.befriend.detour.domain.user.service.EmailCertificationService;
 import com.befriend.detour.domain.user.dto.*;
 import com.befriend.detour.domain.user.service.KakaoService;
 import com.befriend.detour.domain.user.service.UserService;
 import com.befriend.detour.global.dto.CommonResponseDto;
 import com.befriend.detour.global.security.UserDetailsImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.netty.handler.codec.MessageAggregationException;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.NoSuchAlgorithmException;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,6 +28,7 @@ public class UserController {
 
     private final UserService userService;
     private final KakaoService kakaoService;
+    private final EmailCertificationService emailCertificationService;
 
     @PostMapping("/signup")
     public ResponseEntity<CommonResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
@@ -84,6 +91,21 @@ public class UserController {
         userService.refreshAccessToken(refreshAccessTokenRequestDto.getNickname(), response);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "액세스 토큰 재발급에 성공하였습니다. 🎉", null));
+    }
+
+    @PostMapping("/send-certification")
+    public ResponseEntity<CommonResponseDto> sendCertificationNumber(@Validated @RequestBody UserCertificateAccountRequestDto request) throws NoSuchAlgorithmException, MessageAggregationException, MessagingException {
+        emailCertificationService.sendEmailForCertification(request.getEmail());
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "인증 이메일 전송에 성공하였습니다. 🎉", null));
+    }
+
+    @GetMapping ("/verify")
+    public ResponseEntity<CommonResponseDto> verifyCertificationNumber(@RequestParam(name = "certificationNumber") String certificationNumber, @RequestParam(name = "email") String email) {
+
+        emailCertificationService.verifyEmail(certificationNumber, email);
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "이메일 인증에 성공하였습니다. 🎉", null));
     }
 
 }

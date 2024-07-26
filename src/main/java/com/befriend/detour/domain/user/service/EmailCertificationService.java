@@ -61,6 +61,7 @@ public class EmailCertificationService {
     }
 
     private boolean isVerify(String certificationNumber, String email) {
+
         return !(certificationNumberDao.hasKey(email) && // 인증번호가 저장되어 있는지 확인
                 certificationNumberDao.getCertificationNumber(email) // 인증번호 들고옴
                         .equals(certificationNumber)); // 인증번호와 제공된 인증번호 비교

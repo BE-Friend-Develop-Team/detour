@@ -22,6 +22,7 @@ public class CertificationNumberDao  {
 
     // 이메일을 키로 사용하여 Redis에서 인증 번호를 조회
     public String getCertificationNumber(String email) {
+
         return stringRedisTemplate.opsForValue().get(email);
     }
 
@@ -32,6 +33,7 @@ public class CertificationNumberDao  {
 
     // 이메일을 키로 사용하여 Redis에 해당 키가 존재하는지 확인
     public boolean hasKey(String email) {
+
         return stringRedisTemplate.hasKey(email);
     }
 

@@ -1,4 +1,4 @@
-package com.befriend.detour.domain.schedule.dto;
+package com.befriend.detour.domain.invitation.dto;
 
 import lombok.Getter;
 

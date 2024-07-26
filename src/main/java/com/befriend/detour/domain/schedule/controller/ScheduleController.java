@@ -61,22 +61,4 @@ public class ScheduleController {
         return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 삭제에 성공하였습니다. 🎉", null));
     }
 
-    @PostMapping("/{scheduleId}/invitation")
-    public ResponseEntity<CommonResponseDto> inviteMember(@PathVariable(value = "scheduleId") Long scheduleId,
-                                                           @Valid @RequestBody InvitationRequestDto invitationRequestDto,
-                                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        scheduleService.inviteMember(scheduleId, invitationRequestDto, userDetails.getUser());
-
-        return new ResponseEntity<>(new CommonResponseDto<>(201, "일행 초대에 성공하였습니다. 🎉", null), HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/{scheduleId}/invitation")
-    public ResponseEntity<CommonResponseDto> cancelInvitation(@PathVariable(value = "scheduleId") Long scheduleId,
-                                                              @Valid @RequestBody InvitationRequestDto invitationRequestDto,
-                                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        scheduleService.cancelInvitation(scheduleId, invitationRequestDto, userDetails.getUser());
-
-        return ResponseEntity.ok(new CommonResponseDto<>(200, "초대 취소에 성공하였습니다. 🎉", null));
-    }
-
 }

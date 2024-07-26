@@ -1,4 +1,4 @@
-package com.befriend.detour.domain.user;
+package com.befriend.detour.domain.user.service;
 
 import com.befriend.detour.domain.user.dao.CertificationNumberDao;
 import com.befriend.detour.global.exception.CustomException;

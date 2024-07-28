@@ -44,6 +44,9 @@ public class FileService {
     private final FileRepository fileRepository;
 
     public List<File> uploadFile(List<MultipartFile> multipartFiles, Long markerId) {
+        if (multipartFiles == null) {
+            throw new CustomException(ErrorCode.NULL_MULTIPART_FILES_EXCEPTION);
+        }
 
         List<File> fileEntities = new ArrayList<>();
 

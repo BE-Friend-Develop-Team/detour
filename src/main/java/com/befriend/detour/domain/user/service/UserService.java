@@ -159,4 +159,9 @@ public class UserService {
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
+    public boolean isSameUser(User user1, User user2) {
+
+        return user1.getNickname().equals(user2.getNickname());
+    }
+
 }

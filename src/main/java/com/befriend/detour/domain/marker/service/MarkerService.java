@@ -13,6 +13,7 @@ import com.befriend.detour.domain.marker.repository.MarkerRepository;
 import com.befriend.detour.domain.place.entity.Place;
 import com.befriend.detour.domain.place.service.PlaceService;
 import com.befriend.detour.domain.user.entity.User;
+import com.befriend.detour.domain.user.service.UserService;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class MarkerService {
     private final MarkerRepository markerRepository;
     private final DailyPlanService dailyPlanService;
     private final PlaceService placeService;
+    private final UserService userService;
 
     @Transactional
     public MarkerResponseDto createMarker(Long dailyPlanId, Long placeId, MarkerRequestDto requestDto) {
@@ -81,7 +83,7 @@ public class MarkerService {
     public void deleteMarker(User user, Long markerId) {
         Marker marker = findMarker(markerId);
 
-        if (!isSameUser(user, marker.getDailyPlan().getSchedule().getUser())) {
+        if (!userService.isSameUser(user, marker.getDailyPlan().getSchedule().getUser())) {
             throw new CustomException(ErrorCode.NOT_MARKER_WRITER);
         }
 
@@ -94,11 +96,6 @@ public class MarkerService {
         List<MarkerResponseDto> markers = markerRepository.findByDailyPlanId(dailyPlanId);
 
         return !markers.isEmpty();
-    }
-
-    private boolean isSameUser(User user1, User user2) {
-
-        return user1.getNickname().equals(user2.getNickname());
     }
 
     public Marker findMarker(Long markerId) {

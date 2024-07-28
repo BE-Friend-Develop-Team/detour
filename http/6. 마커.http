@@ -14,7 +14,7 @@ Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 6-3. 마커 단건 조회
-GET http://localhost:8081/api/daily-plans/2/markers/3
+GET http://localhost:8081/api/daily-plans/1/markers/1
 Content-Type: application/json
 Authorization: {{access_token}}
 

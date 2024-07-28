@@ -26,6 +26,7 @@ public enum ErrorCode {
     CONFIRM_NEW_PASSWORD_NOT_MATCH(500, "새로운 비밀번호가 서로 일치하지 않습니다."),
     NO_USERS_FOUND(404, "회원이 없습니다."),
     REFRESH_TOKEN_NOT_VALIDATE(500, "리프레시 토큰이 만료 되었거나 잘못되었습니다."),
+    VERIFY_NOT_ALLOWED(400, "인증 요청이 잘못 되었습니다."),
 
     // schedule 관련 오류 처리
     SCHEDULE_NOT_FOUND(404, "존재하지 않는 일정입니다."),

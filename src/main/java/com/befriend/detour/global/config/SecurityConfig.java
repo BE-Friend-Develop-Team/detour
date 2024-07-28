@@ -66,6 +66,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/login").permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/users/login/oauth2/code/kakao").permitAll()
+                        .requestMatchers("/api/users/send-certification").permitAll()
+                        .requestMatchers("api/users/verify/**").permitAll()
                         .anyRequest().authenticated()
         );
 

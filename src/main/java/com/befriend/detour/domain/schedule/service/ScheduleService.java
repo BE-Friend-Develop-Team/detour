@@ -10,8 +10,12 @@ import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -68,6 +72,19 @@ public class ScheduleService {
         Schedule checkSchedule = findById(scheduleId);
         checkIfMemberOfSchedule(checkSchedule, user);
         scheduleRepository.delete(checkSchedule);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ScheduleResponseDto> getUserCreatedSchedules(Pageable pageable, Long userId) {
+        List<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUser(userId, pageable).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+        if (schedules.isEmpty()) {
+            throw new CustomException(ErrorCode.USER_CREATED_SCHEDULES_NOT_FOUND);
+        }
+
+        return schedules.stream()
+                .map(ScheduleResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     public void checkIfMemberOfSchedule(Schedule schedule, User user) {

@@ -2,3 +2,8 @@
 GET http://localhost:8081/api/schedules?page=1
 Content-Type: application/json
 Authorization: {{access_token}}
+
+### 12-2. 사용자가 좋아요한 일정 모두 조회(최신 순)
+GET http://localhost:8081/api/schedules/likes?page=1
+Content-Type: application/json
+Authorization: {{access_token}}

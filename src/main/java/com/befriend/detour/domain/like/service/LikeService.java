@@ -22,7 +22,7 @@ public class LikeService {
     public void createScheduleLike(Long scheduleId, User user) {
         Schedule foundschedule = scheduleService.findById(scheduleId);
 
-        if (likeRepository.findLikeByUserAndSchedule(user, foundschedule).isPresent()) {
+        if (likeRepository.existsByUserAndSchedule(user, foundschedule)) {
             throw new CustomException(ErrorCode.ALREADY_LIKED);
         }
 
@@ -33,9 +33,12 @@ public class LikeService {
 
     @Transactional
     public void deleteScheduleLike(Long likeId, User user) {
-        Like foundLike = likeRepository.findById(likeId).orElseThrow(
-                () -> new CustomException(ErrorCode.LIKE_NOT_EXIST));
-        Schedule foundSchedule = scheduleService.findById(foundLike.getSchedule().getId());
+        Like foundLike = likeRepository.findLikeWithSchedule(likeId);
+        if (foundLike == null) {
+            throw new CustomException(ErrorCode.LIKE_NOT_EXIST);
+        }
+
+        Schedule foundSchedule = foundLike.getSchedule();
 
         if (!user.getId().equals(foundLike.getUser().getId())) {
             throw new CustomException(ErrorCode.CANNOT_CANCEL_OTHERS_LIKE);

@@ -5,11 +5,10 @@ import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.user.entity.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface LikeRepositoryCustom {
 
-    Optional<Like> findLikeByUserAndSchedule(User user, Schedule schedule);
+    boolean existsByUserAndSchedule(User user, Schedule schedule);
+    Like findLikeWithSchedule(Long likeId);
 
 }

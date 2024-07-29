@@ -2,6 +2,7 @@ package com.befriend.detour.domain.like.entity;
 
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.user.entity.User;
+import com.befriend.detour.global.entity.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "likes")
-public class Like {
+public class Like extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

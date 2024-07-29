@@ -13,6 +13,7 @@ public enum ErrorCode {
     EXTENSION_IS_EMPTY(404,"파일을 찾을 수 없습니다."),
     EXTENSION_INVALID(404,"잘못된 확장자명입니다."),
     IO_EXCEPTION_ON_IMAGE_DELETE(404,"업로드에 문제가 발생했습니다."),
+    NULL_MULTIPART_FILES_EXCEPTION(404, "파일 업로드 요청에서 파일이 포함되지 않았습니다. 파일을 선택하고 다시 시도하십시오."),
 
     // user 관련 오류 처리
     DUPLICATE_NICKNAME(500, "이미 사용중인 닉네임입니다."),
@@ -50,7 +51,7 @@ public enum ErrorCode {
     USER_NOT_MATCH_WITH_MARKER (404, "해당 마커의 작성자가 아닙니다."),
 
     // place 관련 오류 처리
-    PLACE_NOT_FOUND(404, "장소를 찾을 수 없습니다.");
+    PLACE_NOT_FOUND(404, "장소를 찾을 수 없습니다.") ;
 
     private int status;
     private String message;

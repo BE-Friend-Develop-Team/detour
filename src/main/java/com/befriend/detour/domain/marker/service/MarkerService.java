@@ -13,6 +13,7 @@ import com.befriend.detour.domain.marker.repository.MarkerRepository;
 import com.befriend.detour.domain.place.entity.Place;
 import com.befriend.detour.domain.place.service.PlaceService;
 import com.befriend.detour.domain.user.entity.User;
+import com.befriend.detour.domain.user.service.UserService;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +28,11 @@ public class MarkerService {
 
     private final MarkerRepository markerRepository;
     private final DailyPlanService dailyPlanService;
-    private final FileRepository fileRepository;
     private final PlaceService placeService;
+    private final UserService userService;
 
-    // 마커 생성
     @Transactional
     public MarkerResponseDto createMarker(Long dailyPlanId, Long placeId, MarkerRequestDto requestDto) {
-
         DailyPlan dailyPlan = dailyPlanService.findDailyPlanById(dailyPlanId);
         Place place = placeService.findPlaceById(placeId);
 
@@ -43,7 +42,6 @@ public class MarkerService {
         return new MarkerResponseDto(marker);
     }
 
-    // 마커 전체 조회
     public List<MarkerResponseDto> getAllMarker(Long dailyPlanId) {
         dailyPlanService.findDailyPlanById(dailyPlanId);
 
@@ -54,7 +52,6 @@ public class MarkerService {
         return markerRepository.findByDailyPlanId(dailyPlanId);
     }
 
-    // 마커 단건 조회
     public MarkerResponseDto getMarker(Long dailyPlanId, Long markerId) {
         dailyPlanService.findDailyPlanById(dailyPlanId);
 
@@ -67,7 +64,6 @@ public class MarkerService {
         );
     }
 
-    // 위도 경도 조회
     public MarkerLocationResponseDto getPosition(Long markerId) {
         Marker marker = findMarker(markerId);
         MarkerLocationResponseDto responseDto = new MarkerLocationResponseDto(marker.getLatitude(), marker.getLatitude());
@@ -75,7 +71,6 @@ public class MarkerService {
         return responseDto;
     }
 
-    // 마커 글 생성, 수정
     @Transactional
     public MarkerResponseDto updateMarkerContent(Long markerId, MarkerContentRequestDto requestDto) {
         Marker marker = findMarker(markerId);
@@ -84,12 +79,11 @@ public class MarkerService {
         return new MarkerResponseDto(marker, null);
     }
 
-    // 마커 삭제
     @Transactional
     public void deleteMarker(User user, Long markerId) {
         Marker marker = findMarker(markerId);
 
-        if (!isSameUser(user, marker.getDailyPlan().getSchedule().getUser())) {
+        if (!userService.isSameUser(user, marker.getDailyPlan().getSchedule().getUser())) {
             throw new CustomException(ErrorCode.NOT_MARKER_WRITER);
         }
 
@@ -98,20 +92,12 @@ public class MarkerService {
     }
 
 
-    // dailyPlanId로 존재하는 마커인지 찾기
     public boolean isMarkerExist(Long dailyPlanId) {
         List<MarkerResponseDto> markers = markerRepository.findByDailyPlanId(dailyPlanId);
 
         return !markers.isEmpty();
     }
 
-    // 동일한 유저인지 비교하기
-    private boolean isSameUser(User user1, User user2) {
-
-        return user1.getNickname().equals(user2.getNickname());
-    }
-
-    // markerId로 마커 찾기
     public Marker findMarker(Long markerId) {
         Marker marker = markerRepository.findById(markerId).orElseThrow(()
                 -> new CustomException(ErrorCode.MARKER_NOT_FOUND)

@@ -36,14 +36,25 @@ public class FileService {
 
     private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
     private static final long MAX_VIDEO_SIZE = 200 * 1024 * 1024; // 200MB
-    private final MarkerService markerService;
+
+    private static final String JPG = "jpg";
+    private static final String JPEG = "jpeg";
+    private static final String PNG = "png";
+    private static final String AVI = "avi";
+    private static final String MP4 = "mp4";
+    private static final String GIF = "gif";
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     private final AmazonS3 amazonS3;
     private final FileRepository fileRepository;
 
+    private final MarkerService markerService;
+
     public List<File> uploadFile(List<MultipartFile> multipartFiles, Long markerId) {
+        if (multipartFiles == null) {
+            throw new CustomException(ErrorCode.NULL_MULTIPART_FILES_EXCEPTION);
+        }
 
         List<File> fileEntities = new ArrayList<>();
 
@@ -101,7 +112,7 @@ public class FileService {
         }
 
         String extension = filename.substring(lastDotIndex + 1).toLowerCase();
-        List<String> allowedExtensionList = Arrays.asList("jpg", "jpeg", "png", "avi", "mp4", "gif");
+        List<String> allowedExtensionList = Arrays.asList(JPG, JPEG, PNG, AVI, MP4, GIF);
 
         if (!allowedExtensionList.contains(extension)) {
             throw new CustomException(ErrorCode.EXTENSION_INVALID);
@@ -121,12 +132,12 @@ public class FileService {
 
     private boolean isImageFile(String extension) {
 
-        return extension.equals("jpeg") || extension.equals("jpg") || extension.equals("png");
+        return extension.equals(JPEG) || extension.equals(JPG) || extension.equals(PNG);
     }
 
     private boolean isVideoFile(String extension) {
 
-        return extension.equals("mp4") || extension.equals("avi") || extension.equals("gif");
+        return extension.equals(MP4) || extension.equals(AVI) || extension.equals(GIF);
     }
 
     public void deleteFile(String fileUrl) {
@@ -165,3 +176,4 @@ public class FileService {
     }
 
 }
+

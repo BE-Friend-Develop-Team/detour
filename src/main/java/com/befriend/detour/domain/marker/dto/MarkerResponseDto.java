@@ -52,4 +52,5 @@ public class MarkerResponseDto {
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
+
 }

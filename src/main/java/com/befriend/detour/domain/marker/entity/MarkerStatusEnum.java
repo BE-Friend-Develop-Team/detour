@@ -7,11 +7,15 @@ public enum MarkerStatusEnum {
 
     private final String status;
 
-    MarkerStatusEnum(String status) { this.status = status; }
+    MarkerStatusEnum(String status) {
+        this.status = status;
+    }
 
-    public String getStatus() { return this.status; }
+    public String getStatus() {
+        return this.status;
+    }
 
-    public static class Status{
+    public static class Status {
         public static final String ACTIVE = "ACTIVE";
         public static final String DELETED = "DELETED";
     }

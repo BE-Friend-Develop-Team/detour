@@ -61,4 +61,5 @@ public class MarkerRepositoryImpl implements MarkerRepositoryCustom {
 
         return new MarkerResponseDto(marker, imageUrls);
     }
+
 }

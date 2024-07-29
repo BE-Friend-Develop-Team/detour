@@ -1,7 +1,6 @@
 package com.befriend.detour.domain.schedule.service;
 
-import com.befriend.detour.domain.invitation.entity.Invitation;
-import com.befriend.detour.domain.invitation.repository.InvitationRepository;
+import com.befriend.detour.domain.invitation.service.InvitationService;
 import com.befriend.detour.domain.schedule.dto.*;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.schedule.repository.ScheduleRepository;
@@ -21,14 +20,13 @@ public class ScheduleService {
     private String defaultImageUrl;
 
     private final ScheduleRepository scheduleRepository;
-    private final InvitationRepository invitationRepository;
+    private final InvitationService invitationService;
 
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto, User user) {
         Schedule schedule = new Schedule(scheduleRequestDto, user, defaultImageUrl);
         scheduleRepository.save(schedule);
-        Invitation invitation = new Invitation(user, schedule);
-        invitationRepository.save(invitation);
+        invitationService.createInvitation(user, schedule);
 
         return new ScheduleResponseDto(schedule);
     }
@@ -36,7 +34,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto updateScheduleTitle(Long scheduleId, EditTitleRequestDto editTitleRequestDto, User user) {
         Schedule checkSchedule = findById(scheduleId);
-        checkIfMemberOfSchedule(checkSchedule, user);
+        invitationService.checkIfMemberOfSchedule(checkSchedule, user);
         checkSchedule.updateScheduleTitle(editTitleRequestDto);
         scheduleRepository.save(checkSchedule);
 
@@ -46,7 +44,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto updateScheduleDate(Long scheduleId, EditDateRequestDto editDateRequestDto, User user) {
         Schedule checkSchedule = findById(scheduleId);
-        checkIfMemberOfSchedule(checkSchedule, user);
+        invitationService.checkIfMemberOfSchedule(checkSchedule, user);
         checkSchedule.updateScheduleDate(editDateRequestDto);
         scheduleRepository.save(checkSchedule);
 
@@ -56,7 +54,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto updateScheduleMainImage(Long scheduleId, EditMainImageRequestDto editMainImageRequestDto, User user) {
         Schedule checkSchedule = findById(scheduleId);
-        checkIfMemberOfSchedule(checkSchedule, user);
+        invitationService.checkIfMemberOfSchedule(checkSchedule, user);
         checkSchedule.updateScheduleMainImage(editMainImageRequestDto);
         scheduleRepository.save(checkSchedule);
 
@@ -66,14 +64,8 @@ public class ScheduleService {
     @Transactional
     public void deleteSchedule(Long scheduleId, User user) {
         Schedule checkSchedule = findById(scheduleId);
-        checkIfMemberOfSchedule(checkSchedule, user);
+        invitationService.checkIfMemberOfSchedule(checkSchedule, user);
         scheduleRepository.delete(checkSchedule);
-    }
-
-    public void checkIfMemberOfSchedule(Schedule schedule, User user) {
-        if (invitationRepository.findInvitationByScheduleAndUser(schedule, user) == null) {
-            throw new CustomException(ErrorCode.NOT_SCHEDULE_MEMBER);
-        }
     }
 
     @Transactional(readOnly = true)

@@ -23,38 +23,43 @@ public class InvitationService {
 
     @Transactional
     public void inviteMember(Long scheduleId, InvitationRequestDto invitationRequestDto, User user) {
-        Schedule checkSchedule = scheduleService.findById(scheduleId);
-
-        // 초대자가 해당 Schedule에 대한 권한이 있는 사용자인지 확인
-        scheduleService.checkIfMemberOfSchedule(checkSchedule, user);
-
+        Schedule schedule = getScheduleWithAuthorization(scheduleId, user);
         User invitee = userService.findUserByNickName(invitationRequestDto.getNickname());
 
-        // 초대할 사람이 이미 초대 받은 사용자인지 확인
-        if (invitationRepository.existsByScheduleAndUser(checkSchedule, invitee)) {
+        if (invitationRepository.existsByScheduleAndUser(schedule, invitee)) {
             throw new CustomException(ErrorCode.ALREADY_INVITED);
         }
 
-        Invitation invitation = new Invitation(invitee, checkSchedule);
-        invitationRepository.save(invitation);
+        createInvitation(invitee, schedule);
     }
 
     @Transactional
     public void cancelInvitation(Long scheduleId, InvitationRequestDto invitationRequestDto, User user) {
-        Schedule checkSchedule = scheduleService.findById(scheduleId);
-
-        // 초대취소자가 해당 Schedule에 대한 권한이 있는 사용자인지 확인
-        scheduleService.checkIfMemberOfSchedule(checkSchedule, user);
-
+        Schedule schedule = getScheduleWithAuthorization(scheduleId, user);
         User invitee = userService.findUserByNickName(invitationRequestDto.getNickname());
 
         // 초대를 취소할 사람이 해당 일정의 일행인지 확인
-        if (!invitationRepository.existsByScheduleAndUser(checkSchedule, invitee)) {
+        checkIfMemberOfSchedule(schedule, invitee);
+
+        Invitation invitation = invitationRepository.findInvitationByScheduleAndUser(schedule, invitee);
+        invitationRepository.delete(invitation);
+    }
+
+    public void createInvitation(User user, Schedule schedule) {
+        Invitation invitation = new Invitation(user, schedule);
+        invitationRepository.save(invitation);
+    }
+
+    public void checkIfMemberOfSchedule(Schedule schedule, User user) {
+        if (!invitationRepository.existsByScheduleAndUser(schedule, user)) {
             throw new CustomException(ErrorCode.USER_NOT_MEMBER);
         }
+    }
 
-        Invitation invitation = invitationRepository.findInvitationByScheduleAndUser(checkSchedule, invitee);
-        invitationRepository.delete(invitation);
+    private Schedule getScheduleWithAuthorization(Long scheduleId, User user) {
+        Schedule schedule = scheduleService.findById(scheduleId);
+        checkIfMemberOfSchedule(schedule, user);
+        return schedule;
     }
 
 }

@@ -1,0 +1,4 @@
+### 12-1. 사용자가 작성(초대)한(받은) 일정 모두 조회(최신 순)
+GET http://localhost:8081/api/schedules?page=1
+Content-Type: application/json
+Authorization: {{access_token}}

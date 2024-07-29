@@ -13,7 +13,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -21,8 +21,6 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "schedules")
 public class Schedule extends TimeStamped {
-
-    private static final String DEFAULT_IMAGE_URL = "https://detour1.s3.ap-northeast-2.amazonaws.com/a7397a75-99d5-4c94-9abf-d5cccac8c464.png";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +33,10 @@ public class Schedule extends TimeStamped {
     private String imageUrl;
 
     @Column(nullable = false)
-    private Date departureDate;
+    private LocalDateTime departureDate;
 
     @Column(nullable = false)
-    private Date arrivalDate;
+    private LocalDateTime arrivalDate;
 
     @Column(nullable = false)
     private Long likeCount = 0L;
@@ -64,9 +62,9 @@ public class Schedule extends TimeStamped {
         this.likeCount--;
     }
 
-    public Schedule(ScheduleRequestDto scheduleRequestDto, User user) {
+    public Schedule(ScheduleRequestDto scheduleRequestDto, User user, String defaultImageUrl) {
         this.title = scheduleRequestDto.getTitle();
-        this.imageUrl = DEFAULT_IMAGE_URL;
+        this.imageUrl = defaultImageUrl;
         this.departureDate = scheduleRequestDto.getDepartureDate();
         this.arrivalDate = scheduleRequestDto.getArrivalDate();
         this.user = user;

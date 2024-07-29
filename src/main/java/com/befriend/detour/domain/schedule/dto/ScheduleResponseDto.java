@@ -4,15 +4,14 @@ import com.befriend.detour.domain.schedule.entity.Schedule;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 public class ScheduleResponseDto {
 
     private Long scheduleId;
     private String title;
-    private Date departureDate;
-    private Date arrivalDate;
+    private LocalDateTime departureDate;
+    private LocalDateTime arrivalDate;
     private String mainImage;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;

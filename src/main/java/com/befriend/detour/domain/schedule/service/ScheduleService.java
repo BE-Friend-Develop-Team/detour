@@ -9,6 +9,7 @@ import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ScheduleService {
 
+    @Value("${DEFAULT_IMAGE_URL}")
+    private String defaultImageUrl;
+
     private final ScheduleRepository scheduleRepository;
     private final InvitationRepository invitationRepository;
 
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto, User user) {
-        Schedule schedule = new Schedule(scheduleRequestDto, user);
+        Schedule schedule = new Schedule(scheduleRequestDto, user, defaultImageUrl);
         scheduleRepository.save(schedule);
         Invitation invitation = new Invitation(user, schedule);
         invitationRepository.save(invitation);

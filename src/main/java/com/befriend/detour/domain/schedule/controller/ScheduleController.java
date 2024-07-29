@@ -6,10 +6,14 @@ import com.befriend.detour.global.dto.CommonResponseDto;
 import com.befriend.detour.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,6 +45,45 @@ public class ScheduleController {
         scheduleService.deleteSchedule(scheduleId, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 삭제에 성공하였습니다. 🎉", null));
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<CommonResponseDto> getUserCreatedSchedules(@RequestParam(value = "page") int page,
+                                                                     @RequestParam(value = "search", required = false) String search,
+                                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Pageable pageable = PageRequest.of(page - 1, 12);
+
+        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserCreatedSchedules(pageable, userDetails.getUser().getId(), search);
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, userDetails.getUser().getNickname() + " 사용자가 작성한 일정들 조회에 성공하였습니다. 🎉", scheduleResponseDtos));
+    }
+
+    @GetMapping("/users/likes")
+    public ResponseEntity<CommonResponseDto> getUserLikedSchedules(@RequestParam(value = "page") int page,
+                                                                   @RequestParam(value = "search", required = false) String search,
+                                                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Pageable pageable = PageRequest.of(page - 1, 12);
+        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserLikedSchedules(pageable, userDetails.getUser(), search);
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, userDetails.getUser().getNickname() + " 사용자가 좋아요한 일정들 조회에 성공하였습니다. 🎉", scheduleResponseDtos));
+    }
+
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<CommonResponseDto> getSchedule(@PathVariable(value = "scheduleId") Long scheduleId) {
+        ScheduleResponseDto scheduleResponseDto = scheduleService.getSchedule(scheduleId);
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 조회에 성공하였습니다. 🎉", scheduleResponseDto));
+    }
+
+    @GetMapping
+    public ResponseEntity<CommonResponseDto> getSchedules(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "sortBy") String sortBy,
+            @RequestParam(value = "search", required = false) String search,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getSchedules(sortBy, page - 1, 12, search);
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, sortBy + " 순으로 전체 일정을 조회에 성공하였습니다.", scheduleResponseDtos));
     }
 
 }

@@ -2,6 +2,9 @@ package com.befriend.detour.domain.schedule.service;
 
 import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.invitation.repository.InvitationRepository;
+import com.befriend.detour.domain.like.entity.Like;
+import com.befriend.detour.domain.like.repository.LikeRepository;
+import com.befriend.detour.domain.schedule.dto.*;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleUpdateRequestDto;
@@ -12,8 +15,14 @@ import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +33,7 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final InvitationRepository invitationRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto, User user) {
@@ -52,6 +62,67 @@ public class ScheduleService {
         scheduleRepository.delete(checkSchedule);
     }
 
+    @Transactional(readOnly = true)
+    public List<ScheduleResponseDto> getUserCreatedSchedules(Pageable pageable, Long userId, String search) {
+        List<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUser(userId, pageable).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+        if (schedules.isEmpty()) {
+            throw new CustomException(ErrorCode.USER_CREATED_SCHEDULES_NOT_FOUND);
+        }
+
+        schedules = filteringSearch(search, schedules);
+
+        return schedules.stream()
+                .map(ScheduleResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ScheduleResponseDto> getUserLikedSchedules(Pageable pageable, User user, String search) {
+        List<Like> likes = likeRepository.getUserLikedSchedules(user, pageable)
+                .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_EXIST));
+
+        List<Schedule> schedules = likes.stream()
+                .map(Like::getSchedule)
+                .collect(Collectors.toList());
+
+        filteringSearch(search, schedules);
+
+        return schedules.stream()
+                .map(ScheduleResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public ScheduleResponseDto getSchedule(Long scheduleId) {
+        Schedule schedule = findById(scheduleId);
+
+        return new ScheduleResponseDto(schedule);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ScheduleResponseDto> getSchedules(String sortBy, int page, int size, String search) {
+        Sort sort;
+
+        if (sortBy.equals("좋아요")) {
+            sort = Sort.by(Sort.Order.desc("likeCount"));
+        } else if (sortBy.equals("최신")) {
+            sort = Sort.by(Sort.Order.desc("createdAt"));
+        } else {
+            throw new CustomException(ErrorCode.SORT_NOT_FOUND);
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        List<Schedule> schedules = scheduleRepository.findAll(pageable).getContent();
+
+        schedules = filteringSearch(search, schedules);
+
+        return schedules.stream()
+                .map(ScheduleResponseDto::new)
+                .collect(Collectors.toList());
+    }
+  
     private void updateScheduleFields(Schedule schedule, ScheduleUpdateRequestDto updateRequestDto) {
         if (updateRequestDto.getTitle() != null) {
             schedule.updateScheduleTitle(updateRequestDto.getTitle());
@@ -72,6 +143,22 @@ public class ScheduleService {
         return scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND)
         );
+    }
+
+    public List<Schedule> filteringSearch(String search, List<Schedule> schedules) {
+        // search 값이 있을 경우 필터링
+        if (search != null && !search.isEmpty()) {
+            schedules = schedules.stream()
+                    .filter(schedule -> schedule.getTitle().contains(search))
+                    .collect(Collectors.toList());
+
+            // 필터링 후 스케줄이 없으면 예외 처리
+            if (schedules.isEmpty()) {
+                throw new CustomException(ErrorCode.SCHEDULE_NOT_FOUND);
+            }
+        }
+
+        return schedules;
     }
 
 }

@@ -13,6 +13,7 @@ public class ScheduleResponseDto {
     private LocalDateTime departureDate;
     private LocalDateTime arrivalDate;
     private String mainImage;
+    private Long likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -24,6 +25,7 @@ public class ScheduleResponseDto {
         this.mainImage = schedule.getImageUrl();
         this.createdAt = schedule.getCreatedAt();
         this.modifiedAt = schedule.getModifiedAt();
+        this.likeCount = schedule.getLikeCount();
     }
 
 }

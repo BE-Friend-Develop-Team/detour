@@ -34,6 +34,7 @@ public enum ErrorCode {
     NOT_SCHEDULE_MEMBER(404, "해당 일정의 일행이어야 일정에 대한 권한이 있습니다."),
     ALREADY_INVITED(409, "이미 해당 일정에 초대된 사용자입니다."),
     USER_NOT_MEMBER(404, "해당 일정에 존재하지 않는 일행입니다."),
+    USER_CREATED_SCHEDULES_NOT_FOUND(404, "작성한 일정이 없습니다."),
 
     // like 관련 오류 처리
     ALREADY_LIKED(409, "이미 좋아요를 누른 일정입니다."),
@@ -51,7 +52,7 @@ public enum ErrorCode {
     USER_NOT_MATCH_WITH_MARKER (404, "해당 마커의 작성자가 아닙니다."),
 
     // place 관련 오류 처리
-    PLACE_NOT_FOUND(404, "장소를 찾을 수 없습니다.") ;
+    PLACE_NOT_FOUND(404, "장소를 찾을 수 없습니다.");
 
     private int status;
     private String message;

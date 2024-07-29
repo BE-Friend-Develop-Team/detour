@@ -6,10 +6,14 @@ import com.befriend.detour.global.dto.CommonResponseDto;
 import com.befriend.detour.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,6 +63,15 @@ public class ScheduleController {
         scheduleService.deleteSchedule(scheduleId, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 삭제에 성공하였습니다. 🎉", null));
+    }
+
+    @GetMapping
+    public ResponseEntity<CommonResponseDto> getUserCreatedSchedules(@RequestParam (value = "page") int page, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserCreatedSchedules(pageable, userDetails.getUser().getId());
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, userDetails.getUser().getNickname() + " 사용자가 작성한 일정들 조회에 성공하였습니다. 🎉", scheduleResponseDtos));
     }
 
 }

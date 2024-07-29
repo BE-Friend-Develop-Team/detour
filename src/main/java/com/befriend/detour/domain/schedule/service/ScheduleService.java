@@ -80,12 +80,14 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getUserCreatedSchedules(Pageable pageable, Long userId) {
+    public List<ScheduleResponseDto> getUserCreatedSchedules(Pageable pageable, Long userId, String search) {
         List<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUser(userId, pageable).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         if (schedules.isEmpty()) {
             throw new CustomException(ErrorCode.USER_CREATED_SCHEDULES_NOT_FOUND);
         }
+
+        schedules = filteringSearch(search, schedules);
 
         return schedules.stream()
                 .map(ScheduleResponseDto::new)
@@ -93,13 +95,15 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getUserLikedSchedules(Pageable pageable, User user) {
+    public List<ScheduleResponseDto> getUserLikedSchedules(Pageable pageable, User user, String search) {
         List<Like> likes = likeRepository.getUserLikedSchedules(user, pageable)
                 .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_EXIST));
 
         List<Schedule> schedules = likes.stream()
                 .map(Like::getSchedule)
                 .collect(Collectors.toList());
+
+        filteringSearch(search, schedules);
 
         return schedules.stream()
                 .map(ScheduleResponseDto::new)
@@ -114,7 +118,7 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getSchedules(String sortBy, int page, int size) {
+    public List<ScheduleResponseDto> getSchedules(String sortBy, int page, int size, String search) {
         Sort sort;
 
         if (sortBy.equals("좋아요")) {
@@ -128,6 +132,8 @@ public class ScheduleService {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         List<Schedule> schedules = scheduleRepository.findAll(pageable).getContent();
+
+        schedules = filteringSearch(search, schedules);
 
         return schedules.stream()
                 .map(ScheduleResponseDto::new)
@@ -145,6 +151,22 @@ public class ScheduleService {
         return scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND)
         );
+    }
+
+    public List<Schedule> filteringSearch(String search, List<Schedule> schedules) {
+        // search 값이 있을 경우 필터링
+        if (search != null && !search.isEmpty()) {
+            schedules = schedules.stream()
+                    .filter(schedule -> schedule.getTitle().contains(search))
+                    .collect(Collectors.toList());
+
+            // 필터링 후 스케줄이 없으면 예외 처리
+            if (schedules.isEmpty()) {
+                throw new CustomException(ErrorCode.SCHEDULE_NOT_FOUND);
+            }
+        }
+
+        return schedules;
     }
 
 }

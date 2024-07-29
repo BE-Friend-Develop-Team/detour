@@ -17,3 +17,18 @@ Authorization: {{access_token}}
 GET http://localhost:8081/api/schedules?page=1&sortBy=최신
 Content-Type: application/json
 Authorization: {{access_token}}
+
+### 12-5. 사용자가 작성(초대)한(받은) 일정 모두 조회(최신 순) + 검색
+GET http://localhost:8081/api/schedules/users?page=1&search=비프렌드
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 12-6. 사용자가 좋아요한 일정 모두 조회(최신 순) + 검색
+GET http://localhost:8081/api/schedules/users/likes?page=1&search=일정
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 12-7. 일정 전체 조회(sortBy에 좋아요 넣으면 좋아요순, 최신 넣으면 최신순) + 검색
+GET http://localhost:8081/api/schedules?page=1&sortBy=최신&search=이창형
+Content-Type: application/json
+Authorization: {{access_token}}

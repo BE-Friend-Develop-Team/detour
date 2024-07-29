@@ -81,4 +81,12 @@ public class ScheduleController {
         return ResponseEntity.ok(new CommonResponseDto<>(200, userDetails.getUser().getNickname() + " 사용자가 좋아요한 일정들 조회에 성공하였습니다. 🎉", scheduleResponseDtos));
     }
 
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<CommonResponseDto> getSchedule(@PathVariable(value = "scheduleId") Long scheduleId,
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ScheduleResponseDto scheduleResponseDto = scheduleService.getSchedule(scheduleId);
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 조회에 성공하였습니다. 🎉", scheduleResponseDto));
+    }
+
 }

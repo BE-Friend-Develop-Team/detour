@@ -63,6 +63,9 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests((authorizeRequest) ->
                 authorizeRequest
                         .requestMatchers("/api/users/signup").permitAll()
+                        .requestMatchers("/api/users/check-loginId").permitAll()
+                        .requestMatchers("/api/users/check-nickname").permitAll()
+                        .requestMatchers("/api/users/check-email").permitAll()
                         .requestMatchers("/api/users/login").permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/users/login/oauth2/code/kakao").permitAll()

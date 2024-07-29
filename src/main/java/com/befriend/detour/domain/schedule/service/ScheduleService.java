@@ -104,6 +104,13 @@ public class ScheduleService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public ScheduleResponseDto getSchedule(Long scheduleId) {
+        Schedule schedule = findById(scheduleId);
+
+        return new ScheduleResponseDto(schedule);
+    }
+
     public void checkIfMemberOfSchedule(Schedule schedule, User user) {
         if (invitationRepository.findInvitationByScheduleAndUser(schedule, user) == null) {
             throw new CustomException(ErrorCode.NOT_SCHEDULE_MEMBER);

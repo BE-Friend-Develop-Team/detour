@@ -7,5 +7,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InvitationRepositoryCustom {
+
     Invitation findInvitationByScheduleAndUser(Schedule schedule, User user);
+    boolean existsByScheduleAndUser(Schedule schedule, User user);
+
 }

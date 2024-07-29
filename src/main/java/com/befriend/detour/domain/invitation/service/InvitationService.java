@@ -31,7 +31,7 @@ public class InvitationService {
         User invitee = userService.findUserByNickName(invitationRequestDto.getNickname());
 
         // 초대할 사람이 이미 초대 받은 사용자인지 확인
-        if (invitationRepository.findInvitationByScheduleAndUser(checkSchedule, invitee) != null) {
+        if (invitationRepository.existsByScheduleAndUser(checkSchedule, invitee)) {
             throw new CustomException(ErrorCode.ALREADY_INVITED);
         }
 
@@ -49,11 +49,11 @@ public class InvitationService {
         User invitee = userService.findUserByNickName(invitationRequestDto.getNickname());
 
         // 초대를 취소할 사람이 해당 일정의 일행인지 확인
-        Invitation invitation = invitationRepository.findInvitationByScheduleAndUser(checkSchedule, invitee);
-        if (invitation == null) {
+        if (!invitationRepository.existsByScheduleAndUser(checkSchedule, invitee)) {
             throw new CustomException(ErrorCode.USER_NOT_MEMBER);
         }
 
+        Invitation invitation = invitationRepository.findInvitationByScheduleAndUser(checkSchedule, invitee);
         invitationRepository.delete(invitation);
     }
 

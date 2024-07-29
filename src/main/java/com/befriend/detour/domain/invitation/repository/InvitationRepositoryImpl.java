@@ -17,11 +17,22 @@ public class InvitationRepositoryImpl implements InvitationRepositoryCustom {
 
     @Override
     public Invitation findInvitationByScheduleAndUser(Schedule schedule, User user){
+
         return jpaQueryFactory
                 .selectFrom(invitation)
                 .where(invitation.schedule.eq(schedule)
                         .and(invitation.user.eq(user)))
                 .fetchOne();
+    }
+
+    @Override
+    public boolean existsByScheduleAndUser(Schedule schedule, User user) {
+
+        return jpaQueryFactory
+                .selectFrom(invitation)
+                .where(invitation.schedule.eq(schedule)
+                        .and(invitation.user.eq(user)))
+                .fetchFirst() != null;
     }
 
 }

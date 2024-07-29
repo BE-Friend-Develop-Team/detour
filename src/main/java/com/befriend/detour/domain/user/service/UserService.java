@@ -18,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -122,22 +120,19 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
     public boolean isLoginIdExist(String loginId) {
-        Optional<User> user = userRepository.findByLoginId(loginId);
-
-        return user.isPresent();
+        return userRepository.existsByLoginId(loginId);
     }
 
+    @Transactional(readOnly = true)
     public boolean isNicknameExist(String nickname) {
-        Optional<User> user = userRepository.findByNickname(nickname);
-
-        return user.isPresent();
+        return userRepository.existsByNickname(nickname);
     }
 
+    @Transactional(readOnly = true)
     public boolean isEmailExist(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-
-        return user.isPresent();
+        return userRepository.existsByEmail(email);
     }
 
     public User findUserByNickName(String nickname) {

@@ -67,11 +67,18 @@ public class ScheduleController {
 
     @GetMapping
     public ResponseEntity<CommonResponseDto> getUserCreatedSchedules(@RequestParam (value = "page") int page, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        Pageable pageable = PageRequest.of(page - 1, 10);
+        Pageable pageable = PageRequest.of(page - 1, 12);
         List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserCreatedSchedules(pageable, userDetails.getUser().getId());
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, userDetails.getUser().getNickname() + " 사용자가 작성한 일정들 조회에 성공하였습니다. 🎉", scheduleResponseDtos));
+    }
+
+    @GetMapping("/likes")
+    public ResponseEntity<CommonResponseDto> getUserLikedSchedules(@RequestParam (value = "page") int page, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Pageable pageable = PageRequest.of(page-1, 12);
+        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserLikedSchedules(pageable, userDetails.getUser());
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, userDetails.getUser().getNickname() + " 사용자가 좋아요한 일정들 조회에 성공하였습니다. 🎉", scheduleResponseDtos));
     }
 
 }

@@ -2,6 +2,8 @@ package com.befriend.detour.domain.schedule.service;
 
 import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.invitation.repository.InvitationRepository;
+import com.befriend.detour.domain.like.entity.Like;
+import com.befriend.detour.domain.like.repository.LikeRepository;
 import com.befriend.detour.domain.schedule.dto.*;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.schedule.repository.ScheduleRepository;
@@ -26,6 +28,7 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final InvitationRepository invitationRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto, User user) {
@@ -81,6 +84,20 @@ public class ScheduleService {
         if (schedules.isEmpty()) {
             throw new CustomException(ErrorCode.USER_CREATED_SCHEDULES_NOT_FOUND);
         }
+
+        return schedules.stream()
+                .map(ScheduleResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ScheduleResponseDto> getUserLikedSchedules(Pageable pageable, User user) {
+        List<Like> likes = likeRepository.getUserLikedSchedules(user, pageable)
+                .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_EXIST));
+
+        List<Schedule> schedules = likes.stream()
+                .map(Like::getSchedule)
+                .collect(Collectors.toList());
 
         return schedules.stream()
                 .map(ScheduleResponseDto::new)

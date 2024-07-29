@@ -32,8 +32,8 @@ public class ScheduleController {
 
     @PatchMapping("/{scheduleId}/title")
     public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> updateScheduleTitle(@PathVariable(value = "scheduleId") Long scheduleId,
-                                                                                     @Valid @RequestBody EditTitleRequestDto editTitleRequestDto,
-                                                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                                                      @Valid @RequestBody EditTitleRequestDto editTitleRequestDto,
+                                                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ScheduleResponseDto scheduleResponseDto = scheduleService.updateScheduleTitle(scheduleId, editTitleRequestDto, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 제목 수정에 성공하였습니다. 🎉", scheduleResponseDto));
@@ -50,8 +50,8 @@ public class ScheduleController {
 
     @PatchMapping("/{scheduleId}/main-image")
     public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> updateScheduleMainImage(@PathVariable(value = "scheduleId") Long scheduleId,
-                                                                                      @Valid @RequestBody EditMainImageRequestDto editMainImageRequestDto,
-                                                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                                                          @Valid @RequestBody EditMainImageRequestDto editMainImageRequestDto,
+                                                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ScheduleResponseDto scheduleResponseDto = scheduleService.updateScheduleMainImage(scheduleId, editMainImageRequestDto, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 메인 이미지 수정에 성공하였습니다. 🎉", scheduleResponseDto));
@@ -59,23 +59,23 @@ public class ScheduleController {
 
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<CommonResponseDto> deleteSchedule(@PathVariable(value = "scheduleId") Long scheduleId,
-                                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         scheduleService.deleteSchedule(scheduleId, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 삭제에 성공하였습니다. 🎉", null));
     }
 
-    @GetMapping
-    public ResponseEntity<CommonResponseDto> getUserCreatedSchedules(@RequestParam (value = "page") int page, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @GetMapping("/users")
+    public ResponseEntity<CommonResponseDto> getUserCreatedSchedules(@RequestParam(value = "page") int page, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Pageable pageable = PageRequest.of(page - 1, 12);
         List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserCreatedSchedules(pageable, userDetails.getUser().getId());
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, userDetails.getUser().getNickname() + " 사용자가 작성한 일정들 조회에 성공하였습니다. 🎉", scheduleResponseDtos));
     }
 
-    @GetMapping("/likes")
-    public ResponseEntity<CommonResponseDto> getUserLikedSchedules(@RequestParam (value = "page") int page, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Pageable pageable = PageRequest.of(page-1, 12);
+    @GetMapping("/users/likes")
+    public ResponseEntity<CommonResponseDto> getUserLikedSchedules(@RequestParam(value = "page") int page, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Pageable pageable = PageRequest.of(page - 1, 12);
         List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserLikedSchedules(pageable, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, userDetails.getUser().getNickname() + " 사용자가 좋아요한 일정들 조회에 성공하였습니다. 🎉", scheduleResponseDtos));
@@ -83,10 +83,20 @@ public class ScheduleController {
 
     @GetMapping("/{scheduleId}")
     public ResponseEntity<CommonResponseDto> getSchedule(@PathVariable(value = "scheduleId") Long scheduleId,
-                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ScheduleResponseDto scheduleResponseDto = scheduleService.getSchedule(scheduleId);
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, "일정 조회에 성공하였습니다. 🎉", scheduleResponseDto));
+    }
+
+    @GetMapping
+    public ResponseEntity<CommonResponseDto> getSchedules(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "sortBy") String sortBy,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getSchedules(sortBy, page - 1, 12);
+
+        return ResponseEntity.ok(new CommonResponseDto<>(200, sortBy + " 순으로 전체 일정을 조회에 성공하였습니다.", scheduleResponseDtos));
     }
 
 }

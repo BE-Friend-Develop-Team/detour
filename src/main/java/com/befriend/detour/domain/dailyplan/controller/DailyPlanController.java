@@ -18,7 +18,7 @@ public class DailyPlanController {
 
     private final DailyPlanService dailyPlanService;
 
-    @PostMapping("/schedules/{scheduleId}/daily-plans")
+    @PostMapping("/schedules/{scheduleId}/dailyplans")
     public ResponseEntity<CommonResponseDto> createDailyPlan(@PathVariable(name = "scheduleId") Long scheduleId,
                                                              @RequestBody DailyPlanRequestDto dailyPlanRequestDto) {
         dailyPlanService.createDailyPlan(scheduleId, dailyPlanRequestDto);
@@ -26,14 +26,14 @@ public class DailyPlanController {
         return new ResponseEntity<>(new CommonResponseDto<>(201, "데일리 플랜 생성에 성공하였습니다. 🎉", null), HttpStatus.CREATED);
     }
 
-    @GetMapping("/schedules/{scheduleId}/daily-plans")
+    @GetMapping("/schedules/{scheduleId}/dailyplans")
     public ResponseEntity<CommonResponseDto<List<DailyPlanResponseDto>>> getDailyPlansByScheduleId(@PathVariable(name = "scheduleId") Long scheduleId) {
         List<DailyPlanResponseDto> responseDtoList = dailyPlanService.getDailyPlansByScheduleId(scheduleId);
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, "해당 일정에 대한 데일리 플랜 목록 조회에 성공하였습니다. 🎉", responseDtoList));
     }
 
-    @GetMapping("/daily-plans/{dailyPlanId}")
+    @GetMapping("/dailyplans/{dailyPlanId}")
     public ResponseEntity<CommonResponseDto<DailyPlanResponseDto>> getDailyPlan(@PathVariable(name = "dailyPlanId") Long dailyPlanId) {
         DailyPlanResponseDto responseDto = dailyPlanService.getDailyPlan(dailyPlanId);
 

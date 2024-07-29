@@ -12,7 +12,9 @@ import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -109,6 +111,27 @@ public class ScheduleService {
         Schedule schedule = findById(scheduleId);
 
         return new ScheduleResponseDto(schedule);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ScheduleResponseDto> getSchedules(String sortBy, int page, int size) {
+        Sort sort;
+
+        if (sortBy.equals("좋아요")) {
+            sort = Sort.by(Sort.Order.desc("likeCount"));
+        } else if (sortBy.equals("최신")) {
+            sort = Sort.by(Sort.Order.desc("createdAt"));
+        } else {
+            throw new CustomException(ErrorCode.SORT_NOT_FOUND);
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        List<Schedule> schedules = scheduleRepository.findAll(pageable).getContent();
+
+        return schedules.stream()
+                .map(ScheduleResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     public void checkIfMemberOfSchedule(Schedule schedule, User user) {

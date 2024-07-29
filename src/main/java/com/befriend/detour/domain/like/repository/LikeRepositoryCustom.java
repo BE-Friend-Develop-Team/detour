@@ -15,4 +15,5 @@ public interface LikeRepositoryCustom {
     Optional<Like> findLikeByUserAndSchedule(User user, Schedule schedule);
 
     Optional<List<Like>> getUserLikedSchedules(User user, Pageable pageable);
+
 }

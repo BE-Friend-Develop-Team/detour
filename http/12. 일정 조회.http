@@ -7,3 +7,8 @@ Authorization: {{access_token}}
 GET http://localhost:8081/api/schedules/likes?page=1
 Content-Type: application/json
 Authorization: {{access_token}}
+
+### 12-3. 일정 단건 조회
+GET http://localhost:8081/api/schedules/2
+Content-Type: application/json
+Authorization: {{access_token}}

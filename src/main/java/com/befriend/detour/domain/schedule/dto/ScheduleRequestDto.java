@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 public class ScheduleRequestDto {
@@ -13,9 +13,9 @@ public class ScheduleRequestDto {
     private String title;
 
     @NotNull(message = "일정 시작 일자를 지정해주세요.")
-    private Date departureDate;
+    private LocalDateTime departureDate;
 
     @NotNull(message = "일정 종료 일자를 지정해주세요.")
-    private Date arrivalDate;
+    private LocalDateTime arrivalDate;
 
 }

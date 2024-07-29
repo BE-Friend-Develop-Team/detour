@@ -13,7 +13,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -35,10 +35,10 @@ public class Schedule extends TimeStamped {
     private String imageUrl;
 
     @Column(nullable = false)
-    private Date departureDate;
+    private LocalDateTime departureDate;
 
     @Column(nullable = false)
-    private Date arrivalDate;
+    private LocalDateTime arrivalDate;
 
     @Column(nullable = false)
     private Long likeCount = 0L;

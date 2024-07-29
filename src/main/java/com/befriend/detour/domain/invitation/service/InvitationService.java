@@ -1,8 +1,8 @@
 package com.befriend.detour.domain.invitation.service;
 
+import com.befriend.detour.domain.invitation.dto.InvitationRequestDto;
 import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.invitation.repository.InvitationRepository;
-import com.befriend.detour.domain.invitation.dto.InvitationRequestDto;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.schedule.service.ScheduleService;
 import com.befriend.detour.domain.user.entity.User;
@@ -41,7 +41,8 @@ public class InvitationService {
         // 초대를 취소할 사람이 해당 일정의 일행인지 확인
         invitationRepository.checkIfMemberOfSchedule(schedule, invitee);
 
-        Invitation invitation = invitationRepository.findInvitationByScheduleAndUser(schedule, invitee);
+        Invitation invitation = invitationRepository.findInvitationByScheduleAndUser(schedule, invitee)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVITATION_NOT_FOUND));
         invitationRepository.delete(invitation);
     }
 

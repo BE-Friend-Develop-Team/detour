@@ -1,8 +1,8 @@
 package com.befriend.detour.domain.invitation.service;
 
+import com.befriend.detour.domain.invitation.dto.InvitationRequestDto;
 import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.invitation.repository.InvitationRepository;
-import com.befriend.detour.domain.invitation.dto.InvitationRequestDto;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.schedule.service.ScheduleService;
 import com.befriend.detour.domain.user.entity.User;
@@ -23,38 +23,38 @@ public class InvitationService {
 
     @Transactional
     public void inviteMember(Long scheduleId, InvitationRequestDto invitationRequestDto, User user) {
-        Schedule checkSchedule = scheduleService.findById(scheduleId);
-
-        // 초대자가 해당 Schedule에 대한 권한이 있는 사용자인지 확인
-        scheduleService.checkIfMemberOfSchedule(checkSchedule, user);
-
+        Schedule schedule = getScheduleWithAuthorization(scheduleId, user);
         User invitee = userService.findUserByNickName(invitationRequestDto.getNickname());
 
-        // 초대할 사람이 이미 초대 받은 사용자인지 확인
-        if (invitationRepository.findInvitationByScheduleAndUser(checkSchedule, invitee) != null) {
+        if (invitationRepository.existsByScheduleAndUser(schedule, invitee)) {
             throw new CustomException(ErrorCode.ALREADY_INVITED);
         }
 
-        Invitation invitation = new Invitation(invitee, checkSchedule);
-        invitationRepository.save(invitation);
+        createInvitation(invitee, schedule);
     }
 
     @Transactional
     public void cancelInvitation(Long scheduleId, InvitationRequestDto invitationRequestDto, User user) {
-        Schedule checkSchedule = scheduleService.findById(scheduleId);
-
-        // 초대취소자가 해당 Schedule에 대한 권한이 있는 사용자인지 확인
-        scheduleService.checkIfMemberOfSchedule(checkSchedule, user);
-
+        Schedule schedule = getScheduleWithAuthorization(scheduleId, user);
         User invitee = userService.findUserByNickName(invitationRequestDto.getNickname());
 
         // 초대를 취소할 사람이 해당 일정의 일행인지 확인
-        Invitation invitation = invitationRepository.findInvitationByScheduleAndUser(checkSchedule, invitee);
-        if (invitation == null) {
-            throw new CustomException(ErrorCode.USER_NOT_MEMBER);
-        }
+        invitationRepository.checkIfMemberOfSchedule(schedule, invitee);
 
+        Invitation invitation = invitationRepository.findInvitationByScheduleAndUser(schedule, invitee)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVITATION_NOT_FOUND));
         invitationRepository.delete(invitation);
+    }
+
+    public void createInvitation(User user, Schedule schedule) {
+        Invitation invitation = new Invitation(user, schedule);
+        invitationRepository.save(invitation);
+    }
+
+    private Schedule getScheduleWithAuthorization(Long scheduleId, User user) {
+        Schedule schedule = scheduleService.findById(scheduleId);
+        invitationRepository.checkIfMemberOfSchedule(schedule, user);
+        return schedule;
     }
 
 }

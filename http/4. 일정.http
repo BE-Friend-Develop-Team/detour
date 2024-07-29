@@ -52,7 +52,7 @@ Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 4-7. 일정 기간 수정
-PATCH http://localhost:8081/api/schedules/2/date
+PATCH http://localhost:8081/api/schedules/2
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -62,7 +62,7 @@ Authorization: {{access_token}}
 }
 
 ### 4-8. 일정 제목 수정
-PATCH http://localhost:8081/api/schedules/2/title
+PATCH http://localhost:8081/api/schedules/2
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -71,7 +71,7 @@ Authorization: {{access_token}}
 }
 
 ### 4-9. 일정 대표 이미지 수정
-PATCH http://localhost:8081/api/schedules/1/main-image
+PATCH http://localhost:8081/api/schedules/1
 Content-Type: application/json
 Authorization: {{access_token}}
 

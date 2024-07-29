@@ -12,7 +12,8 @@ import java.util.Optional;
 @Repository
 public interface LikeRepositoryCustom {
 
-    Optional<Like> findLikeByUserAndSchedule(User user, Schedule schedule);
+    boolean existsByUserAndSchedule(User user, Schedule schedule);
+    Like findLikeWithSchedule(Long likeId);
 
     Optional<List<Like>> getUserLikedSchedules(User user, Pageable pageable);
 

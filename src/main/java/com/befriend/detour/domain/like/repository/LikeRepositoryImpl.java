@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.befriend.detour.domain.like.entity.QLike.like;
+import static com.befriend.detour.domain.schedule.entity.QSchedule.schedule;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,13 +21,23 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Optional<Like> findLikeByUserAndSchedule(User user, Schedule schedule) {
-        Like foundLike = jpaQueryFactory.selectFrom(like)
+    public boolean existsByUserAndSchedule(User user, Schedule schedule) {
+
+        return jpaQueryFactory
+                .selectFrom(like)
                 .where(like.user.eq(user)
                         .and(like.schedule.eq(schedule)))
-                .fetchOne();
+                .fetchFirst() != null;
+    }
 
-        return Optional.ofNullable(foundLike);
+    @Override
+    public Like findLikeWithSchedule(Long likeId) {
+
+        return jpaQueryFactory
+                .selectFrom(like)
+                .leftJoin(like.schedule, schedule)
+                .where(like.id.eq(likeId))
+                .fetchOne();
     }
 
     @Override

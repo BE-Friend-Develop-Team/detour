@@ -35,6 +35,7 @@ public enum ErrorCode {
     ALREADY_INVITED(409, "이미 해당 일정에 초대된 사용자입니다."),
     USER_NOT_MEMBER(404, "해당 일정에 존재하지 않는 일행입니다."),
     USER_CREATED_SCHEDULES_NOT_FOUND(404, "작성한 일정이 없습니다."),
+    USER_LIKED_SCHEDULES_NOT_FOUND(404, "좋아요한 일정이 없습니다."),
 
     // like 관련 오류 처리
     ALREADY_LIKED(409, "이미 좋아요를 누른 일정입니다."),

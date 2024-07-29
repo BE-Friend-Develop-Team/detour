@@ -39,7 +39,7 @@ public class InvitationService {
         User invitee = userService.findUserByNickName(invitationRequestDto.getNickname());
 
         // 초대를 취소할 사람이 해당 일정의 일행인지 확인
-        checkIfMemberOfSchedule(schedule, invitee);
+        invitationRepository.checkIfMemberOfSchedule(schedule, invitee);
 
         Invitation invitation = invitationRepository.findInvitationByScheduleAndUser(schedule, invitee);
         invitationRepository.delete(invitation);
@@ -50,15 +50,9 @@ public class InvitationService {
         invitationRepository.save(invitation);
     }
 
-    public void checkIfMemberOfSchedule(Schedule schedule, User user) {
-        if (!invitationRepository.existsByScheduleAndUser(schedule, user)) {
-            throw new CustomException(ErrorCode.USER_NOT_MEMBER);
-        }
-    }
-
     private Schedule getScheduleWithAuthorization(Long scheduleId, User user) {
         Schedule schedule = scheduleService.findById(scheduleId);
-        checkIfMemberOfSchedule(schedule, user);
+        invitationRepository.checkIfMemberOfSchedule(schedule, user);
         return schedule;
     }
 

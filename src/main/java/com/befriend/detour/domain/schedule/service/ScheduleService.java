@@ -1,6 +1,7 @@
 package com.befriend.detour.domain.schedule.service;
 
-import com.befriend.detour.domain.invitation.service.InvitationService;
+import com.befriend.detour.domain.invitation.entity.Invitation;
+import com.befriend.detour.domain.invitation.repository.InvitationRepository;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleUpdateRequestDto;
@@ -22,13 +23,14 @@ public class ScheduleService {
     private String defaultImageUrl;
 
     private final ScheduleRepository scheduleRepository;
-    private final InvitationService invitationService;
+    private final InvitationRepository invitationRepository;
 
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto, User user) {
         Schedule schedule = new Schedule(scheduleRequestDto, user, defaultImageUrl);
         scheduleRepository.save(schedule);
-        invitationService.createInvitation(user, schedule);
+        Invitation invitation = new Invitation(user, schedule);
+        invitationRepository.save(invitation);
 
         return new ScheduleResponseDto(schedule);
     }
@@ -36,7 +38,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleUpdateRequestDto updateRequestDto, User user) {
         Schedule schedule = findById(scheduleId);
-        invitationService.checkIfMemberOfSchedule(schedule, user);
+        invitationRepository.checkIfMemberOfSchedule(schedule, user);
         updateScheduleFields(schedule, updateRequestDto);
         scheduleRepository.save(schedule);
 
@@ -46,7 +48,7 @@ public class ScheduleService {
     @Transactional
     public void deleteSchedule(Long scheduleId, User user) {
         Schedule checkSchedule = findById(scheduleId);
-        invitationService.checkIfMemberOfSchedule(checkSchedule, user);
+        invitationRepository.checkIfMemberOfSchedule(checkSchedule, user);
         scheduleRepository.delete(checkSchedule);
     }
 

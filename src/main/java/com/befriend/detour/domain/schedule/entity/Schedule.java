@@ -3,9 +3,6 @@ package com.befriend.detour.domain.schedule.entity;
 import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.like.entity.Like;
-import com.befriend.detour.domain.schedule.dto.EditDateRequestDto;
-import com.befriend.detour.domain.schedule.dto.EditMainImageRequestDto;
-import com.befriend.detour.domain.schedule.dto.EditTitleRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.global.entity.TimeStamped;
@@ -70,17 +67,20 @@ public class Schedule extends TimeStamped {
         this.user = user;
     }
 
-    public void updateScheduleTitle(EditTitleRequestDto editTitleRequestDto) {
-        this.title = editTitleRequestDto.getTitle();
+    public void updateScheduleTitle(String title) {
+        this.title = title;
     }
 
-    public void updateScheduleDate(EditDateRequestDto editDateRequestDto) {
-        this.departureDate = editDateRequestDto.getDepartureDate();
-        this.arrivalDate = editDateRequestDto.getArrivalDate();
+    public void updateDepartureDate(LocalDateTime departureDate) {
+        this.departureDate = departureDate;
     }
 
-    public void updateScheduleMainImage(EditMainImageRequestDto editMainImageRequestDto) {
-        this.imageUrl = editMainImageRequestDto.getMainImage();
+    public void updateArrivalDate(LocalDateTime arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+
+    public void updateScheduleMainImage(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 }

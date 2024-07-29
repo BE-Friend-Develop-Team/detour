@@ -22,7 +22,7 @@ public class LikeService {
     public void createScheduleLike(Long scheduleId, User user) {
         Schedule foundschedule = scheduleService.findById(scheduleId);
 
-        if (likeRepository.findLikeByUserAndSchedule(user, foundschedule).isPresent()) {
+        if (likeRepository.existsByUserAndSchedule(user, foundschedule)) {
             throw new CustomException(ErrorCode.ALREADY_LIKED);
         }
 

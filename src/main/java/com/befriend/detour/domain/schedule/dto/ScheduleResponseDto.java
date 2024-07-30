@@ -14,6 +14,7 @@ public class ScheduleResponseDto {
     private LocalDateTime arrivalDate;
     private String mainImage;
     private Long likeCount;
+    private Long hits;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -26,6 +27,7 @@ public class ScheduleResponseDto {
         this.createdAt = schedule.getCreatedAt();
         this.modifiedAt = schedule.getModifiedAt();
         this.likeCount = schedule.getLikeCount();
+        this.hits = schedule.getHits();
     }
 
 }

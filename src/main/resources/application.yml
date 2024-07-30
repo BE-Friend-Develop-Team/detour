@@ -27,12 +27,9 @@ spring:
     connection-timeout: 30000
   data:
     redis:
-      cache:
-        host: localhost # Redis 캐시 서버의 호스트 (로컬 호스트 사용)
-        port: 6379 # Redis 캐서 서버의 포트
       auth:
-        host: localhost # Redis 인증 서버의 호스트 (로컬 호스트 사용)
-        port: 6380 # Redis 인증 서버의 포트
+        host: ${AUTH_REDIS_HOST} # Redis 인증 서버의 호스트(EC2와 연결)
+        port: ${AUTH_REDIS_PORT} # Redis 인증 서버의 포트
 
   security:
     oauth2:

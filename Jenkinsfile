@@ -18,19 +18,15 @@ pipeline{
     stage('Test'){
       steps{
         sh "echo 'Test'"
-        dir('detour') {
-          sh 'chmod +x ./gradlew'
-          sh './gradlew clean test'
-        }
+        sh 'chmod +x /var/jenkins_home/workspace/detour_dev/gradlew'
+        sh '/var/jenkins_home/workspace/detour_dev/gradlew clean test'
       }
     }
 
     stage('Build'){
       steps{
         sh "echo 'Build Jar'"
-        dir('detour') {
-          sh './gradlew bootJar'
-        }
+        sh '/var/jenkins_home/workspace/detour_dev/gradlew bootJar'
       }
     }
 
@@ -47,11 +43,11 @@ pipeline{
 
             sh "echo 'Deploy AWS'"
             dir('detour/build/libs'){
-                sh "scp -o StrictHostKeyChecking=no -i ${my_private_key_file} *.jar ubuntu@${env.DEV_BACK_IP}:/home/ubuntu/detour"
-                sh "scp -o StrictHostKeyChecking=no -i ${my_private_key_file} /path/to/deploy.sh ec2-user@${env.DEV_BACK_IP}:/home/ubuntu/detour"
+                sh "scp -o StrictHostKeyChecking=no -i ${my_private_key_file} /var/jenkins_home/workspace/detour_dev/build/libs/*.jar ubuntu@${env.DEV_BACK_IP}:/home/ubuntu/detour"
+                sh "scp -o StrictHostKeyChecking=no -i ${my_private_key_file} /var/jenkins_home/workspace/detour_dev/deploy.sh ec2-user@${env.DEV_BACK_IP}:/home/ubuntu/detour"
             }
 
-            sh "ssh -o StrictHostKeyChecking=no -i ${my_private_key_file} ubuntu@${env.DEV_BACK_IP} 'cd detour && ./deploy.sh'"
+            sh "ssh -o StrictHostKeyChecking=no -i ${my_private_key_file} ubuntu@${env.DEV_BACK_IP} 'cd /home/ubuntu/detour && ./deploy.sh'"
             sh "echo 'Spring Boot Running'"
           }
         }

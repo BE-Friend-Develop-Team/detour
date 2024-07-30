@@ -25,6 +25,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .from(user)
                 .where(user.loginId.eq(loginId))
                 .fetchFirst();
+
         return fetchOne != null;
     }
 
@@ -35,6 +36,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .from(user)
                 .where(user.nickname.eq(nickname))
                 .fetchFirst();
+
         return fetchOne != null;
     }
 
@@ -45,6 +47,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .from(user)
                 .where(user.email.eq(email))
                 .fetchFirst();
+
         return fetchOne != null;
     }
 

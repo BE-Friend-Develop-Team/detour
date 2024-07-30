@@ -111,18 +111,21 @@ public class UserController {
     @GetMapping("/check-loginId")
     public ResponseEntity<CommonResponseDto> checkLoginId(@RequestParam(name = "loginId") String loginId) {
         boolean isExist = userService.isLoginIdExist(loginId);
+
         return ResponseEntity.ok(new CommonResponseDto(200, "아이디 중복 확인에 성공하였습니다. 🎉", isExist));
     }
 
     @GetMapping("/check-nickname")
     public ResponseEntity<CommonResponseDto> checkNickname(@RequestParam(name = "nickname") String nickname) {
         boolean isExist = userService.isNicknameExist(nickname);
+
         return ResponseEntity.ok(new CommonResponseDto(200, "닉네임 중복 확인에 성공하였습니다. 🎉", isExist));
     }
 
     @GetMapping("/check-email")
     public ResponseEntity<CommonResponseDto> checkEmail(@RequestParam(name = "email") String email) {
         boolean isExist = userService.isEmailExist(email);
+
         return ResponseEntity.ok(new CommonResponseDto(200, "이메일 중복 확인에 성공하였습니다. 🎉", isExist));
     }
 

@@ -19,6 +19,7 @@ pipeline{
       steps{
         sh "echo 'Test'"
         dir('detour') {
+          sh 'chmod +x ./gradlew'
           sh './gradlew clean test'
         }
       }

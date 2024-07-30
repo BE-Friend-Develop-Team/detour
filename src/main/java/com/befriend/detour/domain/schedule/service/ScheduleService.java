@@ -98,6 +98,7 @@ public class ScheduleService {
         Schedule schedule = findById(scheduleId);
 
         scheduleRepository.updateHits(scheduleId);
+        scheduleRepository.updateHourHits(scheduleId);
 
         return new ScheduleResponseDto(schedule);
     }

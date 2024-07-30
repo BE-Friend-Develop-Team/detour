@@ -93,9 +93,11 @@ public class ScheduleService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ScheduleResponseDto getSchedule(Long scheduleId) {
         Schedule schedule = findById(scheduleId);
+
+        scheduleRepository.updateHits(scheduleId);
 
         return new ScheduleResponseDto(schedule);
     }

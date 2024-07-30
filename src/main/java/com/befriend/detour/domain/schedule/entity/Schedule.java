@@ -38,6 +38,9 @@ public class Schedule extends TimeStamped {
     @Column(nullable = false)
     private Long likeCount = 0L;
 
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private Long hits = 0L;
+
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes;
 
@@ -57,6 +60,11 @@ public class Schedule extends TimeStamped {
 
     public void minusLikeCount() {
         this.likeCount--;
+    }
+
+    public Long getHits() {
+
+        return hits;
     }
 
     public Schedule(ScheduleRequestDto scheduleRequestDto, User user, String defaultImageUrl) {

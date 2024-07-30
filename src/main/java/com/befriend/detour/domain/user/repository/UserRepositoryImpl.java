@@ -19,6 +19,39 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
+    public boolean existsByLoginId(String loginId) {
+        Integer fetchOne = jpaQueryFactory
+                .selectOne()
+                .from(user)
+                .where(user.loginId.eq(loginId))
+                .fetchFirst();
+
+        return fetchOne != null;
+    }
+
+    @Override
+    public boolean existsByNickname(String nickname) {
+        Integer fetchOne = jpaQueryFactory
+                .selectOne()
+                .from(user)
+                .where(user.nickname.eq(nickname))
+                .fetchFirst();
+
+        return fetchOne != null;
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        Integer fetchOne = jpaQueryFactory
+                .selectOne()
+                .from(user)
+                .where(user.email.eq(email))
+                .fetchFirst();
+
+        return fetchOne != null;
+    }
+
+    @Override
     public Optional<User> findByNickname(String nickname) {
 
         User result =  jpaQueryFactory.selectFrom(user)

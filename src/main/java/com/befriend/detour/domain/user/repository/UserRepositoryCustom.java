@@ -10,6 +10,10 @@ import java.util.Optional;
 @Repository
 public interface UserRepositoryCustom {
 
+    boolean existsByLoginId(String loginId);
+    boolean existsByNickname(String nickname);
+    boolean existsByEmail(String email);
+
     Optional<User> findByNickname(String nickname);
 
     Optional<User> findByLoginId(String loginId);

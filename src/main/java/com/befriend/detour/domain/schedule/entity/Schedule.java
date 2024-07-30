@@ -91,5 +91,4 @@ public class Schedule extends TimeStamped {
         this.imageUrl = imageUrl;
     }
 
-
 }

@@ -30,6 +30,7 @@ spring:
       auth:
         host: ${AUTH_REDIS_HOST} # Redis 인증 서버의 호스트(EC2와 연결)
         port: ${AUTH_REDIS_PORT} # Redis 인증 서버의 포트
+        password: ${REDIS_PASSWORD}
 
   security:
     oauth2:
@@ -90,7 +91,6 @@ cloud:
 
     s3:
       bucket: ${AWS_BUCKET_NAME}
-
 
 server:
   port: 8081

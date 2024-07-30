@@ -3,6 +3,7 @@ package com.befriend.detour.domain.user.service;
 import com.befriend.detour.domain.user.dao.CertificationNumberDao;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
+import io.lettuce.core.RedisConnectionException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,14 @@ public class EmailCertificationService {
         // TODO: 도메인 구매시 링크 변경 필요
         String content = String.format("%s/api/users/verify?certificationNumber=%s&email=%s \n 이메일 인증을 위해 링크를 클릭해주세요. \n 3분이 초가될 시 해당 링크로 이메일 인증이 불가능합니다.", "http://localhost:8081", certificationNumber, email);
 
-        sendMail(email, content);
-        certificationNumberDao.saveCertificationNumber(email, certificationNumber);
+        try {
+            certificationNumberDao.saveCertificationNumber(email, certificationNumber);
+            sendMail(email, content);
+        } catch (RedisConnectionException e) {
+            throw new CustomException(ErrorCode.REDIS_NOT_CONNECT);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.REDIS_NOT_CONNECT);
+        }
     }
 
     private static String getCertificationNumber() throws NoSuchAlgorithmException {

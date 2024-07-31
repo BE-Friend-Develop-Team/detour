@@ -54,7 +54,10 @@ public enum ErrorCode {
     USER_NOT_MATCH_WITH_MARKER(404, "해당 마커의 작성자가 아닙니다."),
 
     // place 관련 오류 처리
-    PLACE_NOT_FOUND(404, "장소를 찾을 수 없습니다.");
+    PLACE_NOT_FOUND(404, "장소를 찾을 수 없습니다."),
+
+    // redis 관련 오류 처리
+    REDIS_NOT_CONNECT(500, "레디스 서버에 연결할 수 없습니다.");
 
     private int status;
     private String message;

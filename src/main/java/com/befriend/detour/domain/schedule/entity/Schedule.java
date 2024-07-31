@@ -42,6 +42,9 @@ public class Schedule extends TimeStamped {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private Long hits = 0L;
 
+    @Column(name = "hour_hits", columnDefinition = "integer default 0", nullable = false)
+    private Long hourHits = 0L;
+
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes;
 
@@ -69,6 +72,11 @@ public class Schedule extends TimeStamped {
     public Long getHits() {
 
         return hits;
+    }
+
+    public Long getHourHits() {
+
+        return hourHits;
     }
 
     public Schedule(ScheduleRequestDto scheduleRequestDto, User user, String defaultImageUrl) {

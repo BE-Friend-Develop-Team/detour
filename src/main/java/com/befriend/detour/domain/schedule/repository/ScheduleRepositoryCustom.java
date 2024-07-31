@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface ScheduleRepositoryCustom {
 
     Optional<List<Schedule>> findSchedulesByCreatedUser(Long userId, Pageable pageable);
+    Optional<List<Long>> getScheduleIdRanking();
+    void deleteAllHourHits();
 
 }

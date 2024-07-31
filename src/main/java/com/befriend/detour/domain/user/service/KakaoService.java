@@ -40,7 +40,7 @@ public class KakaoService {
     @Value("${SOCIAL_KAKAO_REDIRECT_URI}")
     private String kakaoRedirectUri;
 
-    public void kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public String kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "엑세스 토큰" 요청
         String accessToken = getToken(code);
 
@@ -59,6 +59,8 @@ public class KakaoService {
 
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAccessToken);
         response.setStatus(HttpServletResponse.SC_OK);
+        // JWT 토큰을 반환
+        return jwtAccessToken;
     }
 
     private String getToken(String code) throws JsonProcessingException {

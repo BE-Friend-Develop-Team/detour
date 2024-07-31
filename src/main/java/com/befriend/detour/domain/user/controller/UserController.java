@@ -18,7 +18,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 
 @Controller
@@ -45,10 +48,13 @@ public class UserController {
     }
 
     @GetMapping("/login/oauth2/code/kakao")
-    public ResponseEntity<CommonResponseDto> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        kakaoService.kakaoLogin(code, response);
+    public RedirectView kakaoLogin(@RequestParam String code, HttpServletResponse response ) throws JsonProcessingException, UnsupportedEncodingException {
 
-        return ResponseEntity.ok(new CommonResponseDto(200, "카카오톡 로그인에 성공하였습니다. 🌠", null));
+        String jwtAccessToken = kakaoService.kakaoLogin(code, response);
+        String encodedToken = URLEncoder.encode(jwtAccessToken, "UTF-8");
+        String redirectUrl = "http://localhost:3000?token=" + encodedToken;
+
+        return new RedirectView(redirectUrl);
     }
 
     @GetMapping("/profile")

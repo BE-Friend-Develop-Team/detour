@@ -14,4 +14,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, Sched
     @Query("UPDATE Schedule s SET s.hits = s.hits + 1 WHERE s.id = :scheduleId")
     int updateHits(@Param("scheduleId") Long scheduleId);
 
+    @Modifying
+    @Query("UPDATE Schedule s SET s.hourHits = s.hourHits + 1 WHERE s.id = :scheduleId")
+    int updateHourHits(@Param("scheduleId") Long scheduleId);
+
 }

@@ -4,7 +4,6 @@ import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.invitation.repository.InvitationRepository;
 import com.befriend.detour.domain.like.entity.Like;
 import com.befriend.detour.domain.like.repository.LikeRepository;
-import com.befriend.detour.domain.schedule.dto.*;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleUpdateRequestDto;
@@ -104,6 +103,12 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
+    public List<Long> getRanking() {
+        return scheduleRepository.getScheduleIdRanking()
+                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
     public List<ScheduleResponseDto> getSchedules(String sortBy, int page, int size, String search) {
         Sort sort;
 
@@ -162,6 +167,10 @@ public class ScheduleService {
         }
 
         return schedules;
+    }
+
+    public void deleteAllHourHits() {
+        scheduleRepository.deleteAllHourHits();
     }
 
 }

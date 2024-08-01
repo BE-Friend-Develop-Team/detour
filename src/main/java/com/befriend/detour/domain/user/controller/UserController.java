@@ -65,21 +65,21 @@ public class UserController {
     }
 
     @PatchMapping("/profiles/nickname")
-    public ResponseEntity<CommonResponseDto> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditNicknameRequestDto editNicknameRequestDto) {
+    public ResponseEntity<CommonResponseDto> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails, @Valid @RequestBody EditNicknameRequestDto editNicknameRequestDto) {
         ProfileResponseDto profileResponseDto = userService.updateNickname(userDetails.getUser(), editNicknameRequestDto.getNickname());
 
         return ResponseEntity.ok(new CommonResponseDto(200, "닉네임 수정에 성공하였습니다. 🎉", profileResponseDto));
     }
 
     @PatchMapping("/profiles/email")
-    public ResponseEntity<CommonResponseDto> updateEmail(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditEmailRequestDto editEmailRequestDto) {
+    public ResponseEntity<CommonResponseDto> updateEmail(@AuthenticationPrincipal UserDetailsImpl userDetails, @Valid @RequestBody EditEmailRequestDto editEmailRequestDto) {
         ProfileResponseDto profileResponseDto = userService.updateEmail(userDetails.getUser(), editEmailRequestDto.getEmail());
 
         return ResponseEntity.ok(new CommonResponseDto(200, "이메일 수정에 성공하였습니다. 🎉", profileResponseDto));
     }
 
     @PatchMapping("/profiles/password")
-    public ResponseEntity<CommonResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody EditPasswordRequestDto editPasswordRequestDto) {
+    public ResponseEntity<CommonResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @Valid @RequestBody EditPasswordRequestDto editPasswordRequestDto) {
         userService.updatePassword(userDetails.getUser(), editPasswordRequestDto);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "비밀번호 수정에 성공하였습니다. 🎉", null));

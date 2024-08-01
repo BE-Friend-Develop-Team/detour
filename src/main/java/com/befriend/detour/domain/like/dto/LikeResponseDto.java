@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class LikeResponseDto {
+
     private Long likeId;
     private Long scheduleId;
 
@@ -12,4 +13,5 @@ public class LikeResponseDto {
         this.likeId = like.getId();
         this.scheduleId = like.getSchedule().getId();
     }
+
 }

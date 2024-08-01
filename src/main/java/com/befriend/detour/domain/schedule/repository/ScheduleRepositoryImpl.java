@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,29 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
                 .fetch();
 
         return Optional.ofNullable(schedules);
+    }
+
+    @Override
+    public Optional<List<Long>> getScheduleIdRanking() {
+        QSchedule schedule = QSchedule.schedule;
+
+        List<Long> scheduleIds = jpaQueryFactory.select(schedule.id)
+                .from(schedule)
+                .orderBy(schedule.hourHits.desc())
+                .limit(12)
+                .fetch();
+
+        return Optional.ofNullable(scheduleIds);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllHourHits() {
+        QSchedule schedule = QSchedule.schedule;
+
+        jpaQueryFactory.update(schedule)
+                .set(schedule.hourHits, 0L)
+                .execute();
     }
 
 }

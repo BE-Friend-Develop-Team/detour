@@ -13,6 +13,7 @@ public class ScheduleResponseDto {
     private LocalDateTime departureDate;
     private LocalDateTime arrivalDate;
     private String mainImage;
+    private String nickname;
     private Long likeCount;
     private Long hits;
     private Long hourHits;
@@ -30,6 +31,7 @@ public class ScheduleResponseDto {
         this.likeCount = schedule.getLikeCount();
         this.hits = schedule.getHits();
         this.hourHits = schedule.getHourHits();
+        this.nickname = schedule.getUser().getNickname();
     }
 
 }

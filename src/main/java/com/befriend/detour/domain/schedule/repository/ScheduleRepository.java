@@ -1,6 +1,7 @@
 package com.befriend.detour.domain.schedule.repository;
 
 import com.befriend.detour.domain.schedule.entity.Schedule;
+import com.befriend.detour.domain.user.entity.User;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

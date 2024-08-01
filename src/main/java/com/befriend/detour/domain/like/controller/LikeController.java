@@ -27,11 +27,23 @@ public class LikeController {
     }
 
     @DeleteMapping("/likes/{likeId}")
-    public ResponseEntity<CommonResponseDto<Void>> deleteScheduleLike(@PathVariable(value = "likeId") Long likeId,
-                                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        likeService.deleteScheduleLike(likeId, userDetails.getUser());
+    public ResponseEntity<CommonResponseDto<LikeResponseDto>> deleteScheduleLike(
+            @PathVariable("likeId") Long likeId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        return new ResponseEntity<>(new CommonResponseDto<>(200, likeId + "번 좋아요 취소에 성공하였습니다. 🎉", null), HttpStatus.OK);
+        LikeResponseDto likeResponseDto = likeService.deleteScheduleLike(likeId, userDetails.getUser());
+
+        return new ResponseEntity<>(new CommonResponseDto<>(200, likeId + "번 좋아요 취소에 성공하였습니다. 🎉", likeResponseDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/likes/{likeId}")
+    public ResponseEntity<CommonResponseDto<LikeResponseDto>> getLike(
+            @PathVariable("scheduleId") Long scheduleId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        LikeResponseDto likeResponseDto = likeService.getLike(scheduleId, userDetails.getUser());
+
+        return new ResponseEntity<>(new CommonResponseDto<>(200, scheduleId + "번 좋아요 조회에 성공하였습니다. 🎉", likeResponseDto), HttpStatus.OK);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.like.controller;
 
+import com.befriend.detour.domain.like.dto.LikeResponseDto;
 import com.befriend.detour.domain.like.service.LikeService;
 import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
 import com.befriend.detour.global.dto.CommonResponseDto;
@@ -18,16 +19,16 @@ public class LikeController {
     private final LikeService likeService;
 
     @PostMapping("/{scheduleId}/likes")
-    public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> createScheduleLike(@PathVariable(value = "scheduleId") Long scheduleId,
-                                                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        likeService.createScheduleLike(scheduleId, userDetails.getUser());
+    public ResponseEntity<CommonResponseDto<LikeResponseDto>> createScheduleLike(@PathVariable(value = "scheduleId") Long scheduleId,
+                                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        LikeResponseDto likeResponseDto = likeService.createScheduleLike(scheduleId, userDetails.getUser());
 
-        return new ResponseEntity<>(new CommonResponseDto<>(201, scheduleId + "번 일정에 대한 좋아요 등록을 성공하였습니다. 🎉", null), HttpStatus.CREATED);
+        return new ResponseEntity<>(new CommonResponseDto<>(201, scheduleId + "번 일정에 대한 좋아요 등록을 성공하였습니다. 🎉", likeResponseDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/likes/{likeId}")
-    public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> deleteScheduleLike(@PathVariable(value = "likeId") Long likeId,
-                                                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<CommonResponseDto<Void>> deleteScheduleLike(@PathVariable(value = "likeId") Long likeId,
+                                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         likeService.deleteScheduleLike(likeId, userDetails.getUser());
 
         return new ResponseEntity<>(new CommonResponseDto<>(200, likeId + "번 좋아요 취소에 성공하였습니다. 🎉", null), HttpStatus.OK);

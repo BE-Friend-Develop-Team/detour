@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.like.service;
 
+import com.befriend.detour.domain.like.dto.LikeResponseDto;
 import com.befriend.detour.domain.like.entity.Like;
 import com.befriend.detour.domain.like.repository.LikeRepository;
 import com.befriend.detour.domain.schedule.entity.Schedule;
@@ -19,7 +20,7 @@ public class LikeService {
     private final ScheduleService scheduleService;
 
     @Transactional
-    public void createScheduleLike(Long scheduleId, User user) {
+    public LikeResponseDto createScheduleLike(Long scheduleId, User user) {
         Schedule foundschedule = scheduleService.findById(scheduleId);
 
         if (likeRepository.existsByUserAndSchedule(user, foundschedule)) {
@@ -29,6 +30,8 @@ public class LikeService {
         Like like = new Like(user, foundschedule);
         likeRepository.save(like);
         foundschedule.addLikeCount();
+
+        return new LikeResponseDto(like);
     }
 
     @Transactional

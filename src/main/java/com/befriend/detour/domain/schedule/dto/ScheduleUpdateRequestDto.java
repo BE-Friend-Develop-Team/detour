@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class ScheduleUpdateRequestDto {
 
     private String title;
-    private String mainImage;
+    private String imageUrl;
     private LocalDateTime departureDate;
     private LocalDateTime arrivalDate;
 

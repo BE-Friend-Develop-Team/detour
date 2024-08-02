@@ -13,7 +13,7 @@ public class ScheduleResponseDto {
     private String title;
     private LocalDateTime departureDate;
     private LocalDateTime arrivalDate;
-    private String mainImage;
+    private String imageUrl;
     private String nickname;
     private Long likeCount;
     private Long hits;
@@ -27,7 +27,7 @@ public class ScheduleResponseDto {
         this.title = schedule.getTitle();
         this.departureDate = schedule.getDepartureDate();
         this.arrivalDate = schedule.getArrivalDate();
-        this.mainImage = schedule.getImageUrl();
+        this.imageUrl = schedule.getImageUrl();
         this.createdAt = schedule.getCreatedAt();
         this.modifiedAt = schedule.getModifiedAt();
         this.likeCount = schedule.getLikeCount();
@@ -37,12 +37,12 @@ public class ScheduleResponseDto {
         this.isLiked = false;
     }
 
-    public ScheduleResponseDto(Schedule schedule,  LikeResponseDto likeResponseDto) {
+    public ScheduleResponseDto(Schedule schedule, LikeResponseDto likeResponseDto) {
         this.scheduleId = schedule.getId();
         this.title = schedule.getTitle();
         this.departureDate = schedule.getDepartureDate();
         this.arrivalDate = schedule.getArrivalDate();
-        this.mainImage = schedule.getImageUrl();
+        this.imageUrl = schedule.getImageUrl();
         this.createdAt = schedule.getCreatedAt();
         this.modifiedAt = schedule.getModifiedAt();
         this.likeCount = schedule.getLikeCount();

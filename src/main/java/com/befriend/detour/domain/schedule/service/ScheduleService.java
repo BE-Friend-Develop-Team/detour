@@ -141,8 +141,8 @@ public class ScheduleService {
         if (updateRequestDto.getArrivalDate() != null) {
             schedule.updateArrivalDate(updateRequestDto.getArrivalDate());
         }
-        if (updateRequestDto.getMainImage() != null) {
-            schedule.updateScheduleMainImage(updateRequestDto.getMainImage());
+        if (updateRequestDto.getImageUrl() != null) {
+            schedule.updateScheduleMainImage(updateRequestDto.getImageUrl());
         }
     }
 

@@ -84,7 +84,7 @@ public class ScheduleController {
             @RequestParam(value = "sortBy") String sortBy,
             @RequestParam(value = "search", required = false) String search,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getSchedules(sortBy, page - 1, 12, search);
+        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getSchedules(sortBy, page - 1, 12, search, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), sortBy + " 순으로 전체 일정을 조회에 성공하였습니다.", scheduleResponseDtos));
     }

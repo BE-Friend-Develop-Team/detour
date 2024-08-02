@@ -21,4 +21,6 @@ public interface LikeRepository extends JpaRepository<Like, Long>, LikeRepositor
     boolean existsByUserAndSchedule(User user, Schedule schedule);
 
     Optional<Like> findByScheduleAndUser(Schedule schedule, User user);
+
+    Optional<Like> findByUserIdAndScheduleId(Long userId, Long scheduleId);
 }

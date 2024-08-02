@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,7 +74,7 @@ public class ScheduleService {
         schedules = filteringSearch(search, schedules);
 
         return schedules.stream()
-                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(schedule.getId())))
+                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(userId, schedule.getId())))
                 .collect(Collectors.toList());
     }
 
@@ -89,7 +90,7 @@ public class ScheduleService {
         schedules = filteringSearch(search, schedules);
 
         return schedules.stream()
-                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(schedule.getId())))
+                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(user.getId(), schedule.getId())))
                 .collect(Collectors.toList());
     }
 
@@ -100,7 +101,7 @@ public class ScheduleService {
         scheduleRepository.updateHits(scheduleId);
         scheduleRepository.updateHourHits(scheduleId);
 
-        LikeResponseDto likeResponseDto = getLikeResponseDto(scheduleId);
+        LikeResponseDto likeResponseDto = getLikeResponseDto(user.getId(), scheduleId);
 
         return new ScheduleResponseDto(schedule, likeResponseDto);
     }
@@ -112,7 +113,7 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getSchedules(String sortBy, int page, int size, String search) {
+    public List<ScheduleResponseDto> getSchedules(String sortBy, int page, int size, String search, User user) {
         Sort sort;
 
         if (sortBy.equals("좋아요")) {
@@ -130,7 +131,7 @@ public class ScheduleService {
         schedules = filteringSearch(search, schedules);
 
         return schedules.stream()
-                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(schedule.getId())))
+                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(user.getId(), schedule.getId())))
                 .collect(Collectors.toList());
     }
 
@@ -156,8 +157,15 @@ public class ScheduleService {
         );
     }
 
-    private LikeResponseDto getLikeResponseDto(Long scheduleId) {
-        boolean isLiked = likeRepository.existsByScheduleId(scheduleId);
+    private LikeResponseDto getLikeResponseDto(Long userId, Long scheduleId) {
+        boolean isLiked = false;
+
+        Optional<Like> like = likeRepository.findByUserIdAndScheduleId(userId, scheduleId);
+        if (like.isPresent()) {
+            isLiked = true;
+        } else {
+            isLiked = false;
+        }
         return new LikeResponseDto(null, scheduleId, isLiked);
     }
 

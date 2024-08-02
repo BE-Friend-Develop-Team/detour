@@ -36,9 +36,9 @@ public class LikeController {
         return new ResponseEntity<>(new CommonResponseDto<>(200, likeId + "번 좋아요 취소에 성공하였습니다. 🎉", likeResponseDto), HttpStatus.OK);
     }
 
-    @GetMapping("/likes/{likeId}")
+    @GetMapping("/likes/{scheduleId}")
     public ResponseEntity<CommonResponseDto<LikeResponseDto>> getLike(
-            @PathVariable("scheduleId") Long scheduleId,
+            @PathVariable(value = "scheduleId") Long scheduleId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         LikeResponseDto likeResponseDto = likeService.getLike(scheduleId, userDetails.getUser());

@@ -11,6 +11,7 @@ import com.befriend.detour.domain.schedule.dto.ScheduleUpdateRequestDto;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.schedule.repository.ScheduleRepository;
 import com.befriend.detour.domain.user.entity.User;
+import com.befriend.detour.domain.user.repository.UserRepository;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScheduleService {
 
+
     @Value("${DEFAULT_IMAGE_URL}")
     private String defaultImageUrl;
-
+    private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
     private final InvitationRepository invitationRepository;
     private final LikeRepository likeRepository;
@@ -49,8 +51,24 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleUpdateRequestDto updateRequestDto, User user) {
         Schedule schedule = findById(scheduleId);
-//        invitationRepository.checkIfMemberOfSchedule(schedule, user);
+        invitationRepository.checkIfMemberOfSchedule(schedule, user);
         updateScheduleFields(schedule, updateRequestDto);
+        scheduleRepository.save(schedule);
+
+        return new ScheduleResponseDto(schedule);
+    }
+
+    @Transactional
+    public ScheduleResponseDto updateMainImage(Long scheduleId, String fileUrl, User user) {
+
+        userRepository.findById(user.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+        invitationRepository.checkIfMemberOfSchedule(schedule, user);
+        schedule.setMainImage(fileUrl);
         scheduleRepository.save(schedule);
 
         return new ScheduleResponseDto(schedule);
@@ -140,9 +158,6 @@ public class ScheduleService {
         }
         if (updateRequestDto.getArrivalDate() != null) {
             schedule.updateArrivalDate(updateRequestDto.getArrivalDate());
-        }
-        if (updateRequestDto.getImageUrl() != null) {
-            schedule.updateScheduleMainImage(updateRequestDto.getImageUrl());
         }
     }
 

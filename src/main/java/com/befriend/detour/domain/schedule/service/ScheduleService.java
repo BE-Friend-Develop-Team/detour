@@ -49,7 +49,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleUpdateRequestDto updateRequestDto, User user) {
         Schedule schedule = findById(scheduleId);
-        invitationRepository.checkIfMemberOfSchedule(schedule, user);
+//        invitationRepository.checkIfMemberOfSchedule(schedule, user);
         updateScheduleFields(schedule, updateRequestDto);
         scheduleRepository.save(schedule);
 

@@ -67,10 +67,6 @@ public class ScheduleService {
     public List<ScheduleResponseDto> getUserCreatedSchedules(Pageable pageable, Long userId, String search) {
         List<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUser(userId, pageable).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        if (schedules.isEmpty()) {
-            throw new CustomException(ErrorCode.USER_CREATED_SCHEDULES_NOT_FOUND);
-        }
-
         schedules = filteringSearch(search, schedules);
 
         return schedules.stream()

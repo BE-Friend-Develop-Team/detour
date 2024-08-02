@@ -1,10 +1,10 @@
 ### 2-1-1. 로그인 - USER_1
-POST http://localhost:8081/api/users/login
+POST http://52.78.2.148:80/api/users/login
 Content-Type: application/json
 
 {
-  "loginId": "username1",
-  "password": "Password1!"
+  "loginId": "dlskdud12",
+  "password": "Dlskdud12@"
 }
 
 > {%
@@ -12,7 +12,7 @@ Content-Type: application/json
 %}
 
 ### 2-1-2. 로그인 - USER_2
-POST http://localhost:8081/api/users/login
+POST http://52.78.2.148:80/api/users/login
 Content-Type: application/json
 
 {
@@ -25,7 +25,7 @@ Content-Type: application/json
 %}
 
 ### 2-2. 로그인 - ADMIN
-POST http://localhost:8081/api/users/login
+POST http://52.78.2.148:80/api/users/login
 Content-Type: application/json
 
 {
@@ -38,7 +38,7 @@ Content-Type: application/json
 %}
 
 ### 2-2-1. 액세스 토큰 재발급
-POST http://localhost:8081/api/users/token
+POST http://52.78.2.148:80/api/users/token
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -48,6 +48,6 @@ Authorization: {{access_token}}
 
 ### 2-3. 로그아웃
 
-POST http://localhost:8081/api/users/logout
+POST http://52.78.2.148:80/api/users/logout
 Authorization: {{access_token}}
 

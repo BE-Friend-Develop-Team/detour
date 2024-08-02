@@ -1,5 +1,5 @@
 ### 4-1. 일정 생성
-POST http://localhost:8081/api/schedules
+POST http://52.78.2.148:80/api/schedules
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -10,7 +10,7 @@ Authorization: {{access_token}}
 }
 
 ### 4-2-1. 해당 일정에 대한 일행 초대
-POST http://localhost:8081/api/schedules/1/invitation
+POST http://52.78.2.148:80/api/schedules/1/invitation
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -19,7 +19,7 @@ Authorization: {{access_token}}
 }
 
 ### 4-2-2. 초대할 아이디가 존재하지 않는 사용자인 경우
-POST http://localhost:8081/api/schedules/1/invitation
+POST http://52.78.2.148:80/api/schedules/1/invitation
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -28,7 +28,7 @@ Authorization: {{access_token}}
 }
 
 ### 4-3. 일행 초대 취소
-DELETE http://localhost:8081/api/schedules/1/invitation
+DELETE http://52.78.2.148:80/api/schedules/1/invitation
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -37,22 +37,22 @@ Authorization: {{access_token}}
 }
 
 ### 4-4. 일정 좋아요 등록
-POST http://localhost:8081/api/schedules/1/likes
+POST http://52.78.2.148:80/api/schedules/1/likes
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 4-5. 일정 좋아요 취소
-DELETE http://localhost:8081/api/schedules/likes/2
+DELETE http://52.78.2.148:80/api/schedules/likes/2
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 4-6. 일정 삭제
-DELETE http://localhost:8081/api/schedules/1
+DELETE http://52.78.2.148:80/api/schedules/1
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 4-7. 일정 기간 수정
-PATCH http://localhost:8081/api/schedules/2
+PATCH http://52.78.2.148:80/api/schedules/2
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -62,7 +62,7 @@ Authorization: {{access_token}}
 }
 
 ### 4-8. 일정 제목 수정
-PATCH http://localhost:8081/api/schedules/2
+PATCH http://52.78.2.148:80/api/schedules/2
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -70,7 +70,7 @@ Authorization: {{access_token}}
   "title" : "수정한 일정 1 제목"
 }
 
-### 4-9. 일정 대표 이미지 수정
-PATCH http://localhost:8081/api/schedules/1
+### 4-9. 일정 대표 이미지 수정 : postman에서만 가능
+PATCH http://52.78.2.148:80/api/schedules/1/files
 Content-Type: application/json
 Authorization: {{access_token}}

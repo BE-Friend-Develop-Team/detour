@@ -1,47 +1,45 @@
 package com.befriend.detour.domain.schedule.entity;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.befriend.detour.domain.schedule.dao.RankingDao;
+import com.befriend.detour.domain.schedule.service.ScheduleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
+import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class DBChecker {
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
+    private final ScheduleService scheduleService;
+    private final RankingDao rankingDao;
 
-    @Scheduled(fixedRate = 60000) // 60000ms = 1분
+    @Scheduled(fixedRate = 3600000) // 3600000ms = 1시간
     public void checkDatabase() {
         try (Connection connection = dataSource.getConnection()) {
             if (connection.isValid(2)) {
-                System.out.println("Database is up and running.");
 
-                String sql = "SELECT id, hour_hits, hits FROM schedules";
-                try (Statement stmt = connection.createStatement();
-                     ResultSet rs = stmt.executeQuery(sql)) {
+                List<Long> scheduleIds = scheduleService.getRanking();
 
-                    while (rs.next()) {
-                        Long id = rs.getLong("id");
-                        Long hourHits = rs.getLong("hour_hits");
-                        Long hits = rs.getLong("hits");
-                        System.out.println("Schedule ID: " + id + ", Hour Hits: " + hourHits + ", Hits: " + hits);
-                    }
-                } catch (SQLException e) {
-                    System.err.println("Error querying database: " + e.getMessage());
+                if (scheduleIds != null && !scheduleIds.isEmpty()) {
+                    System.out.println(scheduleIds);
+                    rankingDao.saveRanking(scheduleIds);
+                } else {
+                    System.out.println("No schedule IDs found.");
                 }
-
             } else {
                 System.out.println("Database connection is not valid.");
             }
         } catch (SQLException e) {
-            System.err.println("Error checking database connection: " + e.getMessage());
+            System.err.println("Database connection error: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error occurred: " + e.getMessage());
         }
     }
+
 }

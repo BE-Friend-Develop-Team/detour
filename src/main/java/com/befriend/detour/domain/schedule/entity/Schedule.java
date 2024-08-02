@@ -99,7 +99,7 @@ public class Schedule extends TimeStamped {
         this.arrivalDate = arrivalDate;
     }
 
-    public void updateScheduleMainImage(String imageUrl) {
+    public void setMainImage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 

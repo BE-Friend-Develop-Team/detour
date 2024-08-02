@@ -28,8 +28,8 @@ spring:
   data:
     redis:
       auth:
-        host: ${AUTH_REDIS_HOST} # Redis 인증 서버의 호스트(EC2와 연결)
-        port: ${AUTH_REDIS_PORT} # Redis 인증 서버의 포트
+        host: ${CACHE_REDIS_HOST} # Redis 서버의 호스트(EC2와 연결)
+        port: ${CACHE_REDIS_PORT} # Redis 서버의 포트
         password: ${REDIS_PASSWORD}
 
   security:
@@ -43,7 +43,7 @@ spring:
             authorization-grant-type: authorization_code
             scope:
               - account_email
-            redirect-uri: http://localhost:8081/api/users/login/oauth2/code/kakao
+            redirect-uri: http://52.78.2.148:80/api/users/login/oauth2/code/kakao
             client-name: Kakao
             provider: kakao
         provider:

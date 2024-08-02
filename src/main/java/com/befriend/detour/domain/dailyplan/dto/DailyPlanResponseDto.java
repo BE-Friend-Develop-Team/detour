@@ -7,10 +7,12 @@ import lombok.Getter;
 public class DailyPlanResponseDto {
 
     private Long scheduleId;
+    private Long dailyPlanId;
     private Long day;
 
     public DailyPlanResponseDto(DailyPlan dailyPlan) {
         this.scheduleId = dailyPlan.getSchedule().getId();
+        this.dailyPlanId = dailyPlan.getId();
         this.day = dailyPlan.getDay();
     }
 

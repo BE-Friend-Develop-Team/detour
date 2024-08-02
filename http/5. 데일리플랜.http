@@ -1,5 +1,5 @@
 ### 5-1. 데일리플랜 생성
-POST http://localhost:8081/api/schedules/1/dailyplans
+POST http://52.78.2.148:80/api/schedules/1/dailyplans
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -8,11 +8,11 @@ Authorization: {{access_token}}
 }
 
 ### 5-2. 해당 Schedule에 대한 DailyPlan 목록 조회
-GET http://localhost:8081/api/schedules/1/dailyplans
+GET http://52.78.2.148:80/api/schedules/1/dailyplans
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 5-3. DailyPlan 단건 조회
-GET http://localhost:8081/api/dailyplans/1
+GET http://52.78.2.148:80/api/dailyplans/1
 Content-Type: application/json
 Authorization: {{access_token}}

@@ -77,6 +77,11 @@ public class UserService {
 
     @Transactional
     public ProfileResponseDto updateNickname(User user, String nickname) {
+        // 닉네임 중복 검사
+        if (isNicknameExist(nickname)) {
+            throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
+        }
+
         user.updateNickname(nickname);
         userRepository.save(user);
 
@@ -85,6 +90,11 @@ public class UserService {
 
     @Transactional
     public ProfileResponseDto updateEmail(User user, String email) {
+        // 이메일 중복 검사
+        if (isEmailExist(email)) {
+            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+        }
+
         user.updateEmail(email);
         userRepository.save(user);
 

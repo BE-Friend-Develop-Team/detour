@@ -1,5 +1,5 @@
 ### 6-1. 마커 생성
-POST http://localhost:8081/api/daily-plans/1/place/1/markers
+POST http://52.78.2.148:80/api/daily-plans/1/place/1/markers
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -9,17 +9,17 @@ Authorization: {{access_token}}
 }
 
 ### 6-2. 마커 전체조회
-GET http://localhost:8081/api/daily-plans/1/markers
+GET http://52.78.2.148:80/api/daily-plans/1/markers
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 6-3. 마커 단건 조회
-GET http://localhost:8081/api/daily-plans/1/markers/1
+GET http://52.78.2.148:80/api/daily-plans/1/markers/1
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 6-4. 마커 글 저장
-POST http://localhost:8081/api/daily-plans/markers/1/content
+POST http://52.78.2.148:80/api/daily-plans/markers/1/content
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -28,7 +28,7 @@ Authorization: {{access_token}}
 }
 
 ### 6-5. 마커 글 수정
-PATCH http://localhost:8081/api/daily-plans/markers/4/content
+PATCH http://52.78.2.148:80/api/daily-plans/markers/4/content
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -37,7 +37,7 @@ Authorization: {{access_token}}
 }
 
 ### 6-6. 마커 삭제
-DELETE http://localhost:8081/api/daily-plans/markers/5
+DELETE http://52.78.2.148:80/api/daily-plans/markers/5
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -45,11 +45,11 @@ Authorization: {{access_token}}
 
 
 ### 6-8. 마커 파일 삭제
-DELETE http://localhost:8081/api/daily-plans/markers/1/files?fileUrl=https://detour1.s3.ap-northeast-2.amazonaws.com/73942e29-654f-4a0e-a6f4-5688d5696c75.mp4
+DELETE http://52.78.2.148:80/api/daily-plans/markers/1/files?fileUrl=https://detour1.s3.ap-northeast-2.amazonaws.com/73942e29-654f-4a0e-a6f4-5688d5696c75.mp4
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 6-9. 위도, 경도 조회
-GET http://localhost:8081/api/daily-plans/markers/1/location
+GET http://52.78.2.148:80/api/daily-plans/markers/1/location
 Content-Type: application/json
 Authorization: {{access_token}}

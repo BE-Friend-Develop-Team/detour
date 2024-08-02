@@ -83,7 +83,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         user.updateRefresh(refreshToken);
         userRepository.save(user);
 
-        CommonResponseDto commonResponse = new CommonResponseDto(200, "로그인에 성공하였습니다. 🎉", new LoginResponseDto(user));
+        CommonResponseDto<LoginResponseDto> commonResponse = new CommonResponseDto(200, "로그인에 성공하였습니다. 🎉", new LoginResponseDto(user));
 
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         response.setStatus(HttpServletResponse.SC_OK);

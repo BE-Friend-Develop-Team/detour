@@ -48,7 +48,6 @@ public class FileService {
     private String bucket;
     private final AmazonS3 amazonS3;
     private final FileRepository fileRepository;
-
     private final MarkerService markerService;
 
     public List<File> uploadFile(List<MultipartFile> multipartFiles, Long markerId) {
@@ -77,7 +76,10 @@ public class FileService {
             String fileUrl = amazonS3.getUrl(bucket, fileName).toString();
 
             // 파일 정보 데이터베이스에 저장
-            Marker marker = markerService.findMarker(markerId);
+            Marker marker = null;
+            if (markerId != null) {
+                marker = markerService.findMarker(markerId);
+            }
             File fileEntity = new File(fileName, fileUrl, file.getContentType(), file.getSize(), marker);
             fileRepository.save(fileEntity);
             fileEntities.add(fileEntity);

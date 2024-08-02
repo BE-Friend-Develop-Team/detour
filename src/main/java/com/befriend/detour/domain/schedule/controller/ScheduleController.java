@@ -1,6 +1,11 @@
 package com.befriend.detour.domain.schedule.controller;
 
-import com.befriend.detour.domain.schedule.dto.*;
+import com.befriend.detour.domain.file.entity.File;
+import com.befriend.detour.domain.file.service.FileService;
+import com.befriend.detour.domain.invitation.repository.InvitationRepository;
+import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
+import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
+import com.befriend.detour.domain.schedule.dto.ScheduleUpdateRequestDto;
 import com.befriend.detour.domain.schedule.service.ScheduleService;
 import com.befriend.detour.global.dto.CommonResponseDto;
 import com.befriend.detour.global.security.UserDetailsImpl;
@@ -12,7 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -21,6 +28,8 @@ import java.util.List;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
+    private final FileService fileService;
+    private final InvitationRepository invitationRepository;
 
     @PostMapping
     public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> createSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto,
@@ -30,6 +39,7 @@ public class ScheduleController {
         return new ResponseEntity<>(new CommonResponseDto<>(HttpStatus.CREATED.value(), "일정 생성에 성공하였습니다. 🎉", scheduleResponseDto), HttpStatus.CREATED);
     }
 
+
     @PatchMapping("/{scheduleId}")
     public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> updateSchedule(@PathVariable(value = "scheduleId") Long scheduleId,
                                                                                  @Valid @RequestBody ScheduleUpdateRequestDto updateRequestDto,
@@ -37,6 +47,17 @@ public class ScheduleController {
         ScheduleResponseDto scheduleResponseDto = scheduleService.updateSchedule(scheduleId, updateRequestDto, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "일정 수정에 성공하였습니다. 🎉", scheduleResponseDto));
+    }
+
+    @PatchMapping("/{scheduleId}/files")
+    public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> updateScheduleImage(@PathVariable Long scheduleId,
+                                                                                      @RequestParam("file") MultipartFile file,
+                                                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        File uploadedFile = fileService.uploadFile(Collections.singletonList(file), null).get(0);
+        ScheduleResponseDto scheduleResponseDto = scheduleService.updateMainImage(scheduleId, uploadedFile.getFileUrl(), userDetails.getUser());
+
+        return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "이미지 수정에 성공하였습니다. 🎉", scheduleResponseDto));
     }
 
     @DeleteMapping("/{scheduleId}")

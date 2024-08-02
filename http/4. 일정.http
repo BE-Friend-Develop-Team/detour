@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: {{access_token}}
 
 {
-  "title": "일정 1",
+  "title": "나영 귀여워",
   "departureDate" : "2024-07-22T00:00:00",
   "arrivalDate" : "2024-07-26T00:00:00"
 }
@@ -74,7 +74,3 @@ Authorization: {{access_token}}
 PATCH http://localhost:8081/api/schedules/1
 Content-Type: application/json
 Authorization: {{access_token}}
-
-{
-  "mainImage" : "https://detour1.s3.ap-northeast-2.amazonaws.com/2c564a88-ac76-4bc0-9030-ed8ee81fdede.png"
-}

@@ -23,12 +23,14 @@ public class DailyPlanService {
     private final ScheduleService scheduleService;
 
     @Transactional
-    public void createDailyPlan(Long scheduleId, DailyPlanRequestDto dailyPlanRequestDto) {
+    public DailyPlanResponseDto createDailyPlan(Long scheduleId, DailyPlanRequestDto dailyPlanRequestDto) {
 
         Schedule checkSchedule = scheduleService.findById(scheduleId);
 
         DailyPlan dailyPlan = new DailyPlan(checkSchedule, dailyPlanRequestDto);
         dailyPlanRepository.save(dailyPlan);
+
+        return new DailyPlanResponseDto(dailyPlan);
     }
 
     @Transactional(readOnly = true)

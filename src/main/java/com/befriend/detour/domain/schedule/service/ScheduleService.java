@@ -2,6 +2,7 @@ package com.befriend.detour.domain.schedule.service;
 
 import com.befriend.detour.domain.invitation.entity.Invitation;
 import com.befriend.detour.domain.invitation.repository.InvitationRepository;
+import com.befriend.detour.domain.like.dto.LikeResponseDto;
 import com.befriend.detour.domain.like.entity.Like;
 import com.befriend.detour.domain.like.repository.LikeRepository;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,7 +74,7 @@ public class ScheduleService {
         schedules = filteringSearch(search, schedules);
 
         return schedules.stream()
-                .map(ScheduleResponseDto::new)
+                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(userId, schedule.getId())))
                 .collect(Collectors.toList());
     }
 
@@ -85,21 +87,23 @@ public class ScheduleService {
                 .map(Like::getSchedule)
                 .collect(Collectors.toList());
 
-        filteringSearch(search, schedules);
+        schedules = filteringSearch(search, schedules);
 
         return schedules.stream()
-                .map(ScheduleResponseDto::new)
+                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(user.getId(), schedule.getId())))
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public ScheduleResponseDto getSchedule(Long scheduleId) {
+    public ScheduleResponseDto getSchedule(Long scheduleId, User user) {
         Schedule schedule = findById(scheduleId);
 
         scheduleRepository.updateHits(scheduleId);
         scheduleRepository.updateHourHits(scheduleId);
 
-        return new ScheduleResponseDto(schedule);
+        LikeResponseDto likeResponseDto = getLikeResponseDto(user.getId(), scheduleId);
+
+        return new ScheduleResponseDto(schedule, likeResponseDto);
     }
 
     @Transactional(readOnly = true)
@@ -109,7 +113,7 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getSchedules(String sortBy, int page, int size, String search) {
+    public List<ScheduleResponseDto> getSchedules(String sortBy, int page, int size, String search, User user) {
         Sort sort;
 
         if (sortBy.equals("좋아요")) {
@@ -127,10 +131,10 @@ public class ScheduleService {
         schedules = filteringSearch(search, schedules);
 
         return schedules.stream()
-                .map(ScheduleResponseDto::new)
+                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(user.getId(), schedule.getId())))
                 .collect(Collectors.toList());
     }
-  
+
     private void updateScheduleFields(Schedule schedule, ScheduleUpdateRequestDto updateRequestDto) {
         if (updateRequestDto.getTitle() != null) {
             schedule.updateScheduleTitle(updateRequestDto.getTitle());
@@ -153,14 +157,24 @@ public class ScheduleService {
         );
     }
 
+    private LikeResponseDto getLikeResponseDto(Long userId, Long scheduleId) {
+        boolean isLiked = false;
+
+        Optional<Like> like = likeRepository.findByUserIdAndScheduleId(userId, scheduleId);
+        if (like.isPresent()) {
+            isLiked = true;
+        } else {
+            isLiked = false;
+        }
+        return new LikeResponseDto(null, scheduleId, isLiked);
+    }
+
     public List<Schedule> filteringSearch(String search, List<Schedule> schedules) {
-        // search 값이 있을 경우 필터링
         if (search != null && !search.isEmpty()) {
             schedules = schedules.stream()
                     .filter(schedule -> schedule.getTitle().contains(search))
                     .collect(Collectors.toList());
 
-            // 필터링 후 스케줄이 없으면 예외 처리
             if (schedules.isEmpty()) {
                 throw new CustomException(ErrorCode.SCHEDULE_NOT_FOUND);
             }
@@ -172,5 +186,4 @@ public class ScheduleService {
     public void deleteAllHourHits() {
         scheduleRepository.deleteAllHourHits();
     }
-
 }

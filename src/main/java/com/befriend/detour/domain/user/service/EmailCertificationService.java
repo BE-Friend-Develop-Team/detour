@@ -27,7 +27,7 @@ public class EmailCertificationService {
         String certificationNumber = getCertificationNumber();
         // 아래 링크를 클릭하여 인증을 완료하도록
         // TODO: 도메인 구매시 링크 변경 필요
-        String content = String.format("%s/api/users/verify?certificationNumber=%s&email=%s \n 이메일 인증을 위해 링크를 클릭해주세요. \n 3분이 초가될 시 해당 링크로 이메일 인증이 불가능합니다.", "http://localhost:8081", certificationNumber, email);
+        String content = String.format("%s \n 3분이 초과될 시 해당 인증 번호로 이메일 인증이 불가능합니다.", certificationNumber);
 
         try {
             certificationNumberDao.saveCertificationNumber(email, certificationNumber);

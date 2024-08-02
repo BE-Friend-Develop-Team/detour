@@ -1,6 +1,7 @@
 package com.befriend.detour.global.security;
 
 import com.befriend.detour.domain.user.dto.LoginRequestDto;
+import com.befriend.detour.domain.user.dto.LoginResponseDto;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.domain.user.entity.UserRoleEnum;
 import com.befriend.detour.domain.user.entity.UserStatusEnum;
@@ -64,9 +65,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserRoleEnum userRole = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
         UserStatusEnum userStatus = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getStatus();
 
-        Optional<User> user = userRepository.findByLoginId(userId);
+        Optional<User> userOptional = userRepository.findByLoginId(userId);
 
-        if (user.isEmpty() || user.get().getStatus().equals(UserStatusEnum.WITHDRAWAL) || user.get().getStatus().equals(UserStatusEnum.BLOCK)) {
+        if (userOptional.isEmpty() || userOptional.get().getStatus().equals(UserStatusEnum.WITHDRAWAL) || userOptional.get().getStatus().equals(UserStatusEnum.BLOCK)) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/plain;charset=UTF-8");
             response.getWriter().write("유효하지 않은 사용자 정보입니다.");
@@ -74,13 +75,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             return;
         }
 
+        User user = userOptional.get();
+
         String accessToken = jwtProvider.createAccessToken(userId, userRole);
         String refreshToken = jwtProvider.createRefreshToken(userId);
 
-        user.get().updateRefresh(refreshToken);
-        userRepository.save(user.get());
+        user.updateRefresh(refreshToken);
+        userRepository.save(user);
 
-        CommonResponseDto commonResponse = new CommonResponseDto(200, "로그인에 성공하였습니다. 🎉", null);
+        CommonResponseDto commonResponse = new CommonResponseDto(200, "로그인에 성공하였습니다. 🎉", new LoginResponseDto(user));
 
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         response.setStatus(HttpServletResponse.SC_OK);

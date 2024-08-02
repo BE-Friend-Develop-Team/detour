@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         Optional<User> user = userRepository.findByLoginId(userId);
 
-        if (user.isEmpty() || userStatus.equals(UserStatusEnum.Status.BLOCK)) {
+        if (user.isEmpty() || user.get().getStatus().equals(UserStatusEnum.WITHDRAWAL) || user.get().getStatus().equals(UserStatusEnum.BLOCK)) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/plain;charset=UTF-8");
             response.getWriter().write("유효하지 않은 사용자 정보입니다.");

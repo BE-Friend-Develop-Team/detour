@@ -74,3 +74,31 @@ Authorization: {{access_token}}
 PATCH http://52.78.2.148:80/api/schedules/1/files
 Content-Type: application/json
 Authorization: {{access_token}}
+
+### 4-10. 일정 댓글 등록
+POST http://52.78.2.148:80/api/schedules/1/comments
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "content" : "댓글입니다"
+}
+
+### 4-11. 일정 댓글 수정
+PATCH http://52.78.2.148:80/api/schedules/comments/1
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "content" : "수정한 댓글입니다"
+}
+
+### 4-12. 일정 댓글 조회
+GET http://52.78.2.148:80/api/schedules/1/comments?page=1
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 4-13. 일정 댓글 삭제
+DELETE http://52.78.2.148:80/api/schedules/comments/1
+Content-Type: application/json
+Authorization: {{access_token}}

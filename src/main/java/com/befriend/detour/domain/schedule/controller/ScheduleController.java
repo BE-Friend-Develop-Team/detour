@@ -3,6 +3,7 @@ package com.befriend.detour.domain.schedule.controller;
 import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.file.service.FileService;
 import com.befriend.detour.domain.invitation.repository.InvitationRepository;
+import com.befriend.detour.domain.schedule.dto.ScheduleDetailsResponseDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleUpdateRequestDto;
@@ -97,6 +98,16 @@ public class ScheduleController {
         ScheduleResponseDto scheduleResponseDto = scheduleService.getSchedule(scheduleId, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "일정 조회에 성공하였습니다. 🎉", scheduleResponseDto));
+    }
+
+    @GetMapping("/{scheduleId}/details")
+    public ResponseEntity<CommonResponseDto<ScheduleDetailsResponseDto>> getScheduleDetails(
+            @PathVariable("scheduleId") Long scheduleId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        ScheduleDetailsResponseDto scheduleDetailsResponseDto = scheduleService.getScheduleDetails(scheduleId, userDetails.getUser());
+
+        return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "일정 조회에 성공하였습니다. 🎉", scheduleDetailsResponseDto));
     }
 
     @GetMapping

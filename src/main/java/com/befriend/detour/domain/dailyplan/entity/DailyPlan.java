@@ -1,11 +1,14 @@
 package com.befriend.detour.domain.dailyplan.entity;
 
 import com.befriend.detour.domain.dailyplan.dto.DailyPlanRequestDto;
+import com.befriend.detour.domain.marker.entity.Marker;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.global.entity.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +26,9 @@ public class DailyPlan extends TimeStamped {
 
     @Column(nullable = false)
     private Long day;
+
+    @OneToMany(mappedBy = "dailyPlan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Marker> markers;
 
     public DailyPlan(Schedule checkSchedule, DailyPlanRequestDto dailyPlanRequestDto) {
         this.schedule = checkSchedule;

@@ -1,13 +1,17 @@
 package com.befriend.detour.domain.schedule.dto;
 
+import com.befriend.detour.domain.dailyplan.dto.DailyPlanResponseDto;
+import com.befriend.detour.domain.invitation.dto.InvitationResponseDto;
 import com.befriend.detour.domain.like.dto.LikeResponseDto;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
-public class ScheduleResponseDto {
+public class ScheduleDetailsResponseDto {
+
     private Long scheduleId;
     private String title;
     private LocalDateTime departureDate;
@@ -17,11 +21,13 @@ public class ScheduleResponseDto {
     private Long likeCount;
     private Long hits;
     private Long hourHits;
+    private List<InvitationResponseDto> invitationList;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private boolean isLiked;
+    private List<DailyPlanResponseDto> dailyPlanList;
 
-    public ScheduleResponseDto(Schedule schedule) {
+    public ScheduleDetailsResponseDto(Schedule schedule) {
         this.scheduleId = schedule.getId();
         this.title = schedule.getTitle();
         this.departureDate = schedule.getDepartureDate();
@@ -35,7 +41,8 @@ public class ScheduleResponseDto {
         this.nickname = schedule.getUser().getNickname();
         this.isLiked = false;
     }
-    public ScheduleResponseDto(Schedule schedule, LikeResponseDto likeResponseDto) {
+
+    public ScheduleDetailsResponseDto(Schedule schedule, LikeResponseDto likeResponseDto) {
         this.scheduleId = schedule.getId();
         this.title = schedule.getTitle();
         this.departureDate = schedule.getDepartureDate();
@@ -48,6 +55,8 @@ public class ScheduleResponseDto {
         this.hourHits = schedule.getHourHits();
         this.nickname = schedule.getUser().getNickname();
         this.isLiked = likeResponseDto.isLiked();
+        this.dailyPlanList = schedule.getDailyPlans().stream().map(DailyPlanResponseDto::new).toList();
+        this.invitationList = schedule.getInvitations().stream().map(InvitationResponseDto::new).toList();
     }
 
 }

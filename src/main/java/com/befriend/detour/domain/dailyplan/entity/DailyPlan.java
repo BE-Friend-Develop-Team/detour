@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,6 +34,7 @@ public class DailyPlan extends TimeStamped {
     public DailyPlan(Schedule checkSchedule, DailyPlanRequestDto dailyPlanRequestDto) {
         this.schedule = checkSchedule;
         this.day = dailyPlanRequestDto.getDay();
+        this.markers = new ArrayList<>();
     }
 
 }

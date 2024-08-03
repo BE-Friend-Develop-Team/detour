@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.comment.entity;
 
+import com.befriend.detour.domain.comment.dto.CommentRequestDto;
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.global.entity.TimeStamped;
@@ -27,5 +28,15 @@ public class Comment extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
+
+    public Comment(CommentRequestDto commentRequestDto, Schedule schedule, User user) {
+        this.content = commentRequestDto.getContent();
+        this.schedule = schedule;
+        this.user = user;
+    }
+
+    public void update(CommentRequestDto commentRequestDto) {
+        this.content = commentRequestDto.getContent();
+    }
 
 }

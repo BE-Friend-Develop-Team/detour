@@ -43,7 +43,7 @@ spring:
             authorization-grant-type: authorization_code
             scope:
               - account_email
-            redirect-uri: http://52.78.2.148:80/api/users/login/oauth2/code/kakao
+            redirect-uri: http://localhost:8081/api/users/login/oauth2/code/kakao
             client-name: Kakao
             provider: kakao
         provider:
@@ -62,6 +62,11 @@ spring:
     properties:
       mail.smtp.auth: true # SMTP 인증 사용
       mail.smtp.starttls.enable: true # TLS 사용
+
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
 
 jwt:
   secret:

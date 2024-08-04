@@ -1,6 +1,7 @@
 package com.befriend.detour.domain.marker.dto;
 
 import com.befriend.detour.domain.marker.entity.Marker;
+import jakarta.persistence.Column;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,9 @@ public class MarkerResponseDto {
     private List<String> images;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private String name;
+    private String address;
+    private String telNumber;
 
     public MarkerResponseDto(Double latitude, Double longitude) {
         this.latitude = latitude;
@@ -31,6 +35,9 @@ public class MarkerResponseDto {
         this.images = List.of();
         this.createdAt = marker.getCreatedAt();  // 생성 시간 설정
         this.modifiedAt = marker.getModifiedAt(); // 수정 시간 설정
+        this.name = marker.getPlace().getName();
+        this.address = marker.getPlace().getAddress();
+        this.telNumber = marker.getPlace().getTelNumber();
     }
 
     public MarkerResponseDto(Marker marker, List<String> imageUrls) {

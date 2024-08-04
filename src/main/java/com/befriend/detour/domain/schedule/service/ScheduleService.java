@@ -5,6 +5,7 @@ import com.befriend.detour.domain.invitation.repository.InvitationRepository;
 import com.befriend.detour.domain.like.dto.LikeResponseDto;
 import com.befriend.detour.domain.like.entity.Like;
 import com.befriend.detour.domain.like.repository.LikeRepository;
+import com.befriend.detour.domain.schedule.dto.ScheduleDetailsResponseDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleUpdateRequestDto;
@@ -118,6 +119,18 @@ public class ScheduleService {
         LikeResponseDto likeResponseDto = getLikeResponseDto(user.getId(), scheduleId);
 
         return new ScheduleResponseDto(schedule, likeResponseDto);
+    }
+
+    @Transactional
+    public ScheduleDetailsResponseDto getScheduleDetails(Long scheduleId, User user) {
+        Schedule schedule = findById(scheduleId);
+
+        scheduleRepository.updateHits(scheduleId);
+        scheduleRepository.updateHourHits(scheduleId);
+
+        LikeResponseDto likeResponseDto = getLikeResponseDto(user.getId(), scheduleId);
+
+        return new ScheduleDetailsResponseDto(schedule, likeResponseDto);
     }
 
     @Transactional(readOnly = true)

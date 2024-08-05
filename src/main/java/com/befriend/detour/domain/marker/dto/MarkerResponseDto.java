@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 public class MarkerResponseDto {
 
+    private Long markerId;
     private Long placeId;
     private Double latitude;
     private Double longitude;
@@ -27,6 +28,7 @@ public class MarkerResponseDto {
     }
 
     public MarkerResponseDto(Marker marker) {
+        this.markerId = marker.getId();
         this.placeId = marker.getPlace() != null ? marker.getPlace().getId() : null;
         this.latitude = marker.getLatitude();
         this.longitude = marker.getLongitude();
@@ -41,6 +43,7 @@ public class MarkerResponseDto {
     }
 
     public MarkerResponseDto(Marker marker, List<String> imageUrls) {
+        this.markerId = marker.getId();
         this.placeId = marker.getPlace() != null ? marker.getPlace().getId() : null;
         this.latitude = marker.getLatitude();
         this.longitude = marker.getLongitude();

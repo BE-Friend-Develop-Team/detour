@@ -42,10 +42,10 @@ public class ScheduleController {
 
 
     @PatchMapping("/{scheduleId}")
-    public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> updateSchedule(@PathVariable(value = "scheduleId") Long scheduleId,
+    public ResponseEntity<CommonResponseDto<ScheduleDetailsResponseDto>> updateSchedule(@PathVariable(value = "scheduleId") Long scheduleId,
                                                                                  @Valid @RequestBody ScheduleUpdateRequestDto updateRequestDto,
                                                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        ScheduleResponseDto scheduleResponseDto = scheduleService.updateSchedule(scheduleId, updateRequestDto, userDetails.getUser());
+        ScheduleDetailsResponseDto scheduleResponseDto = scheduleService.updateSchedule(scheduleId, updateRequestDto, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "일정 수정에 성공하였습니다. 🎉", scheduleResponseDto));
     }

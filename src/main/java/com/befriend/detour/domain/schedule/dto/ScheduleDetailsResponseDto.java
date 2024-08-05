@@ -40,6 +40,8 @@ public class ScheduleDetailsResponseDto {
         this.hourHits = schedule.getHourHits();
         this.nickname = schedule.getUser().getNickname();
         this.isLiked = false;
+        this.dailyPlanList = schedule.getDailyPlans().stream().map(DailyPlanResponseDto::new).toList();
+        this.invitationList = schedule.getInvitations().stream().map(InvitationResponseDto::new).toList();
     }
 
     public ScheduleDetailsResponseDto(Schedule schedule, LikeResponseDto likeResponseDto) {

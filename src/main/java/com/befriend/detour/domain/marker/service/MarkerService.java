@@ -35,7 +35,11 @@ public class MarkerService {
         DailyPlan dailyPlan = dailyPlanService.findDailyPlanById(dailyPlanId);
         Place place = placeService.findPlaceById(placeId);
 
-        Marker marker = new Marker(requestDto.getLatitude(), requestDto.getLongitude(), dailyPlan, place);
+        // markerIndex 최댓값 확인
+        Long maxIndex = markerRepository.findMaxMarkerIndexByDailyPlan(dailyPlan);
+        maxIndex = (maxIndex == null) ? 0L : maxIndex + 1;
+
+        Marker marker = new Marker(requestDto.getLatitude(), requestDto.getLongitude(), dailyPlan, place, maxIndex);
         markerRepository.save(marker);
 
         return new MarkerResponseDto(marker);

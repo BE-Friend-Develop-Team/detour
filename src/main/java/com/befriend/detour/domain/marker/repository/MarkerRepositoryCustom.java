@@ -16,4 +16,6 @@ public interface MarkerRepositoryCustom {
     Optional<MarkerResponseDto> fetchMarkerDetails(Long markerId, Long dailyPlanId);
 
     List<Marker> findAllByDailyPlanOrderByMarkerIndex(DailyPlan dailyPlan);
+
+    Long findMaxMarkerIndexByDailyPlan(DailyPlan dailyPlan);
 }

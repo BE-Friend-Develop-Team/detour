@@ -48,6 +48,17 @@ public class MarkerRepositoryImpl implements MarkerRepositoryCustom {
     }
 
     @Override
+    public Long findMaxMarkerIndexByDailyPlan(DailyPlan dailyPlan) {
+
+        return jpaQueryFactory
+                .select(marker.markerIndex.max())
+                .from(marker)
+                .where(marker.dailyPlan.eq(dailyPlan)
+                        .and(marker.status.ne(MarkerStatusEnum.DELETED)))
+                .fetchOne();
+    }
+
+    @Override
     public Optional<MarkerResponseDto> fetchMarkerDetails(Long markerId, Long dailyPlanId) {
 
         return findByIdAndDailyPlanId(markerId, dailyPlanId)

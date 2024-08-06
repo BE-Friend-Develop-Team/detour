@@ -50,12 +50,13 @@ public class Marker extends TimeStamped {
     @OneToMany(mappedBy = "marker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> files = new ArrayList<>();
 
-    public Marker(Double latitude, Double longitude, DailyPlan dailyPlan, Place place) {
+    public Marker(Double latitude, Double longitude, DailyPlan dailyPlan, Place place, Long markerIndex) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.dailyPlan = dailyPlan;
         this.place = place;
         this.status = MarkerStatusEnum.ACTIVE;
+        this.markerIndex = markerIndex;
     }
 
     public void updateContent(MarkerContentRequestDto requestDto) {

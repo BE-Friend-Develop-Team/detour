@@ -30,7 +30,7 @@ public class MarkerFileService {
 
         // 파일 정보를 포함한 MarkerResponseDto 생성
         return fileEntities.stream()
-                .map(file -> new MarkerResponseDto(marker.getPlace().getId(), marker.getLatitude(), marker.getLongitude(), marker.getContent(), List.of(file.getFileUrl()), marker.getCreatedAt(), marker.getModifiedAt()))
+                .map(file -> new MarkerResponseDto(marker.getPlace().getId(), marker.getLatitude(), marker.getLongitude(), marker.getContent(), List.of(file.getFileUrl()), marker.getMarkerIndex(), marker.getCreatedAt(), marker.getModifiedAt()))
                 .collect(Collectors.toList());
     }
 

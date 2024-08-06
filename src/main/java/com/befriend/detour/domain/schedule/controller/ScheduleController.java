@@ -3,6 +3,7 @@ package com.befriend.detour.domain.schedule.controller;
 import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.file.service.FileService;
 import com.befriend.detour.domain.invitation.repository.InvitationRepository;
+import com.befriend.detour.domain.schedule.dao.RankingDao;
 import com.befriend.detour.domain.schedule.dto.ScheduleDetailsResponseDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
@@ -30,7 +31,7 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
     private final FileService fileService;
-    private final InvitationRepository invitationRepository;
+    private final RankingDao rankingDao;
 
     @PostMapping
     public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> createSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto,
@@ -123,8 +124,9 @@ public class ScheduleController {
 
     @GetMapping("/ranking")
     public ResponseEntity<CommonResponseDto<List<Long>>> getTopSchedules() {
-        List<Long> topScheduleIds = scheduleService.getRanking();
-        return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "상위 12개의 인기 일정 ID를 성공적으로 조회했습니다.", topScheduleIds));
+        List<Long> ranking = rankingDao.getRanking();
+
+        return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "상위 12개의 인기 일정 ID를 성공적으로 조회했습니다.", ranking));
     }
 
 }

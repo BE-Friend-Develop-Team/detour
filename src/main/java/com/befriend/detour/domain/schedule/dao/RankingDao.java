@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,6 +21,17 @@ public class RankingDao {
                     .set(String.valueOf(i + 1), String.valueOf(scheduleIds.get(i)));
         }
         scheduleService.deleteAllHourHits();
+    }
+
+    public List<Long> getRanking() {
+        List<Long> ranking = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {  // 상위 12개 랭킹을 가져옵니다
+            String value = stringRedisTemplate.opsForValue().get(String.valueOf(i));
+            if (value != null) {
+                ranking.add(Long.parseLong(value));
+            }
+        }
+        return ranking;
     }
 
 }

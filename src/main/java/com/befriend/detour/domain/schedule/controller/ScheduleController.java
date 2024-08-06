@@ -121,10 +121,4 @@ public class ScheduleController {
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), sortBy + " 순으로 전체 일정을 조회에 성공하였습니다.", scheduleResponseDtos));
     }
 
-    @GetMapping("/ranking")
-    public ResponseEntity<CommonResponseDto<List<Long>>> getTopSchedules() {
-        List<Long> topScheduleIds = scheduleService.getRanking();
-        return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "상위 12개의 인기 일정 ID를 성공적으로 조회했습니다.", topScheduleIds));
-    }
-
 }

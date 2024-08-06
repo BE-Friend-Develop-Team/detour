@@ -1,0 +1,14 @@
+### 13-1. 리뷰 작성
+POST http://52.78.2.148:80/api/review
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "content" : "여행관리를",
+  "star" : "⭐️⭐️⭐️⭐️⭐️"
+}
+
+### 13-2. 리뷰 조회
+GET http://52.78.2.148:80/api/review/1
+Content-Type: application/json
+Authorization: {{access_token}}

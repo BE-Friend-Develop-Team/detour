@@ -32,6 +32,9 @@ public class Marker extends TimeStamped {
     @Column
     private String content;
 
+    @Column(nullable = false)
+    private Long markerIndex;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MarkerStatusEnum status = MarkerStatusEnum.ACTIVE;
@@ -47,12 +50,13 @@ public class Marker extends TimeStamped {
     @OneToMany(mappedBy = "marker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> files = new ArrayList<>();
 
-    public Marker(Double latitude, Double longitude, DailyPlan dailyPlan, Place place) {
+    public Marker(Double latitude, Double longitude, DailyPlan dailyPlan, Place place, Long markerIndex) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.dailyPlan = dailyPlan;
         this.place = place;
         this.status = MarkerStatusEnum.ACTIVE;
+        this.markerIndex = markerIndex;
     }
 
     public void updateContent(MarkerContentRequestDto requestDto) {
@@ -63,4 +67,7 @@ public class Marker extends TimeStamped {
         this.status = MarkerStatusEnum.DELETED;
     }
 
+    public void updateIndex(long index) {
+        this.markerIndex = index;
+    }
 }

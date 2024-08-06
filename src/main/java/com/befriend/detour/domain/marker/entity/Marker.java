@@ -32,6 +32,9 @@ public class Marker extends TimeStamped {
     @Column
     private String content;
 
+    @Column(nullable = false)
+    private Long markerIndex;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MarkerStatusEnum status = MarkerStatusEnum.ACTIVE;
@@ -63,4 +66,7 @@ public class Marker extends TimeStamped {
         this.status = MarkerStatusEnum.DELETED;
     }
 
+    public void updateIndex(long index) {
+        this.markerIndex = index;
+    }
 }

@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.marker.repository;
 
+import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.file.repository.FileRepository;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
@@ -9,6 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,6 +35,16 @@ public class MarkerRepositoryImpl implements MarkerRepositoryCustom {
                 .stream()
                 .map(this::toMarkerResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Marker> findAllByDailyPlanOrderByMarkerIndex(DailyPlan dailyPlan) {
+
+        return new ArrayList<>(jpaQueryFactory.selectFrom(marker)
+                .where(marker.dailyPlan.eq(dailyPlan),
+                        marker.status.ne(MarkerStatusEnum.DELETED))
+                .orderBy(marker.id.asc())
+                .fetch());
     }
 
     @Override

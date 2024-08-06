@@ -53,6 +53,8 @@ public enum ErrorCode {
     MARKER_NOT_FOUND(404, "마커를 찾을 수 없습니다."),
     ALREADY_IS_DELETED(404, "이미 차단된 마커입니다."),
     USER_NOT_MATCH_WITH_MARKER(404, "해당 마커의 작성자가 아닙니다."),
+    OVER_INDEX(500, "목표 인덱스가 범위를 벗어납니다."),
+    MOVE_MARKER_NOT_FOUND(500, "이동할 컬럼을 찾을 수 없습니다."),
 
     // place 관련 오류 처리
     PLACE_NOT_FOUND(404, "장소를 찾을 수 없습니다."),

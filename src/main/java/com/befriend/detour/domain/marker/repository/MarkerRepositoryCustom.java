@@ -1,5 +1,6 @@
 package com.befriend.detour.domain.marker.repository;
 
+import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
 import com.befriend.detour.domain.marker.entity.Marker;
 
@@ -14,4 +15,5 @@ public interface MarkerRepositoryCustom {
 
     Optional<MarkerResponseDto> fetchMarkerDetails(Long markerId, Long dailyPlanId);
 
+    List<Marker> findAllByDailyPlanOrderByMarkerIndex(DailyPlan dailyPlan);
 }

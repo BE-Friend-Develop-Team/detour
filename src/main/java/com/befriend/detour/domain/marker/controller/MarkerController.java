@@ -1,9 +1,6 @@
 package com.befriend.detour.domain.marker.controller;
 
-import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
-import com.befriend.detour.domain.marker.dto.MarkerLocationResponseDto;
-import com.befriend.detour.domain.marker.dto.MarkerRequestDto;
-import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
+import com.befriend.detour.domain.marker.dto.*;
 import com.befriend.detour.domain.marker.service.MarkerFileService;
 import com.befriend.detour.domain.marker.service.MarkerService;
 import com.befriend.detour.global.dto.CommonResponseDto;
@@ -97,6 +94,16 @@ public class MarkerController {
         markerFileService.deleteFile(markerId, fileUrl);
 
         return ResponseEntity.ok(new CommonResponseDto<>(200, "파일 삭제에 성공하였습니다. 🎉", null));
+    }
+
+    @PutMapping("/{dailyPlanId}/markers/{markerId}/transfer")
+    public ResponseEntity<CommonResponseDto> moveMarker(@PathVariable Long dailyPlanId,
+                                                        @PathVariable Long markerId,
+                                                        @RequestBody MarkerMoveRequestDto requestDto,
+                                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        markerService.moveMarker(dailyPlanId, markerId, requestDto, userDetails.getUser());
+
+        return ResponseEntity.ok(new CommonResponseDto(200, "마커 순서 이동에 성공하였습니다. 🎉", null));
     }
 
 }

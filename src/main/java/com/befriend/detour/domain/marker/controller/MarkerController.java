@@ -101,9 +101,9 @@ public class MarkerController {
                                                         @PathVariable Long markerId,
                                                         @RequestBody MarkerMoveRequestDto requestDto,
                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        markerService.moveMarker(dailyPlanId, markerId, requestDto, userDetails.getUser());
+        List<MarkerMoveResponseDto> responseDto = markerService.moveMarker(dailyPlanId, markerId, requestDto, userDetails.getUser());
 
-        return ResponseEntity.ok(new CommonResponseDto(200, "마커 순서 이동에 성공하였습니다. 🎉", null));
+        return ResponseEntity.ok(new CommonResponseDto<>(200, "마커 순서 이동에 성공하였습니다. 🎉", responseDto));
     }
 
 }

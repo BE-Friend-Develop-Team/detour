@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
@@ -27,6 +28,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoService {
 
     private final PasswordEncoder passwordEncoder;
@@ -58,9 +60,11 @@ public class KakaoService {
         userRepository.save(kakaoUser);
 
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAccessToken);
+//        response.addHeader("nickname", kakaoUserInfo.getNickname());
         response.setStatus(HttpServletResponse.SC_OK);
+
         // JWT 토큰을 반환
-        return jwtAccessToken;
+        return kakaoUser.getNickname();
     }
 
     private String getToken(String code) throws JsonProcessingException {
@@ -93,6 +97,9 @@ public class KakaoService {
                 requestEntity, // 요청 엔티티
                 String.class // 응답 타입
         );
+
+        log.info(String.valueOf(response));
+
 
         // HTTP 응답 (JSON) -> 액세스 토큰 파싱
         // 응답 본문을 JSON 노드로 파싱

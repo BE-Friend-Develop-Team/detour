@@ -52,6 +52,7 @@ public class MarkerResponseDto {
         this.content = marker.getContent();
         this.images = imageUrls;
         this.markerIndex = marker.getMarkerIndex();
+        this.name = marker.getPlace().getName();
         this.createdAt = marker.getCreatedAt();  // 생성 시간 설정
         this.modifiedAt = marker.getModifiedAt(); // 수정 시간 설정
     }

@@ -19,6 +19,7 @@ import org.hibernate.annotations.Columns;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -114,7 +115,7 @@ public class MarkerService {
     }
 
     @Transactional
-    public void moveMarker(Long dailyPlanId, Long markerId, MarkerMoveRequestDto requestDto, User user) {
+    public List<MarkerMoveResponseDto> moveMarker(Long dailyPlanId, Long markerId, MarkerMoveRequestDto requestDto, User user) {
         DailyPlan dailyPlan = dailyPlanService.findDailyPlanById(dailyPlanId);
         Marker checkMarker = findMarker(markerId);
 
@@ -128,7 +129,7 @@ public class MarkerService {
 
         // 현재 인덱스와 목표 인덱스가 같으면 아무 작업도 하지 않음
         if (currentIndex.equals(targetIndex)) {
-            return;
+            return null;
         }
 
         // 모든 마커를 현재 데일리플랜에서 조회
@@ -149,12 +150,18 @@ public class MarkerService {
         markersList.remove(markerToMove);
         markersList.add(Math.toIntExact(targetIndex), markerToMove);
 
-        // 변경된 순서대로 모든 마커 저장
+        List<MarkerMoveResponseDto> responseList = new ArrayList<>();
+
+        // 변경된 순서대로 모든 마커 저장 및 응답 DTO 생성
         for (int i = 0; i < markersList.size(); i++) {
             Marker markers = markersList.get(i);
             markers.updateIndex(i);
             markerRepository.save(markers);
+
+            // 각 마커에 대한 응답 DTO 생성 및 리스트에 추가
+            responseList.add(new MarkerMoveResponseDto(markers.getId(), (long) i));
         }
 
+        return responseList;
     }
 }

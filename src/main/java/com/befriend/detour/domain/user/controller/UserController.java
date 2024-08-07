@@ -48,13 +48,11 @@ public class UserController {
     }
 
     @GetMapping("/login/oauth2/code/kakao")
-    public RedirectView kakaoLogin(@RequestParam String code, HttpServletResponse response ) throws JsonProcessingException, UnsupportedEncodingException {
+    public ResponseEntity<CommonResponseDto> kakaoLogin(@RequestParam String code, HttpServletResponse response ) throws JsonProcessingException, UnsupportedEncodingException {
 
-        String jwtAccessToken = kakaoService.kakaoLogin(code, response);
-        String encodedToken = URLEncoder.encode(jwtAccessToken, "UTF-8");
-        String redirectUrl = "http://localhost:3000?token=" + encodedToken;
+        String nickname = kakaoService.kakaoLogin(code, response);
 
-        return new RedirectView(redirectUrl);
+        return ResponseEntity.ok(new CommonResponseDto(200, "카카오 로그인 성공", nickname));
     }
 
     @GetMapping("/profile")

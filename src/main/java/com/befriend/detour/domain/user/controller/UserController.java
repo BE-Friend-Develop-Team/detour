@@ -9,6 +9,7 @@ import com.befriend.detour.global.security.UserDetailsImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.netty.handler.codec.MessageAggregationException;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +51,9 @@ public class UserController {
     @GetMapping("/login/oauth2/code/kakao")
     public ResponseEntity<CommonResponseDto> kakaoLogin(@RequestParam String code, HttpServletResponse response ) throws JsonProcessingException, UnsupportedEncodingException {
 
-        String nickname = kakaoService.kakaoLogin(code, response);
+        String kakaoToken = kakaoService.kakaoLogin(code, response);
 
-        return ResponseEntity.ok(new CommonResponseDto(200, "카카오 로그인 성공", nickname));
+        return ResponseEntity.ok(new CommonResponseDto(200, "카카오 로그인 성공", kakaoToken));
     }
 
     @GetMapping("/profile")

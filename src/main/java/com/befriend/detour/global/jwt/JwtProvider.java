@@ -35,15 +35,15 @@ public class JwtProvider {
     }
 
     // 액세스 토큰 생성
-    public String createAccessToken(String nickname, UserRoleEnum role) {
+    public String createAccessToken(String loginId, UserRoleEnum role) {
 
-        return generateToken(nickname, role, tokenExpiration);
+        return generateToken(loginId, role, tokenExpiration);
     }
 
     // 리프레시 토큰 생성
-    public String createRefreshToken(String username) {
+    public String createRefreshToken(String loginId) {
 
-        return generateRefreshToken(username, refreshTokenExpiration);
+        return generateRefreshToken(loginId, refreshTokenExpiration);
     }
 
     public String generateToken(String loginId, UserRoleEnum role, long expiration) {

@@ -50,13 +50,14 @@ public class User extends TimeStamped {
         this.role = userRole;
     }
 
-    public User(String email, String encodedPassword, String nickname, UserStatusEnum userStatusEnum, UserRoleEnum userRoleEnum, Long kakaoId) {
+    public User(String email, String encodedPassword, String nickname, UserStatusEnum userStatusEnum, UserRoleEnum userRoleEnum, Long kakaoId, String loginId) {
         this.password = encodedPassword;
         this.nickname = nickname;
         this.email = email;
         this.status = userStatusEnum;
         this.role = userRoleEnum;
         this.kakaoId = kakaoId;
+        this.loginId = loginId;
     }
 
     public void encryptionPassword(String password) {

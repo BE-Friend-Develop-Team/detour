@@ -53,8 +53,8 @@ public class KakaoService {
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
         // 4. JWT 반환
-        String jwtAccessToken = jwtProvider.createAccessToken(kakaoUser.getNickname(), kakaoUser.getRole());
-        String jwtRefreshToken = jwtProvider.createRefreshToken(kakaoUser.getNickname());
+        String jwtAccessToken = jwtProvider.createAccessToken(kakaoUser.getLoginId(), kakaoUser.getRole());
+        String jwtRefreshToken = jwtProvider.createRefreshToken(kakaoUser.getLoginId());
 
         kakaoUser.updateRefresh(jwtRefreshToken);
         userRepository.save(kakaoUser);
@@ -161,11 +161,12 @@ public class KakaoService {
                 // password: random UUID
                 String password = UUID.randomUUID().toString();  //password는 UUID를 사용해서 랜덤으로 생성
                 String encodedPassword = passwordEncoder.encode(password);  //암호화
+                String loginId = UUID.randomUUID().toString();
 
                 // email: kakao email
                 String email = kakaoUserInfo.getEmail();
 
-                kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserStatusEnum.ACTIVE, UserRoleEnum.USER, kakaoId);
+                kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), UserStatusEnum.ACTIVE, UserRoleEnum.USER, kakaoId, loginId);
             }
         }
 

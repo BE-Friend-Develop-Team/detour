@@ -2,6 +2,7 @@ package com.befriend.detour.domain.dailyplan.dto;
 
 import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.marker.dto.MarkerResponseDto;
+import com.befriend.detour.domain.marker.entity.MarkerStatusEnum;
 import lombok.Getter;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class DailyPlanResponseDto {
         this.scheduleId = dailyPlan.getSchedule().getId();
         this.dailyPlanId = dailyPlan.getId();
         this.day = dailyPlan.getDay();
-        this.markerList = dailyPlan.getMarkers().stream().map(MarkerResponseDto::new).toList();
+        this.markerList = dailyPlan.getMarkers().stream().filter(m -> m.getStatus() == MarkerStatusEnum.ACTIVE).map(MarkerResponseDto::new).toList();
     }
 
 }

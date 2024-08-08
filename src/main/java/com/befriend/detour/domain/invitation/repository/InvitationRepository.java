@@ -8,6 +8,9 @@ import com.befriend.detour.global.exception.ErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface InvitationRepository extends JpaRepository<Invitation, Long>, InvitationRepositoryCustom {
 
@@ -16,5 +19,7 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long>, I
             throw new CustomException(ErrorCode.USER_NOT_MEMBER);
         }
     }
+
+    Optional<List<User>> findUsersByScheduleId(Long scheduleId);
 
 }

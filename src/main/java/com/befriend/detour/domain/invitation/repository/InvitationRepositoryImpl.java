@@ -8,14 +8,18 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+
+import static com.befriend.detour.domain.invitation.entity.QInvitation.invitation;
+import static com.befriend.detour.domain.user.entity.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
 public class InvitationRepositoryImpl implements InvitationRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private final QInvitation qInvitation = QInvitation.invitation;
+    private final QInvitation qInvitation = invitation;
 
     @Override
     public Optional<Invitation> findInvitationByScheduleAndUser(Schedule schedule, User user){
@@ -36,6 +40,18 @@ public class InvitationRepositoryImpl implements InvitationRepositoryCustom {
                 .where(qInvitation.schedule.eq(schedule)
                         .and(qInvitation.user.eq(user)))
                 .fetchFirst() != null;
+    }
+
+    @Override
+    public Optional<List<User>> findUsersByScheduleId(Long scheduleId) {
+        List<User> users = jpaQueryFactory
+                .select(user)
+                .from(invitation)
+                .join(invitation.user, user)
+                .where(invitation.schedule.id.eq(scheduleId))
+                .fetch();
+
+        return Optional.ofNullable(users);
     }
 
 }

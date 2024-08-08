@@ -32,3 +32,9 @@ Authorization: {{access_token}}
 GET http://52.78.2.148:80/api/schedules?page=1&sortBy=최신&search=이창형
 Content-Type: application/json
 Authorization: {{access_token}}
+
+### 12-8. 사용자 조회 - 초대
+GET http://localhost:8081/api/schedules/6/invitation/users
+Content-Type: application/json
+Authorization: {{access_token}}
+

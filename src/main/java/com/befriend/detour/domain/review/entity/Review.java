@@ -20,11 +20,15 @@ public class Review extends TimeStamped {
     private String content;
 
     @Column(nullable = false)
-    private String star;
+    private int star; // String에서 int로 변경
+
+    @Column(nullable = false)
+    private String username;
 
     public Review(ReviewRequestDto requestDto) {
         this.content = requestDto.getContent();
-        this.star = requestDto.getStar();
+        this.star = requestDto.getStar(); // int로 변경
+        this.username = requestDto.getUsername();
     }
 
 }

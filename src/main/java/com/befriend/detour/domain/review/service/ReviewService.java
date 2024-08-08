@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
+    @Transactional
     public ReviewResponseDto createReview(ReviewRequestDto requestDto) {
         Review review = new Review(requestDto);
         reviewRepository.save(review);
@@ -26,6 +28,7 @@ public class ReviewService {
         return new ReviewResponseDto(review);
     }
 
+    @Transactional
     public double getAverageRating() {
         List<Review> reviews = reviewRepository.findAll();
 
@@ -35,6 +38,7 @@ public class ReviewService {
                 .orElse(0.0);
     }
 
+    @Transactional
     public Page<ReviewResponseDto> getAllReviews(Pageable pageable) {
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "createdAt"));
 

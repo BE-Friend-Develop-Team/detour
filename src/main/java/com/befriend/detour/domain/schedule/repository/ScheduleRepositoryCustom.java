@@ -1,6 +1,7 @@
 package com.befriend.detour.domain.schedule.repository;
 
 import com.befriend.detour.domain.schedule.entity.Schedule;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +14,5 @@ public interface ScheduleRepositoryCustom {
     Optional<List<Schedule>> findSchedulesByCreatedUser(Long userId, Pageable pageable);
     Optional<List<Long>> getScheduleIdRanking();
     void deleteAllHourHits();
-
+    Page<Schedule> findAllBySearch(Pageable pageable, String search);
 }

@@ -17,9 +17,7 @@ import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,18 +81,25 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getUserCreatedSchedules(Pageable pageable, Long userId, String search) {
-        List<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUser(userId, pageable).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+    public Page<ScheduleResponseDto> getUserCreatedSchedules(Pageable pageable, Long userId, String search) {
+        // Find schedules created by the user
+        List<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUser(userId, pageable)
+                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
+        // Apply search filter
         schedules = filteringSearch(search, schedules);
 
-        return schedules.stream()
+        // Convert the list of schedules to a list of ScheduleResponseDto
+        List<ScheduleResponseDto> scheduleResponseDtos = schedules.stream()
                 .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(userId, schedule.getId())))
                 .collect(Collectors.toList());
+
+        // Create and return a Page object with the converted list and the Pageable information
+        return new PageImpl<>(scheduleResponseDtos, pageable, scheduleResponseDtos.size());
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getUserLikedSchedules(Pageable pageable, User user, String search) {
+    public Page<ScheduleResponseDto> getUserLikedSchedules(Pageable pageable, User user, String search) {
         List<Like> likes = likeRepository.getUserLikedSchedules(user, pageable)
                 .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_EXIST));
 
@@ -104,9 +109,11 @@ public class ScheduleService {
 
         schedules = filteringSearch(search, schedules);
 
-        return schedules.stream()
+        List<ScheduleResponseDto> scheduleResponseDtos = schedules.stream()
                 .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(user.getId(), schedule.getId())))
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(scheduleResponseDtos, pageable, scheduleResponseDtos.size());
     }
 
     @Transactional
@@ -140,7 +147,7 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getSchedules(String sortBy, int page, int size, String search, User user) {
+    public Page<ScheduleResponseDto> getSchedules(String sortBy, int page, int size, String search, User user) {
         Sort sort;
 
         if (sortBy.equals("좋아요")) {
@@ -153,13 +160,16 @@ public class ScheduleService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        List<Schedule> schedules = scheduleRepository.findAll(pageable).getContent();
+        Page<Schedule> schedulePage = scheduleRepository.findAll(pageable);
 
-        schedules = filteringSearch(search, schedules);
+        List<Schedule> schedules = filteringSearch(search, schedulePage.getContent());
 
-        return schedules.stream()
+        List<ScheduleResponseDto> scheduleDtos = schedules.stream()
                 .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(user.getId(), schedule.getId())))
                 .collect(Collectors.toList());
+
+        // 'schedulePage'의 메타데이터를 유지하기 위해 PageImpl을 사용하여 새 Page 객체 생성
+        return new PageImpl<>(scheduleDtos, pageable, schedulePage.getTotalElements());
     }
 
     private void updateScheduleFields(Schedule schedule, ScheduleUpdateRequestDto updateRequestDto) {

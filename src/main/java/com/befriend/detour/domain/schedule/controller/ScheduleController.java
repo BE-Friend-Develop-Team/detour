@@ -2,7 +2,6 @@ package com.befriend.detour.domain.schedule.controller;
 
 import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.file.service.FileService;
-import com.befriend.detour.domain.invitation.repository.InvitationRepository;
 import com.befriend.detour.domain.schedule.dao.RankingDao;
 import com.befriend.detour.domain.schedule.dto.ScheduleDetailsResponseDto;
 import com.befriend.detour.domain.schedule.dto.ScheduleRequestDto;
@@ -13,6 +12,7 @@ import com.befriend.detour.global.dto.CommonResponseDto;
 import com.befriend.detour.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -71,22 +71,22 @@ public class ScheduleController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<CommonResponseDto<List<ScheduleResponseDto>>> getUserCreatedSchedules(@RequestParam(value = "page") int page,
+    public ResponseEntity<CommonResponseDto<Page<ScheduleResponseDto>>> getUserCreatedSchedules(@RequestParam(value = "page") int page,
                                                                                                 @RequestParam(value = "search", required = false) String search,
                                                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Pageable pageable = PageRequest.of(page - 1, 12);
 
-        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserCreatedSchedules(pageable, userDetails.getUser().getId(), search);
+        Page<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserCreatedSchedules(pageable, userDetails.getUser().getId(), search);
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), userDetails.getUser().getNickname() + " 사용자가 작성한 일정들 조회에 성공하였습니다. 🎉", scheduleResponseDtos));
     }
 
     @GetMapping("/users/likes")
-    public ResponseEntity<CommonResponseDto<List<ScheduleResponseDto>>> getUserLikedSchedules(@RequestParam(value = "page") int page,
+    public ResponseEntity<CommonResponseDto<Page<ScheduleResponseDto>>> getUserLikedSchedules(@RequestParam(value = "page") int page,
                                                                                               @RequestParam(value = "search", required = false) String search,
                                                                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Pageable pageable = PageRequest.of(page - 1, 12);
-        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserLikedSchedules(pageable, userDetails.getUser(), search);
+        Page<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getUserLikedSchedules(pageable, userDetails.getUser(), search);
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), userDetails.getUser().getNickname() + " 사용자가 좋아요한 일정들 조회에 성공하였습니다. 🎉", scheduleResponseDtos));
     }
@@ -112,12 +112,12 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponseDto<List<ScheduleResponseDto>>> getSchedules(
+    public ResponseEntity<CommonResponseDto<Page<ScheduleResponseDto>>> getSchedules(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "sortBy") String sortBy,
             @RequestParam(value = "search", required = false) String search,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getSchedules(sortBy, page - 1, 12, search, userDetails.getUser());
+        Page<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getSchedules(sortBy, page - 1, 12, search, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), sortBy + " 순으로 전체 일정을 조회에 성공하였습니다.", scheduleResponseDtos));
     }

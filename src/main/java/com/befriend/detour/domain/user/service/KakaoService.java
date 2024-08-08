@@ -60,11 +60,11 @@ public class KakaoService {
         userRepository.save(kakaoUser);
 
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAccessToken);
-//        response.addHeader("nickname", kakaoUserInfo.getNickname());
+//        response.addHeader("Kakao-Token", accessToken); // 추가로 accessToken을 담아 보낼 때는 새 헤더를 사용
         response.setStatus(HttpServletResponse.SC_OK);
 
-        // JWT 토큰을 반환
-        return kakaoUser.getNickname();
+        // 카카오토큰 반환
+        return accessToken;
     }
 
     private String getToken(String code) throws JsonProcessingException {

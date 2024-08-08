@@ -10,13 +10,21 @@ import com.befriend.detour.domain.user.repository.UserRepository;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import com.befriend.detour.global.jwt.JwtProvider;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
@@ -65,8 +73,8 @@ public class UserService {
 
     @Transactional
     public void logout(User user) {
-        user.updateRefresh(null);
-        userRepository.save(user);
+            user.updateRefresh(null);
+            userRepository.save(user);
     }
 
     @Transactional(readOnly = true)

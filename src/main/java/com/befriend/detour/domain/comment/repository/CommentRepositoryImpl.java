@@ -18,15 +18,13 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<CommentResponseDto> getPagedCommentsByScheduleAndUser(Long scheduleId, Long userId, Pageable pageable) {
+    public List<CommentResponseDto> getPagedCommentsByScheduleAndUser(Long scheduleId, Long userId) {
         QComment comment = QComment.comment;
 
         List<Comment> comments = jpaQueryFactory.selectFrom(comment)
-                .where(comment.schedule.id.eq(scheduleId)
-                        .and(comment.user.id.eq(userId)))
+                .where(comment.schedule.id.eq(scheduleId))
+//                        .and(comment.user.id.eq(userId)))
                 .orderBy(comment.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
 
         return comments.stream()

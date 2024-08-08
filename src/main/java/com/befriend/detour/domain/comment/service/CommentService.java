@@ -49,9 +49,13 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
+    //    @Transactional(readOnly = true)
+//    public List<CommentResponseDto> getScheduleComments(Long scheduleId, User user, Pageable pageable) {
+//        return commentRepository.getPagedCommentsByScheduleAndUser(scheduleId, user.getId(), pageable);
+//    }
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> getScheduleComments(Long scheduleId, User user, Pageable pageable) {
-        return commentRepository.getPagedCommentsByScheduleAndUser(scheduleId, user.getId(), pageable);
+    public List<CommentResponseDto> getScheduleComments(Long scheduleId, User user) {
+        return commentRepository.getPagedCommentsByScheduleAndUser(scheduleId, user.getId());
     }
 
     private void validateUserMatch(Comment comment, User user) {

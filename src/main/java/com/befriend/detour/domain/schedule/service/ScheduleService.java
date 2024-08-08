@@ -160,16 +160,20 @@ public class ScheduleService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Schedule> schedulePage = scheduleRepository.findAll(pageable);
+        Page<Schedule> schedules = null;
 
-        List<Schedule> schedules = filteringSearch(search, schedulePage.getContent());
+        if (search == null) {
+            schedules = scheduleRepository.findAll(pageable);
+        } else {
+            schedules = scheduleRepository.findAllBySearch(pageable, search);
+        }
 
         List<ScheduleResponseDto> scheduleDtos = schedules.stream()
                 .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(user.getId(), schedule.getId())))
                 .collect(Collectors.toList());
 
         // 'schedulePage'의 메타데이터를 유지하기 위해 PageImpl을 사용하여 새 Page 객체 생성
-        return new PageImpl<>(scheduleDtos, pageable, schedulePage.getTotalElements());
+        return new PageImpl<>(scheduleDtos, pageable, schedules.getTotalElements());
     }
 
     private void updateScheduleFields(Schedule schedule, ScheduleUpdateRequestDto updateRequestDto) {

@@ -5,6 +5,8 @@ import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -41,15 +43,42 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom{
     }
 
     @Override
-    public Optional<List<Like>> getUserLikedSchedules(User user, Pageable pageable) {
-        List<Like> likes = jpaQueryFactory.selectFrom(like)
+    public Page<Schedule> getUserLikedSchedules(User user, Pageable pageable) {
+
+        long total = jpaQueryFactory.select(like.schedule)
+                .from(like)
+                .where(like.user.eq(user))
+                .fetchCount();
+
+        List<Schedule> schedules = jpaQueryFactory.select(like.schedule)
+                .from(like)
                 .where(like.user.eq(user))
                 .orderBy(like.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return Optional.ofNullable(likes);
+        return new PageImpl<>(schedules, pageable, total);
     }
 
+    @Override
+    public Page<Schedule> getUserLikedSchedulesBySearch(User user, Pageable pageable, String search) {
+
+        long total = jpaQueryFactory.select(like.schedule)
+                .from(like)
+                .where(like.user.eq(user))
+                .where(like.schedule.title.contains(search))
+                .fetchCount();
+
+        List<Schedule> schedules = jpaQueryFactory.select(like.schedule)
+                .from(like)
+                .where(like.user.eq(user))
+                .where(like.schedule.title.contains(search))
+                .orderBy(like.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(schedules, pageable, total);
+    }
 }

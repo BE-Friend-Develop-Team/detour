@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.befriend.detour.domain.like.entity.QLike.like;
+
 @Repository
 @RequiredArgsConstructor
 public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
@@ -27,9 +29,18 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Optional<List<Schedule>> findSchedulesByCreatedUser(Long userId, Pageable pageable) {
+    public Page<Schedule> findSchedulesByCreatedUser(Long userId, Pageable pageable) {
         QSchedule schedule = QSchedule.schedule;
         QInvitation invitation = QInvitation.invitation;
+
+        long total = jpaQueryFactory.selectFrom(schedule)
+                .where(schedule.user.id.eq(userId)
+                        .or(schedule.id.in(
+                                jpaQueryFactory.select(invitation.schedule.id)
+                                        .from(invitation)
+                                        .where(invitation.user.id.eq(userId))
+                        )))
+                .fetchCount();
 
         List<Schedule> schedules = jpaQueryFactory.selectFrom(schedule)
                 .where(schedule.user.id.eq(userId)
@@ -43,7 +54,38 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return Optional.ofNullable(schedules);
+        return new PageImpl<>(schedules, pageable, total);
+    }
+
+    @Override
+    public Page<Schedule> findSchedulesByCreatedUserBySearch(Long userId, Pageable pageable, String search) {
+        QSchedule schedule = QSchedule.schedule;
+        QInvitation invitation = QInvitation.invitation;
+
+        long total = jpaQueryFactory.selectFrom(schedule)
+                .where(schedule.user.id.eq(userId)
+                        .or(schedule.id.in(
+                                jpaQueryFactory.select(invitation.schedule.id)
+                                        .from(invitation)
+                                        .where(invitation.user.id.eq(userId))
+                        )))
+                .where(schedule.title.contains(search))
+                .fetchCount();
+
+        List<Schedule> schedules = jpaQueryFactory.selectFrom(schedule)
+                .where(schedule.user.id.eq(userId)
+                        .or(schedule.id.in(
+                                jpaQueryFactory.select(invitation.schedule.id)
+                                        .from(invitation)
+                                        .where(invitation.user.id.eq(userId))
+                        )))
+                .where(schedule.title.contains(search))
+                .orderBy(schedule.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(schedules, pageable, total);
     }
 
     @Override

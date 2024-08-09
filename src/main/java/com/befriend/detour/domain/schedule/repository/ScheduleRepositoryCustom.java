@@ -11,7 +11,8 @@ import java.util.Optional;
 @Repository
 public interface ScheduleRepositoryCustom {
 
-    Optional<List<Schedule>> findSchedulesByCreatedUser(Long userId, Pageable pageable);
+    Page<Schedule> findSchedulesByCreatedUser(Long userId, Pageable pageable);
+    Page<Schedule> findSchedulesByCreatedUserBySearch(Long userId, Pageable pageable, String search);
     Optional<List<Long>> getScheduleIdRanking();
     void deleteAllHourHits();
     Page<Schedule> findAllBySearch(Pageable pageable, String search);

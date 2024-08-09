@@ -82,38 +82,43 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public Page<ScheduleResponseDto> getUserCreatedSchedules(Pageable pageable, Long userId, String search) {
-        // Find schedules created by the user
-        List<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUser(userId, pageable)
-                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+        if(search == null || search == "") {
+            Page<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUser(userId, pageable);
 
-        // Apply search filter
-        schedules = filteringSearch(search, schedules);
+            List<ScheduleResponseDto> schedulesDto = schedules.stream()
+                    .map(ScheduleResponseDto::new)
+                    .collect(Collectors.toList());
 
-        // Convert the list of schedules to a list of ScheduleResponseDto
-        List<ScheduleResponseDto> scheduleResponseDtos = schedules.stream()
-                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(userId, schedule.getId())))
-                .collect(Collectors.toList());
+            return new PageImpl<>(schedulesDto, pageable, schedules.getTotalElements());
+        } else {
+            Page<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUserBySearch(userId, pageable, search);
 
-        // Create and return a Page object with the converted list and the Pageable information
-        return new PageImpl<>(scheduleResponseDtos, pageable, scheduleResponseDtos.size());
+            List<ScheduleResponseDto> schedulesDto = schedules.stream()
+                    .map(ScheduleResponseDto::new)
+                    .collect(Collectors.toList());
+
+            return new PageImpl<>(schedulesDto, pageable, schedules.getTotalElements());
+        }
     }
 
     @Transactional(readOnly = true)
     public Page<ScheduleResponseDto> getUserLikedSchedules(Pageable pageable, User user, String search) {
-        List<Like> likes = likeRepository.getUserLikedSchedules(user, pageable)
-                .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_EXIST));
+        if(search == null || search == "") {
+           Page<Schedule> schedules = likeRepository.getUserLikedSchedules(user, pageable);
+            List<ScheduleResponseDto> schedulesDto = schedules.stream()
+                    .map(ScheduleResponseDto::new)
+                    .collect(Collectors.toList());
 
-        List<Schedule> schedules = likes.stream()
-                .map(Like::getSchedule)
-                .collect(Collectors.toList());
+            return new PageImpl<>(schedulesDto, pageable, schedules.getTotalElements());
+        } else {
+            Page<Schedule> schedules = likeRepository.getUserLikedSchedulesBySearch(user, pageable, search);
+            List<ScheduleResponseDto> schedulesDto = schedules.stream()
+                    .map(ScheduleResponseDto::new)
+                    .collect(Collectors.toList());
 
-        schedules = filteringSearch(search, schedules);
+            return new PageImpl<>(schedulesDto, pageable, schedules.getTotalElements());
+        }
 
-        List<ScheduleResponseDto> scheduleResponseDtos = schedules.stream()
-                .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(user.getId(), schedule.getId())))
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(scheduleResponseDtos, pageable, scheduleResponseDtos.size());
     }
 
     @Transactional

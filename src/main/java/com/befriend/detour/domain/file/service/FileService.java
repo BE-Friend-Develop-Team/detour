@@ -40,6 +40,7 @@ public class FileService {
     private static final String JPG = "jpg";
     private static final String JPEG = "jpeg";
     private static final String PNG = "png";
+    private static final String HEIC = "heic";
     private static final String AVI = "avi";
     private static final String MP4 = "mp4";
     private static final String GIF = "gif";
@@ -89,24 +90,19 @@ public class FileService {
     }
 
     private String createFileName(String fileName) {
-
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
     private String getFileExtension(String fileName) {
-
         try {
-            validateImageFileExtension(fileName);
-
+            validateFileExtension(fileName);
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
             throw new CustomException(ErrorCode.FILE_NAME_INVALID);
         }
-
     }
 
-    private void validateImageFileExtension(String filename) {
-
+    private void validateFileExtension(String filename) {
         int lastDotIndex = filename.lastIndexOf(".");
 
         if (lastDotIndex == -1) {
@@ -114,65 +110,53 @@ public class FileService {
         }
 
         String extension = filename.substring(lastDotIndex + 1).toLowerCase();
-        List<String> allowedExtensionList = Arrays.asList(JPG, JPEG, PNG, AVI, MP4, GIF);
+        List<String> allowedExtensionList = Arrays.asList(JPG, JPEG, PNG, HEIC, AVI, MP4, GIF); // HEIC 추가
 
         if (!allowedExtensionList.contains(extension)) {
             throw new CustomException(ErrorCode.EXTENSION_INVALID);
         }
-
     }
 
     private void validateFileSize(long size, String extension) {
-
         if (isImageFile(extension) && size > MAX_IMAGE_SIZE) {
             throw new IllegalArgumentException("이미지 파일 크기는 10MB를 초과할 수 없습니다.");
         } else if (isVideoFile(extension) && size > MAX_VIDEO_SIZE) {
             throw new IllegalArgumentException("비디오 파일 크기는 200MB를 초과할 수 없습니다.");
         }
-
     }
 
     private boolean isImageFile(String extension) {
-
-        return extension.equals(JPEG) || extension.equals(JPG) || extension.equals(PNG);
+        return extension.equals(JPEG) || extension.equals(JPG) || extension.equals(PNG) || extension.equals(HEIC); // HEIC 추가
     }
 
     private boolean isVideoFile(String extension) {
-
         return extension.equals(MP4) || extension.equals(AVI) || extension.equals(GIF);
     }
 
     public void deleteFile(String fileUrl) {
-        // 파일 URL로 S3에서 삭제
         String key = getKeyFromFileAddress(fileUrl);
 
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, key));
-            // 파일 URL로 데이터베이스에서 삭제
             fileRepository.deleteByFileUrl(fileUrl);
         } catch (Exception e) {
             log.error("Error occurred while deleting the file", e);
             throw new CustomException(ErrorCode.IO_EXCEPTION_ON_IMAGE_DELETE);
         }
-
     }
 
     private String getKeyFromFileAddress(String fileAddress) {
-
         try {
             URL url = new URL(fileAddress);
             String decodingKey = URLDecoder.decode(url.getPath(), StandardCharsets.UTF_8);
-
             return decodingKey.substring(1); // 맨 앞의 '/' 제거
         } catch (MalformedURLException e) {
             e.printStackTrace();
             throw new CustomException(ErrorCode.IO_EXCEPTION_ON_IMAGE_DELETE);
         }
-
     }
 
     public File findFileByUrl(String fileUrl) {
-
         return fileRepository.findByFileUrl(fileUrl)
                 .orElseThrow(() -> new CustomException(ErrorCode.EXTENSION_IS_EMPTY));
     }

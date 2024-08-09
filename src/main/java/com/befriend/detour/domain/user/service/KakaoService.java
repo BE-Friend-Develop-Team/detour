@@ -24,6 +24,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -42,7 +44,9 @@ public class KakaoService {
     @Value("${SOCIAL_KAKAO_REDIRECT_URI}")
     private String kakaoRedirectUri;
 
-    public String kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public List<String> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+        List<String> res = new ArrayList<>();
+
         // 1. "인가 코드"로 "엑세스 토큰" 요청
         String accessToken = getToken(code);
 
@@ -60,11 +64,13 @@ public class KakaoService {
         userRepository.save(kakaoUser);
 
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAccessToken);
-//        response.addHeader("Kakao-Token", accessToken); // 추가로 accessToken을 담아 보낼 때는 새 헤더를 사용
         response.setStatus(HttpServletResponse.SC_OK);
 
+        res.add(accessToken);
+        res.add(kakaoUser.getNickname());
+
         // 카카오토큰 반환
-        return accessToken;
+        return res;
     }
 
     private String getToken(String code) throws JsonProcessingException {

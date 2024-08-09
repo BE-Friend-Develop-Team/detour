@@ -24,6 +24,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,7 +52,7 @@ public class UserController {
     @GetMapping("/login/oauth2/code/kakao")
     public ResponseEntity<CommonResponseDto> kakaoLogin(@RequestParam String code, HttpServletResponse response ) throws JsonProcessingException, UnsupportedEncodingException {
 
-        String kakaoToken = kakaoService.kakaoLogin(code, response);
+        List<String> kakaoToken = kakaoService.kakaoLogin(code, response);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "카카오 로그인 성공", kakaoToken));
     }

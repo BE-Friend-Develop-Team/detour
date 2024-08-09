@@ -29,6 +29,7 @@ public class SignupRequestDto {
     private String adminToken;
 
     public String getAdminToken() {
+
         return adminToken != null ? adminToken : "";
     }
 

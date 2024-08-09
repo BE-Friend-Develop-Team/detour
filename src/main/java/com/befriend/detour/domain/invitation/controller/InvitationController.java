@@ -46,5 +46,4 @@ public class InvitationController {
         return ResponseEntity.ok(new CommonResponseDto<>(200, "전체 사용자 조회 성공하였습니다. 🎉", nicknames));
     }
 
-
 }

@@ -11,7 +11,9 @@ import java.util.Optional;
 public interface FileRepository extends JpaRepository<File, Long> {
 
     Optional<File> findByFileUrl(String fileUrl);
+
     void deleteByFileUrl(String fileUrl);
+
     List<File> findByMarkerId(Long markerId);
 
 }

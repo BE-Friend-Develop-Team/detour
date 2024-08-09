@@ -1,7 +1,6 @@
 package com.befriend.detour.domain.comment.dto;
 
 import com.befriend.detour.domain.comment.entity.Comment;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

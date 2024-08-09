@@ -29,12 +29,10 @@ public class LikeService {
     public LikeResponseDto createScheduleLike(Long scheduleId, User user) {
         Schedule foundSchedule = scheduleService.findById(scheduleId);
 
-//      좋아요가 이미 있는지 확인
         if (likeRepository.existsByUserAndSchedule(user, foundSchedule)) {
             throw new CustomException(ErrorCode.ALREADY_LIKED);
         }
 
-        // 좋아요를 새로 추가
         Like like = new Like(user, foundSchedule);
         likeRepository.save(like);
         foundSchedule.addLikeCount();
@@ -59,27 +57,23 @@ public class LikeService {
         likeRepository.delete(foundLike);
         foundSchedule.minusLikeCount();
 
-        // 취소 후 응답으로 빈 LikeResponseDto를 반환
         return new LikeResponseDto(null, false);
     }
 
     public LikeResponseDto getLike(Long scheduleId, User user) {
 
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(()->
-                 new CustomException(ErrorCode.PLACE_NOT_FOUND));
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
+                new CustomException(ErrorCode.PLACE_NOT_FOUND));
 
         System.out.println(schedule.getId());
         System.out.println(user.getId());
 
-        Like like = likeRepository.findByScheduleAndUser(schedule, user).orElseThrow(()->
+        Like like = likeRepository.findByScheduleAndUser(schedule, user).orElseThrow(() ->
                 new CustomException(ErrorCode.ALREADY_INVITED));
 
         System.out.println(like);
+
         return new LikeResponseDto(like, false);
     }
 
-    public boolean isLikedByUser(Long userId, Long scheduleId) {
-        Optional<Like> like = likeRepository.findByUserIdAndScheduleId(userId, scheduleId);
-        return like.isPresent();
-    }
 }

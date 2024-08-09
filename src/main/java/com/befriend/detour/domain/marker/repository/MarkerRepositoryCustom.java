@@ -18,4 +18,5 @@ public interface MarkerRepositoryCustom {
     List<Marker> findAllByDailyPlanOrderByMarkerIndex(DailyPlan dailyPlan);
 
     Long findMaxMarkerIndexByDailyPlan(DailyPlan dailyPlan);
+
 }

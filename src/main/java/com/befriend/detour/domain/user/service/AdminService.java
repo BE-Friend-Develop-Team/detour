@@ -24,7 +24,6 @@ public class AdminService {
     public Page<ProfileResponseDto> getAllUsers(Pageable pageable) {
         List<User> users = userRepository.findAllUser(pageable).orElseThrow(() -> new CustomException(ErrorCode.NO_USERS_FOUND));
 
-        // User 객체를 ProfileResponseDto로 변환
         List<ProfileResponseDto> profileResponseDtos = users.stream()
                 .map(user -> new ProfileResponseDto(user.getId(), user.getLoginId(), user.getKakaoId(), user.getEmail(), user.getNickname(), user.getStatus(), user.getRole()))
                 .collect(Collectors.toList());
@@ -35,7 +34,7 @@ public class AdminService {
     public User changeUserStatus(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if(user.getStatus() == UserStatusEnum.ACTIVE) {
+        if (user.getStatus() == UserStatusEnum.ACTIVE) {
             user.updateStatus(UserStatusEnum.BLOCK);
             userRepository.save(user);
         } else {

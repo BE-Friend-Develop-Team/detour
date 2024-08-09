@@ -7,16 +7,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface LikeRepositoryCustom {
 
     boolean existsByUserAndSchedule(User user, Schedule schedule);
+
     Like findLikeWithSchedule(Long likeId);
 
     Page<Schedule> getUserLikedSchedules(User user, Pageable pageable);
 
     Page<Schedule> getUserLikedSchedulesBySearch(User user, Pageable pageable, String search);
+
 }

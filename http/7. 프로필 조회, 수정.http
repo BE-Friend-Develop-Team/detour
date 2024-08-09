@@ -1,10 +1,10 @@
 ### 7-1. 프로필 조회
-GET http://52.78.2.148:80/api/users/profile
+GET https://detourofficial.shop/api/users/profile
 Content-Type: application/json
 Authorization: {{access_token}}
 
 #### 7-2. 닉네임 수정
-PATCH http://52.78.2.148:80/api/users/profiles/nickname
+PATCH https://detourofficial.shop/api/users/profiles/nickname
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -13,7 +13,7 @@ Authorization: {{access_token}}
 }
 
 #### 7-3. 이메일 수정
-PATCH http://52.78.2.148:80/api/users/profiles/email
+PATCH https://detourofficial.shop/api/users/profiles/email
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -22,7 +22,7 @@ Authorization: {{access_token}}
 }
 
 #### 7-4. 비밀번호 수정
-PATCH http://52.78.2.148:80/api/users/profiles/password
+PATCH https://detourofficial.shop/api/users/profiles/password
 Content-Type: application/json
 Authorization: {{access_token}}
 

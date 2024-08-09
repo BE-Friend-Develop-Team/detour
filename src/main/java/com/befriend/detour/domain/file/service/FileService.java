@@ -34,8 +34,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileService {
 
-    private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
-    private static final long MAX_VIDEO_SIZE = 200 * 1024 * 1024; // 200MB
+    private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+    private static final long MAX_VIDEO_SIZE = 200 * 1024 * 1024;
 
     private static final String JPG = "jpg";
     private static final String JPEG = "jpeg";
@@ -76,7 +76,6 @@ public class FileService {
 
             String fileUrl = amazonS3.getUrl(bucket, fileName).toString();
 
-            // 파일 정보 데이터베이스에 저장
             Marker marker = null;
             if (markerId != null) {
                 marker = markerService.findMarker(markerId);
@@ -90,12 +89,14 @@ public class FileService {
     }
 
     private String createFileName(String fileName) {
+
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
     private String getFileExtension(String fileName) {
         try {
             validateFileExtension(fileName);
+
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
             throw new CustomException(ErrorCode.FILE_NAME_INVALID);
@@ -110,7 +111,7 @@ public class FileService {
         }
 
         String extension = filename.substring(lastDotIndex + 1).toLowerCase();
-        List<String> allowedExtensionList = Arrays.asList(JPG, JPEG, PNG, HEIC, AVI, MP4, GIF); // HEIC 추가
+        List<String> allowedExtensionList = Arrays.asList(JPG, JPEG, PNG, HEIC, AVI, MP4, GIF);
 
         if (!allowedExtensionList.contains(extension)) {
             throw new CustomException(ErrorCode.EXTENSION_INVALID);
@@ -126,10 +127,12 @@ public class FileService {
     }
 
     private boolean isImageFile(String extension) {
-        return extension.equals(JPEG) || extension.equals(JPG) || extension.equals(PNG) || extension.equals(HEIC); // HEIC 추가
+
+        return extension.equals(JPEG) || extension.equals(JPG) || extension.equals(PNG) || extension.equals(HEIC);
     }
 
     private boolean isVideoFile(String extension) {
+
         return extension.equals(MP4) || extension.equals(AVI) || extension.equals(GIF);
     }
 
@@ -149,7 +152,8 @@ public class FileService {
         try {
             URL url = new URL(fileAddress);
             String decodingKey = URLDecoder.decode(url.getPath(), StandardCharsets.UTF_8);
-            return decodingKey.substring(1); // 맨 앞의 '/' 제거
+
+            return decodingKey.substring(1);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             throw new CustomException(ErrorCode.IO_EXCEPTION_ON_IMAGE_DELETE);
@@ -157,6 +161,7 @@ public class FileService {
     }
 
     public File findFileByUrl(String fileUrl) {
+
         return fileRepository.findByFileUrl(fileUrl)
                 .orElseThrow(() -> new CustomException(ErrorCode.EXTENSION_IS_EMPTY));
     }

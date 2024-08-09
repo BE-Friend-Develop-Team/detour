@@ -11,14 +11,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.befriend.detour.domain.like.entity.QLike.like;
 import static com.befriend.detour.domain.schedule.entity.QSchedule.schedule;
 
 @Repository
 @RequiredArgsConstructor
-public class LikeRepositoryImpl implements LikeRepositoryCustom{
+public class LikeRepositoryImpl implements LikeRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -81,4 +80,5 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom{
 
         return new PageImpl<>(schedules, pageable, total);
     }
+
 }

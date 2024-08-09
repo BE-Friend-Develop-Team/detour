@@ -34,13 +34,11 @@ public class JwtProvider {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    // 액세스 토큰 생성
     public String createAccessToken(String loginId, UserRoleEnum role) {
 
         return generateToken(loginId, role, tokenExpiration);
     }
 
-    // 리프레시 토큰 생성
     public String createRefreshToken(String loginId) {
 
         return generateRefreshToken(loginId, refreshTokenExpiration);
@@ -49,10 +47,10 @@ public class JwtProvider {
     public String generateToken(String loginId, UserRoleEnum role, long expiration) {
 
         return Jwts.builder()
-                .setSubject(loginId) // 토큰 주체
+                .setSubject(loginId)
                 .claim("role", role.getAuthority())
-                .setIssuedAt(new Date()) // 토큰 발행 시간
-                .setExpiration(new Date(System.currentTimeMillis() + expiration)) // 토큰 만료시간
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
@@ -60,11 +58,11 @@ public class JwtProvider {
     public String generateRefreshToken(String loginId, long expiration) {
 
         return Jwts.builder()
-                .setSubject(loginId) // 토큰 주체
-                .claim("type", "refresh") // 리프레시 토큰 유형 클레임 추가
-                .setId(UUID.randomUUID().toString()) // 고유한 ID로 설정
-                .setIssuedAt(new Date()) // 토큰 발행 시간
-                .setExpiration(new Date(System.currentTimeMillis() + expiration)) // 토큰 만료시간
+                .setSubject(loginId)
+                .claim("type", "refresh")
+                .setId(UUID.randomUUID().toString())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
@@ -75,22 +73,6 @@ public class JwtProvider {
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
-
-    }
-
-    public String getRoleFromToken(String token) {
-
-        Jws<Claims> claims = Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token);
-
-        return claims.getBody().get("role", String.class);
-    }
-
-    public boolean validateToken(String token, UserDetails userDetails) {
-
-        final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 
     }
 
@@ -110,17 +92,6 @@ public class JwtProvider {
         }
     }
 
-    private boolean isTokenExpired(String token) {
-        final Date expiration = extractClaims(token).getExpiration();
-
-        return expiration.before(new Date());
-    }
-
-    public String getUsernameFromToken(String token) {
-
-        return extractClaims(token).getSubject();
-    }
-
     public String getAccessTokenFromHeader(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
 
@@ -129,23 +100,6 @@ public class JwtProvider {
         }
 
         return authorizationHeader.substring(7);
-    }
-
-    public void checkTokenExpiration(String token) throws CustomException {
-
-        try {
-            Claims claims = getClaimsFromToken(token);
-            Date date = claims.getExpiration();
-            Date now = new Date();
-
-            if (date != null && date.before(now)) {
-                throw new CustomException(ErrorCode.LOGIN_FAIL);
-            }
-
-        } catch (ExpiredJwtException e) {
-            throw new CustomException(ErrorCode.LOGIN_FAIL);
-        }
-
     }
 
     public Claims getClaimsFromToken(String token) {

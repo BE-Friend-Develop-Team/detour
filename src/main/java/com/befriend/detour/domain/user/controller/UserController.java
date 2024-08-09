@@ -1,7 +1,7 @@
 package com.befriend.detour.domain.user.controller;
 
-import com.befriend.detour.domain.user.service.EmailCertificationService;
 import com.befriend.detour.domain.user.dto.*;
+import com.befriend.detour.domain.user.service.EmailCertificationService;
 import com.befriend.detour.domain.user.service.KakaoService;
 import com.befriend.detour.domain.user.service.UserService;
 import com.befriend.detour.global.dto.CommonResponseDto;
@@ -9,7 +9,6 @@ import com.befriend.detour.global.security.UserDetailsImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.netty.handler.codec.MessageAggregationException;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +18,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -50,8 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/login/oauth2/code/kakao")
-    public ResponseEntity<CommonResponseDto> kakaoLogin(@RequestParam String code, HttpServletResponse response ) throws JsonProcessingException, UnsupportedEncodingException {
-
+    public ResponseEntity<CommonResponseDto> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
         List<String> kakaoToken = kakaoService.kakaoLogin(code, response);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "카카오 로그인 성공", kakaoToken));
@@ -65,35 +61,40 @@ public class UserController {
     }
 
     @PatchMapping("/profiles/nickname")
-    public ResponseEntity<CommonResponseDto> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails, @Valid @RequestBody EditNicknameRequestDto editNicknameRequestDto) {
+    public ResponseEntity<CommonResponseDto> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                            @Valid @RequestBody EditNicknameRequestDto editNicknameRequestDto) {
         ProfileResponseDto profileResponseDto = userService.updateNickname(userDetails.getUser(), editNicknameRequestDto.getNickname());
 
         return ResponseEntity.ok(new CommonResponseDto(200, "닉네임 수정에 성공하였습니다. 🎉", profileResponseDto));
     }
 
     @PatchMapping("/profiles/email")
-    public ResponseEntity<CommonResponseDto> updateEmail(@AuthenticationPrincipal UserDetailsImpl userDetails, @Valid @RequestBody EditEmailRequestDto editEmailRequestDto) {
+    public ResponseEntity<CommonResponseDto> updateEmail(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                         @Valid @RequestBody EditEmailRequestDto editEmailRequestDto) {
         ProfileResponseDto profileResponseDto = userService.updateEmail(userDetails.getUser(), editEmailRequestDto.getEmail());
 
         return ResponseEntity.ok(new CommonResponseDto(200, "이메일 수정에 성공하였습니다. 🎉", profileResponseDto));
     }
 
     @PatchMapping("/profiles/password")
-    public ResponseEntity<CommonResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @Valid @RequestBody EditPasswordRequestDto editPasswordRequestDto) {
+    public ResponseEntity<CommonResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                            @Valid @RequestBody EditPasswordRequestDto editPasswordRequestDto) {
         userService.updatePassword(userDetails.getUser(), editPasswordRequestDto);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "비밀번호 수정에 성공하였습니다. 🎉", null));
     }
 
     @PatchMapping("/withdrawal")
-    public ResponseEntity<CommonResponseDto> withdrawalUser(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody WithdrawalDto withDrawalDto) {
+    public ResponseEntity<CommonResponseDto> withdrawalUser(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                            @RequestBody WithdrawalDto withDrawalDto) {
         userService.withdrawalUser(userDetails.getUser(), withDrawalDto.getPassword());
 
         return ResponseEntity.ok(new CommonResponseDto(200, "회원 탈퇴에 성공하였습니다. 🎉", null));
     }
 
     @PostMapping("/token")
-    public ResponseEntity<CommonResponseDto> refreshAccessToken(@RequestBody RefreshAccessTokenRequestDto refreshAccessTokenRequestDto, HttpServletResponse response) {
+    public ResponseEntity<CommonResponseDto> refreshAccessToken(@RequestBody RefreshAccessTokenRequestDto refreshAccessTokenRequestDto,
+                                                                HttpServletResponse response) {
         userService.refreshAccessToken(refreshAccessTokenRequestDto.getNickname(), response);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "액세스 토큰 재발급에 성공하였습니다. 🎉", null));
@@ -106,9 +107,9 @@ public class UserController {
         return ResponseEntity.ok(new CommonResponseDto(200, "인증 이메일 전송에 성공하였습니다. 🎉", null));
     }
 
-    @GetMapping ("/verify")
-    public ResponseEntity<CommonResponseDto> verifyCertificationNumber(@RequestParam(name = "certificationNumber") String certificationNumber, @RequestParam(name = "email") String email) {
-
+    @GetMapping("/verify")
+    public ResponseEntity<CommonResponseDto> verifyCertificationNumber(@RequestParam(name = "certificationNumber") String certificationNumber,
+                                                                       @RequestParam(name = "email") String email) {
         emailCertificationService.verifyEmail(certificationNumber, email);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "이메일 인증에 성공하였습니다. 🎉", null));

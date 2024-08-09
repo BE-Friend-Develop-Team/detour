@@ -55,9 +55,10 @@ public class DailyPlanService {
         return new DailyPlanResponseDto(checkDailyPlan);
     }
 
-    // dailyPlanId로 데일리플랜 찾기
     public DailyPlan findDailyPlanById(Long dailyPlanId) {
+
         return dailyPlanRepository.findById(dailyPlanId).orElseThrow(() ->
                 new CustomException(ErrorCode.DAILY_PLAN_NOT_FOUND));
     }
+
 }

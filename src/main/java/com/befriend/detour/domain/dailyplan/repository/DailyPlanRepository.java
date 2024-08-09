@@ -9,5 +9,7 @@ import java.util.List;
 
 @Repository
 public interface DailyPlanRepository extends JpaRepository<DailyPlan, Long> {
+
     List<DailyPlan> findAllByScheduleOrderByDay(Schedule checkSchedule);
+
 }

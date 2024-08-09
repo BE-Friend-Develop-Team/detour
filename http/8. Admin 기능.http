@@ -1,9 +1,9 @@
 ### 8-1. 전체 회원 조회
-GET http://52.78.2.148:80/api/admin/users?page=1
+GET https://detourofficial.shop/api/admin/users?page=1
 Accept: application/json
 Authorization: {{access_token}}
 
 ### 8-2 회원 상태 변경
-PATCH http://52.78.2.148:80/api/admin/users?userId=1
+PATCH https://detourofficial.shop/api/admin/users?userId=1
 Accept: application/json
 Authorization: {{access_token}}

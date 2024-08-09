@@ -1,6 +1,5 @@
 package com.befriend.detour.global.dto;
 
-import com.befriend.detour.global.dto.CommonResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -14,14 +13,12 @@ public class SecurityResponse {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void sendResponse(HttpServletResponse response, HttpStatus status, String message) throws IOException {
-
         CommonResponseDto responseDto = new CommonResponseDto(status.value(), message, null);
         String json = objectMapper.writeValueAsString(responseDto);
 
         response.setStatus(status.value());
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(json);
-
     }
 
 }

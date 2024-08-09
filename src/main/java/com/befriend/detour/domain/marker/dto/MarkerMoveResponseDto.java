@@ -14,4 +14,5 @@ public class MarkerMoveResponseDto {
         this.markerId = markerId;
         this.markerIndex = markerIndex;
     }
+
 }

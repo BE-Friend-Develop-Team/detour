@@ -26,7 +26,7 @@ public class RankingDao {
     public List<Long> getRanking() {
         List<Long> ranking = new ArrayList<>();
 
-        for (int i = 1; i <= 12; i++) {  // 상위 12개 랭킹을 가져옵니다
+        for (int i = 1; i <= 12; i++) {
             String key = String.valueOf(i);
             String value = stringRedisTemplate.opsForValue().get(key);
 
@@ -34,15 +34,12 @@ public class RankingDao {
                 try {
                     ranking.add(Long.parseLong(value));
                 } catch (NumberFormatException e) {
-                    // 값을 Long으로 변환할 수 없는 경우 예외 처리
                     System.err.println("Invalid number format for key " + key);
-                    // 예외가 발생해도 해당 키는 무시하고 계속 진행
                 }
             }
         }
 
         return ranking;
     }
-
 
 }

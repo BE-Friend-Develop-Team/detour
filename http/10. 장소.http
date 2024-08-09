@@ -1,5 +1,5 @@
 ### 8-1. 장소 생성
-POST http://52.78.2.148:80/api/place
+POST https://detourofficial.shop/api/place
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -10,12 +10,12 @@ Authorization: {{access_token}}
 }
 
 ### 8-2. 장소 조회
-GET http://52.78.2.148:80/api/place/4
+GET https://detourofficial.shop/api/place/4
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ### 8-3. 장소 수정
-PATCH http://52.78.2.148:80/api/place/3
+PATCH https://detourofficial.shop/api/place/3
 Content-Type: application/json
 Authorization: {{access_token}}
 

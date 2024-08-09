@@ -1,7 +1,6 @@
 package com.befriend.detour.domain.marker.dto;
 
 import com.befriend.detour.domain.marker.entity.Marker;
-import jakarta.persistence.Column;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -23,22 +22,16 @@ public class MarkerResponseDto {
     private String address;
     private String telNumber;
 
-    public MarkerResponseDto(Double latitude, Double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-
     public MarkerResponseDto(Marker marker) {
         this.markerId = marker.getId();
         this.placeId = marker.getPlace() != null ? marker.getPlace().getId() : null;
         this.latitude = marker.getLatitude();
         this.longitude = marker.getLongitude();
         this.content = marker.getContent();
-        // images는 나중에 설정될 수 있도록 null 또는 빈 리스트로 초기화 가능
         this.images = List.of();
         this.markerIndex = marker.getMarkerIndex();
-        this.createdAt = marker.getCreatedAt();  // 생성 시간 설정
-        this.modifiedAt = marker.getModifiedAt(); // 수정 시간 설정
+        this.createdAt = marker.getCreatedAt();
+        this.modifiedAt = marker.getModifiedAt();
         this.name = marker.getPlace().getName();
         this.address = marker.getPlace().getAddress();
         this.telNumber = marker.getPlace().getTelNumber();
@@ -53,8 +46,8 @@ public class MarkerResponseDto {
         this.images = imageUrls;
         this.markerIndex = marker.getMarkerIndex();
         this.name = marker.getPlace().getName();
-        this.createdAt = marker.getCreatedAt();  // 생성 시간 설정
-        this.modifiedAt = marker.getModifiedAt(); // 수정 시간 설정
+        this.createdAt = marker.getCreatedAt();
+        this.modifiedAt = marker.getModifiedAt();
     }
 
     public MarkerResponseDto(Long placeId, Double latitude, Double longitude, String content, List<String> images, Long markerIndex, LocalDateTime createdAt, LocalDateTime modifiedAt) {

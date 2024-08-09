@@ -1,5 +1,5 @@
 ### 10-1. 인증 이메일 전송
-POST http://52.78.2.148:80api/users/send-certification
+POST https://detourofficial.shopapi/users/send-certification
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -8,6 +8,6 @@ Authorization: {{access_token}}
 }
 
 ### 10-2. 이메일 인증 확인
-GET http://52.78.2.148:80/api/users/verify?certificationNumber=434586&email=chxngbro@gmail.com
+GET https://detourofficial.shop/api/users/verify?certificationNumber=434586&email=chxngbro@gmail.com
 Content-Type: application/json
 Authorization: {{access_token}}

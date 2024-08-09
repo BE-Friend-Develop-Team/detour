@@ -46,7 +46,7 @@ public enum ErrorCode {
     ALREADY_LIKED(409, "이미 좋아요를 누른 일정입니다."),
     LIKE_NOT_EXIST(404, "해당 좋아요가 존재하지 않습니다."),
     CANNOT_CANCEL_OTHERS_LIKE(403, "다른 사람의 좋아요는 취소할 수 없습니다."),
-    UNAUTHORIZED_ACTION(404,"승인되지 않은 접근입니다."),
+    UNAUTHORIZED_ACTION(404, "승인되지 않은 접근입니다."),
 
     // daily plan 관련 오류 처리
     DAILY_PLAN_NOT_FOUND(404, "존재하지 않는 데일리플랜입니다."),

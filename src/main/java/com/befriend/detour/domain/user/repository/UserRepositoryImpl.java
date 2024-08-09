@@ -54,7 +54,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     @Override
     public Optional<User> findByNickname(String nickname) {
 
-        User result =  jpaQueryFactory.selectFrom(user)
+        User result = jpaQueryFactory.selectFrom(user)
                 .where(user.nickname.eq(nickname))
                 .fetchOne();
 

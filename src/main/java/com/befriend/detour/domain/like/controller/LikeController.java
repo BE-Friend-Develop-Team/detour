@@ -2,7 +2,6 @@ package com.befriend.detour.domain.like.controller;
 
 import com.befriend.detour.domain.like.dto.LikeResponseDto;
 import com.befriend.detour.domain.like.service.LikeService;
-import com.befriend.detour.domain.schedule.dto.ScheduleResponseDto;
 import com.befriend.detour.global.dto.CommonResponseDto;
 import com.befriend.detour.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;

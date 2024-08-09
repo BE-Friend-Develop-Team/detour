@@ -12,7 +12,9 @@ import java.util.Optional;
 public interface InvitationRepositoryCustom {
 
     Optional<Invitation> findInvitationByScheduleAndUser(Schedule schedule, User user);
+
     boolean existsByScheduleAndUser(Schedule schedule, User user);
+
     Optional<List<User>> findUsersByScheduleId(Long scheduleId);
 
 }

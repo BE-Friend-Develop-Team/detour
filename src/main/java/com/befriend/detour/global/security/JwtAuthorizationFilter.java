@@ -51,12 +51,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
 
         }
-
         filterChain.doFilter(request, response);
     }
 
     public void setAuthentication(String userId) {
-
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(userId);
         context.setAuthentication(authentication);
@@ -64,7 +62,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private Authentication createAuthentication(String userId) {
-
         UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
 
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

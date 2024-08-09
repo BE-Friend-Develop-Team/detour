@@ -1,7 +1,6 @@
 package com.befriend.detour.domain.comment.repository;
 
 import com.befriend.detour.domain.comment.dto.CommentResponseDto;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.List;
 @Repository
 public interface CommentRepositoryCustom {
 
-//    List<CommentResponseDto> getPagedCommentsByScheduleAndUser(Long scheduleId, Long userId, Pageable pageable);
-
     List<CommentResponseDto> getPagedCommentsByScheduleAndUser(Long scheduleId, Long userId);
+
 }

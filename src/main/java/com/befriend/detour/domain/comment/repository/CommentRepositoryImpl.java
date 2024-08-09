@@ -5,7 +5,6 @@ import com.befriend.detour.domain.comment.entity.Comment;
 import com.befriend.detour.domain.comment.entity.QComment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,7 +22,6 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
         List<Comment> comments = jpaQueryFactory.selectFrom(comment)
                 .where(comment.schedule.id.eq(scheduleId))
-//                        .and(comment.user.id.eq(userId)))
                 .orderBy(comment.createdAt.desc())
                 .fetch();
 
@@ -31,4 +29,5 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
     }
+
 }

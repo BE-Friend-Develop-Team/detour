@@ -36,7 +36,7 @@ public class AdminController {
         User user = adminService.changeUserStatus(userId);
         UserStatusEnum status = user.getStatus();
 
-        return ResponseEntity.ok(new CommonResponseDto(200, userId + "번 유저 상태를 " + status +"로 변경 성공하였습니다. 🎉", null));
+        return ResponseEntity.ok(new CommonResponseDto(200, userId + "번 유저 상태를 " + status + "로 변경 성공하였습니다. 🎉", null));
     }
 
 }

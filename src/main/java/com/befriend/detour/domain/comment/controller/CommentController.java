@@ -7,9 +7,6 @@ import com.befriend.detour.global.dto.CommonResponseDto;
 import com.befriend.detour.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,10 +49,7 @@ public class CommentController {
 
     @GetMapping("/{scheduleId}/comments")
     public ResponseEntity<CommonResponseDto<List<CommentResponseDto>>> getScheduleComments(@PathVariable Long scheduleId,
-                                                                                           //@RequestParam(value = "page") int page,
                                                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
-//        List<CommentResponseDto> commentResponseDtos = commentService.getScheduleComments(scheduleId, userDetails.getUser(), pageable);
         List<CommentResponseDto> commentResponseDtos = commentService.getScheduleComments(scheduleId, userDetails.getUser());
 
         return new ResponseEntity<>(new CommonResponseDto<>(HttpStatus.OK.value(), "댓글 조회에 성공하였습니다. 🎉", commentResponseDtos), HttpStatus.OK);

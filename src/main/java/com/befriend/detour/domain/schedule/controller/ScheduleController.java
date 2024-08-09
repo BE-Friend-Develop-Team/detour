@@ -44,8 +44,8 @@ public class ScheduleController {
 
     @PatchMapping("/{scheduleId}")
     public ResponseEntity<CommonResponseDto<ScheduleDetailsResponseDto>> updateSchedule(@PathVariable(value = "scheduleId") Long scheduleId,
-                                                                                 @Valid @RequestBody ScheduleUpdateRequestDto updateRequestDto,
-                                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                                                        @Valid @RequestBody ScheduleUpdateRequestDto updateRequestDto,
+                                                                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ScheduleDetailsResponseDto scheduleResponseDto = scheduleService.updateSchedule(scheduleId, updateRequestDto, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "일정 수정에 성공하였습니다. 🎉", scheduleResponseDto));
@@ -55,7 +55,6 @@ public class ScheduleController {
     public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> updateScheduleImage(@PathVariable Long scheduleId,
                                                                                       @RequestParam("file") MultipartFile file,
                                                                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
         File uploadedFile = fileService.uploadFile(Collections.singletonList(file), null).get(0);
         ScheduleResponseDto scheduleResponseDto = scheduleService.updateMainImage(scheduleId, uploadedFile.getFileUrl(), userDetails.getUser());
 
@@ -92,31 +91,26 @@ public class ScheduleController {
     }
 
     @GetMapping("/{scheduleId}")
-    public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> getSchedule(
-            @PathVariable("scheduleId") Long scheduleId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+    public ResponseEntity<CommonResponseDto<ScheduleResponseDto>> getSchedule(@PathVariable("scheduleId") Long scheduleId,
+                                                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ScheduleResponseDto scheduleResponseDto = scheduleService.getSchedule(scheduleId, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "일정 조회에 성공하였습니다. 🎉", scheduleResponseDto));
     }
 
     @GetMapping("/{scheduleId}/details")
-    public ResponseEntity<CommonResponseDto<ScheduleDetailsResponseDto>> getScheduleDetails(
-            @PathVariable("scheduleId") Long scheduleId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+    public ResponseEntity<CommonResponseDto<ScheduleDetailsResponseDto>> getScheduleDetails(@PathVariable("scheduleId") Long scheduleId,
+                                                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ScheduleDetailsResponseDto scheduleDetailsResponseDto = scheduleService.getScheduleDetails(scheduleId, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), "일정 조회에 성공하였습니다. 🎉", scheduleDetailsResponseDto));
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponseDto<Page<ScheduleResponseDto>>> getSchedules(
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "sortBy") String sortBy,
-            @RequestParam(value = "search", required = false) String search,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<CommonResponseDto<Page<ScheduleResponseDto>>> getSchedules(@RequestParam(value = "page") int page,
+                                                                                     @RequestParam(value = "sortBy") String sortBy,
+                                                                                     @RequestParam(value = "search", required = false) String search,
+                                                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Page<ScheduleResponseDto> scheduleResponseDtos = scheduleService.getSchedules(sortBy, page - 1, 12, search, userDetails.getUser());
 
         return ResponseEntity.ok(new CommonResponseDto<>(HttpStatus.OK.value(), sortBy + " 순으로 전체 일정을 조회에 성공하였습니다.", scheduleResponseDtos));

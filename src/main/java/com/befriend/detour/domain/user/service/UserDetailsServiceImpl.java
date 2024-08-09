@@ -33,13 +33,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userOptional.get();
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
-        if(user.getStatus().equals(UserStatusEnum.BLOCK))
-        {
+        if (user.getStatus().equals(UserStatusEnum.BLOCK)) {
             throw new CustomException(ErrorCode.USER_NOT_ACTIVE);
         }
 
         return userDetails;
-
     }
 
 }

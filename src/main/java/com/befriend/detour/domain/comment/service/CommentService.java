@@ -10,7 +10,6 @@ import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,13 +48,18 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    //    @Transactional(readOnly = true)
-//    public List<CommentResponseDto> getScheduleComments(Long scheduleId, User user, Pageable pageable) {
-//        return commentRepository.getPagedCommentsByScheduleAndUser(scheduleId, user.getId(), pageable);
-//    }
     @Transactional(readOnly = true)
     public List<CommentResponseDto> getScheduleComments(Long scheduleId, User user) {
+
         return commentRepository.getPagedCommentsByScheduleAndUser(scheduleId, user.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public Comment findById(Long commentId) {
+
+        return commentRepository.findById(commentId).orElseThrow(
+                () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
+        );
     }
 
     private void validateUserMatch(Comment comment, User user) {
@@ -64,10 +68,4 @@ public class CommentService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public Comment findById(Long commentId) {
-        return commentRepository.findById(commentId).orElseThrow(
-                () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
-        );
-    }
 }

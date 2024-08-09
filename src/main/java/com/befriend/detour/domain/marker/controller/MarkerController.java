@@ -50,7 +50,6 @@ public class MarkerController {
 
     @GetMapping("/{dailyPlanId}/markers")
     public ResponseEntity<CommonResponseDto> getAllMarker(@PathVariable Long dailyPlanId) {
-
         List<MarkerResponseDto> responseDto = markerService.getAllMarker(dailyPlanId);
 
         return ResponseEntity.ok(new CommonResponseDto(200, dailyPlanId + "번 데일리 플랜의 마커 전체 조회에 성공하였습니다. 🎉", responseDto));
@@ -66,7 +65,6 @@ public class MarkerController {
 
     @GetMapping("/markers/{markerId}/location")
     public ResponseEntity<CommonResponseDto> getPosition(@PathVariable Long markerId) {
-
         MarkerLocationResponseDto responseDto = markerService.getPosition(markerId);
 
         return ResponseEntity.ok(new CommonResponseDto(200, "위도, 경도 조회에 성공하였습니다. 🎉", responseDto));

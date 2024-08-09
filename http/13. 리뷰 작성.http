@@ -1,14 +1,20 @@
 ### 13-1. 리뷰 작성
-POST http://52.78.2.148:80/api/review
+POST https://detourofficial.shop/api/review
 Content-Type: application/json
 Authorization: {{access_token}}
 
 {
   "content" : "여행관리를",
-  "star" : "⭐️⭐️⭐️⭐️⭐️"
+  "star" : 1,
+  "username" : "창봉"
 }
 
 ### 13-2. 리뷰 조회
-GET http://52.78.2.148:80/api/review/1
+GET https://detourofficial.shop/api/review?page=1
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 13-3. 리뷰 평균 계산
+GET https://detourofficial.shop/api/review/average
 Content-Type: application/json
 Authorization: {{access_token}}

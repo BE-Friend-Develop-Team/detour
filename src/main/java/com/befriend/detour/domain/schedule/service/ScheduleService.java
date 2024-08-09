@@ -82,7 +82,7 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public Page<ScheduleResponseDto> getUserCreatedSchedules(Pageable pageable, Long userId, String search) {
-        if(search == null || search == "") {
+        if (search == null || search == "") {
             Page<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUser(userId, pageable);
 
             List<ScheduleResponseDto> schedulesDto = schedules.stream()
@@ -103,8 +103,8 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public Page<ScheduleResponseDto> getUserLikedSchedules(Pageable pageable, User user, String search) {
-        if(search == null || search == "") {
-           Page<Schedule> schedules = likeRepository.getUserLikedSchedules(user, pageable);
+        if (search == null || search == "") {
+            Page<Schedule> schedules = likeRepository.getUserLikedSchedules(user, pageable);
             List<ScheduleResponseDto> schedulesDto = schedules.stream()
                     .map(ScheduleResponseDto::new)
                     .collect(Collectors.toList());
@@ -147,6 +147,7 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public List<Long> getRanking() {
+
         return scheduleRepository.getScheduleIdRanking()
                 .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
     }
@@ -177,7 +178,6 @@ public class ScheduleService {
                 .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(user.getId(), schedule.getId())))
                 .collect(Collectors.toList());
 
-        // 'schedulePage'의 메타데이터를 유지하기 위해 PageImpl을 사용하여 새 Page 객체 생성
         return new PageImpl<>(scheduleDtos, pageable, schedules.getTotalElements());
     }
 
@@ -195,6 +195,7 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public Schedule findById(Long scheduleId) {
+
         return scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND)
         );
@@ -209,6 +210,7 @@ public class ScheduleService {
         } else {
             isLiked = false;
         }
+
         return new LikeResponseDto(null, scheduleId, isLiked);
     }
 
@@ -229,4 +231,5 @@ public class ScheduleService {
     public void deleteAllHourHits() {
         scheduleRepository.deleteAllHourHits();
     }
+
 }

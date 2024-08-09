@@ -10,21 +10,13 @@ import com.befriend.detour.domain.user.repository.UserRepository;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import com.befriend.detour.global.jwt.JwtProvider;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
@@ -39,17 +31,14 @@ public class UserService {
 
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
-        // 아이디 중복 검사
         if (isLoginIdExist(signupRequestDto.getLoginId())) {
             throw new CustomException(ErrorCode.DUPLICATE_USER_ID);
         }
 
-        // 닉네임 중복 검사
         if (isNicknameExist(signupRequestDto.getNickname())) {
             throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
         }
 
-        // 이메일 중복 검사
         if (isEmailExist(signupRequestDto.getEmail())) {
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
         }
@@ -73,8 +62,8 @@ public class UserService {
 
     @Transactional
     public void logout(User user) {
-            user.updateRefresh(null);
-            userRepository.save(user);
+        user.updateRefresh(null);
+        userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
@@ -85,7 +74,6 @@ public class UserService {
 
     @Transactional
     public ProfileResponseDto updateNickname(User user, String nickname) {
-        // 닉네임 중복 검사
         if (isNicknameExist(nickname)) {
             throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
         }
@@ -98,7 +86,6 @@ public class UserService {
 
     @Transactional
     public ProfileResponseDto updateEmail(User user, String email) {
-        // 이메일 중복 검사
         if (isEmailExist(email)) {
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
         }
@@ -111,13 +98,11 @@ public class UserService {
 
     @Transactional
     public void updatePassword(User user, EditPasswordRequestDto editPasswordRequestDtoDto) {
-        // 현재 비밀번호 체크
-        if(!passwordEncoder.matches(editPasswordRequestDtoDto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(editPasswordRequestDtoDto.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
         }
 
-        // 새로운 비밀번호 체크
-        if(!editPasswordRequestDtoDto.getNewPassword().equals(editPasswordRequestDtoDto.getConfirmNewPassword())) {
+        if (!editPasswordRequestDtoDto.getNewPassword().equals(editPasswordRequestDtoDto.getConfirmNewPassword())) {
             throw new CustomException(ErrorCode.CONFIRM_NEW_PASSWORD_NOT_MATCH);
         }
 
@@ -129,8 +114,7 @@ public class UserService {
 
     @Transactional
     public void withdrawalUser(User user, String password) {
-        // 비밀번호 확인
-        if(!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
         }
 
@@ -140,32 +124,34 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public boolean isLoginIdExist(String loginId) {
+
         return userRepository.existsByLoginId(loginId);
     }
 
     @Transactional(readOnly = true)
     public boolean isNicknameExist(String nickname) {
+
         return userRepository.existsByNickname(nickname);
     }
 
     @Transactional(readOnly = true)
     public boolean isEmailExist(String email) {
+
         return userRepository.existsByEmail(email);
     }
 
     public User findUserByNickName(String nickname) {
+
         return userRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
     public void refreshAccessToken(String nickname, HttpServletResponse response) {
         User user = userRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        // 리프레시 토큰 검증
         if (!jwtProvider.validateRefreshToken(user.getRefreshToken())) {
             throw new CustomException(ErrorCode.REFRESH_TOKEN_NOT_VALIDATE);
         }
 
-        // 통과했으면 AccessToken 생성
         String accessToken = jwtProvider.createAccessToken(user.getNickname(), user.getRole());
 
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);

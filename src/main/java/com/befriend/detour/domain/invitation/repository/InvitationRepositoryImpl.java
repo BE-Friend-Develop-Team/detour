@@ -22,7 +22,7 @@ public class InvitationRepositoryImpl implements InvitationRepositoryCustom {
     private final QInvitation qInvitation = invitation;
 
     @Override
-    public Optional<Invitation> findInvitationByScheduleAndUser(Schedule schedule, User user){
+    public Optional<Invitation> findInvitationByScheduleAndUser(Schedule schedule, User user) {
         Invitation invitation = jpaQueryFactory
                 .selectFrom(qInvitation)
                 .where(qInvitation.schedule.eq(schedule)

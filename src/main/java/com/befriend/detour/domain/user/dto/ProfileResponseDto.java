@@ -2,9 +2,6 @@ package com.befriend.detour.domain.user.dto;
 
 import com.befriend.detour.domain.user.entity.UserRoleEnum;
 import com.befriend.detour.domain.user.entity.UserStatusEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Getter;
 
 @Getter

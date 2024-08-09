@@ -1,5 +1,5 @@
 ### 3-1. 회원탈퇴
-PATCH http://52.78.2.148:80/api/users/withdrawal
+PATCH https://detourofficial.shop/api/users/withdrawal
 Content-Type: application/json
 Authorization: {{access_token}}
 

@@ -35,6 +35,7 @@ public class ScheduleResponseDto {
         this.nickname = schedule.getUser().getNickname();
         this.isLiked = false;
     }
+
     public ScheduleResponseDto(Schedule schedule, LikeResponseDto likeResponseDto) {
         this.scheduleId = schedule.getId();
         this.title = schedule.getTitle();

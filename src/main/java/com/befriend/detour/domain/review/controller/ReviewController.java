@@ -22,12 +22,14 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<CommonResponseDto<ReviewResponseDto>> createReview(@RequestBody ReviewRequestDto requestDto) {
         ReviewResponseDto responseDto = reviewService.createReview(requestDto);
+
         return new ResponseEntity<>(new CommonResponseDto<>(201, "리뷰 저장에 성공하였습니다. 🎉", responseDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/average")
     public ResponseEntity<CommonResponseDto<Double>> getAverageRating() {
         double averageRating = reviewService.getAverageRating();
+
         return new ResponseEntity<>(new CommonResponseDto<>(200, "리뷰 평균 점수입니다. 🎉", averageRating), HttpStatus.OK);
     }
 
@@ -37,6 +39,7 @@ public class ReviewController {
             @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ReviewResponseDto> reviews = reviewService.getAllReviews(pageable);
+
         return new ResponseEntity<>(new CommonResponseDto<>(200, "리뷰 조회에 성공했습니다. 🎉", reviews), HttpStatus.OK);
     }
 

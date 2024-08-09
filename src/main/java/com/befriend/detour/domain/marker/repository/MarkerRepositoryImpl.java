@@ -75,7 +75,6 @@ public class MarkerRepositoryImpl implements MarkerRepositoryCustom {
         return Optional.ofNullable(result);
     }
 
-    // 마커에 연관된 파일 목록을 조회하여 URL을 추출한 뒤 리스트로 변환하여 MarkerResponseDto 객체를 생성하여 반환
     private MarkerResponseDto toMarkerResponseDto(Marker marker) {
         List<String> imageUrls = fileRepository.findByMarkerId(marker.getId())
                 .stream()

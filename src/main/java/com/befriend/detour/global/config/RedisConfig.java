@@ -20,7 +20,6 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisAuthConnectionFactory() {
-        // 레디스와의 서버 연결 설정 (레디스의 서버 주소, 포트)
         final RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
 
         redisStandaloneConfiguration.setHostName(host);
@@ -33,7 +32,6 @@ public class RedisConfig {
     @Bean(name = "redisTemplate")
     public StringRedisTemplate stringRedisTemplate() {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
-        // stringRedisTemplate 에서 setConnectionFactory 라는 메서드로 서버와 연결 될 수 있도록 구현
         stringRedisTemplate.setConnectionFactory(redisAuthConnectionFactory());
 
         return stringRedisTemplate;

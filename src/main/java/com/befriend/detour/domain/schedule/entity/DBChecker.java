@@ -19,7 +19,7 @@ public class DBChecker {
     private final ScheduleService scheduleService;
     private final RankingDao rankingDao;
 
-    @Scheduled(fixedRate = 3600000) // 3600000ms = 1시간
+    @Scheduled(fixedRate = 3600000)
     public void checkDatabase() {
         try (Connection connection = dataSource.getConnection()) {
             if (connection.isValid(2)) {

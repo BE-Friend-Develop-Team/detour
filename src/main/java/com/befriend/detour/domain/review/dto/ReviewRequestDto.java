@@ -8,4 +8,5 @@ public class ReviewRequestDto {
     private String content;
     private int star;
     private String username;
+
 }

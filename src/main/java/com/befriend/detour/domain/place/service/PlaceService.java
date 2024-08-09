@@ -38,12 +38,6 @@ public class PlaceService {
         return new PlaceResponseDto(place);
     }
 
-    @Transactional
-    public void deletePlace(Long placeId) {
-        Place place = findPlaceById(placeId);
-        placeRepository.delete(place);
-    }
-
     public Place findPlaceById(Long placeId) {
         Place place = placeRepository.findById(placeId).orElseThrow(
                 () -> new CustomException(ErrorCode.PLACE_NOT_FOUND)

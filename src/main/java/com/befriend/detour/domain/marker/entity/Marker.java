@@ -4,7 +4,6 @@ import com.befriend.detour.domain.dailyplan.entity.DailyPlan;
 import com.befriend.detour.domain.file.entity.File;
 import com.befriend.detour.domain.marker.dto.MarkerContentRequestDto;
 import com.befriend.detour.domain.place.entity.Place;
-import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.global.entity.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -70,4 +69,5 @@ public class Marker extends TimeStamped {
     public void updateIndex(long index) {
         this.markerIndex = index;
     }
+
 }

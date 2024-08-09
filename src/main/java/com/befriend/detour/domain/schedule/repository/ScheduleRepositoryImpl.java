@@ -20,11 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.befriend.detour.domain.like.entity.QLike.like;
-
 @Repository
 @RequiredArgsConstructor
-public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
+public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -115,7 +113,6 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
     public Page<Schedule> findAllBySearch(Pageable pageable, String search) {
         QSchedule schedule = QSchedule.schedule;
 
-        // Sort 객체에서 정렬 방향과 속성 추출
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
         for (Sort.Order order : pageable.getSort()) {
             PathBuilder<?> pathBuilder = new PathBuilder<>(schedule.getType(), schedule.getMetadata());
@@ -126,12 +123,10 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
             orderSpecifiers.add(orderSpecifier);
         }
 
-        // 총 개수 조회
         long total = jpaQueryFactory.selectFrom(schedule)
                 .where(schedule.title.contains(search))
                 .fetchCount();
 
-        // 페이징된 데이터 조회
         List<Schedule> schedules = jpaQueryFactory.selectFrom(schedule)
                 .where(schedule.title.contains(search))
                 .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
@@ -139,7 +134,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        // Page 객체 생성 및 반환
         return new PageImpl<>(schedules, pageable, total);
     }
+
 }

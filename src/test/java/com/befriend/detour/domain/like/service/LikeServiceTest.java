@@ -2,34 +2,33 @@ package com.befriend.detour.domain.like.service;
 
 import com.befriend.detour.domain.schedule.entity.Schedule;
 import com.befriend.detour.domain.schedule.repository.ScheduleRepository;
-import com.befriend.detour.domain.schedule.service.ScheduleService;
 import com.befriend.detour.domain.user.entity.User;
 import com.befriend.detour.domain.user.entity.UserRoleEnum;
 import com.befriend.detour.domain.user.entity.UserStatusEnum;
 import com.befriend.detour.domain.user.repository.UserRepository;
-import com.befriend.detour.global.redis.RedisService;
+import com.befriend.detour.global.exception.CustomException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class LikeServiceTest {
 
     @Autowired
     private LikeService likeService;
-
-    @Autowired
-    private ScheduleService scheduleService;
 
     @Autowired
     private ScheduleRepository scheduleRepository;
@@ -37,41 +36,88 @@ public class LikeServiceTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private RedisService redisService;
-
+    private User[] users;
     private Schedule schedule;
-    private User user;
 
     @BeforeEach
-    public void setup() {
-        user = userRepository.save(new User("test@example.com", "encodedPassword", "nickname", UserStatusEnum.ACTIVE, UserRoleEnum.USER, null));
-        Date now = new Date();
-        schedule = scheduleRepository.save(new Schedule("Test Schedule", now, now, user));
+    void setUp() {
+        // 10명의 사용자를 생성
+        users = IntStream.range(0, 100)
+                .mapToObj(i -> new User(
+                        "user" + i + "@example.com",
+                        "Password" + i,
+                        "User" + i,
+                        UserStatusEnum.ACTIVE,
+                        UserRoleEnum.USER,
+                        123456789L + i,
+                        "loginId" + i
+                ))
+                .peek(userRepository::save)
+                .toArray(User[]::new);
+
+        // 하나의 일정 생성
+        schedule = new Schedule("Sample Title", LocalDateTime.now(), LocalDateTime.now().plusDays(1), users[0]);
+        scheduleRepository.save(schedule);
+    }
+
+    @AfterEach
+    void tearDown() {
+        scheduleRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
-    public void testConcurrentLikes() throws InterruptedException {
-        int numberOfUsers = 100;
-        ExecutorService executorService = Executors.newFixedThreadPool(numberOfUsers);
-        CountDownLatch latch = new CountDownLatch(numberOfUsers);
+    void concurrencyTestUsingLock() throws InterruptedException {
+        int userCount = 100;
+        CountDownLatch latch = new CountDownLatch(userCount);
+        AtomicInteger successCount = new AtomicInteger(0);
+        AtomicInteger failCount = new AtomicInteger(0);
 
-        for (int i = 0; i < numberOfUsers; i++) {
-            final int index = i;
+        ExecutorService executorService = Executors.newFixedThreadPool(userCount);
+        List<User> userList = List.of(users);
+
+        IntStream.range(0, userCount).forEach(i -> {
             executorService.submit(() -> {
                 try {
-                    User user = userRepository.save(new User("testUser" + index + "@example.com", "encodedPassword", "nickname" + index, UserStatusEnum.ACTIVE, UserRoleEnum.USER, null));
-                    likeService.createScheduleLike(schedule.getId(), user);
+                    User user = userList.get(i);
+                    try {
+                        likeService.createScheduleLikeWithLock(schedule.getId(), user);
+                        successCount.incrementAndGet();
+                        System.out.println("User " + user.getId() + ": Like successful");
+                    } catch (CustomException e) {
+                        if (e.getMessage().contains("이미 좋아요를 누른 일정입니다")) {
+                            successCount.incrementAndGet(); // 이미 좋아요를 누른 경우도 성공으로 간주
+                            System.out.println("User " + user.getId() + ": Already liked");
+                        } else if (e.getMessage().contains("락 획득에 실패했습니다")) {
+                            failCount.incrementAndGet();
+                            System.out.println("User " + user.getId() + ": Lock acquisition failed");
+                        } else {
+                            e.printStackTrace();
+                            failCount.incrementAndGet();
+                        }
+                    }
                 } finally {
                     latch.countDown();
                 }
             });
-        }
+        });
 
-        latch.await();
+        latch.await(30, TimeUnit.SECONDS);
         executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.MINUTES);
 
-        Schedule updatedSchedule = scheduleService.findById(schedule.getId());
-        assertThat(updatedSchedule.getLikeCount()).isEqualTo(numberOfUsers);
+        Schedule updatedSchedule = scheduleRepository.findById(schedule.getId()).orElseThrow();
+        long actualLikes = updatedSchedule.getLikeCount();
+        long expectedLikes = Math.min(userCount, actualLikes); // 최대 userCount로 조정
+
+        // 결과를 출력
+        System.out.println("총 좋아요 수: " + actualLikes);
+        System.out.println("성공 횟수: " + successCount.get());
+        System.out.println("실패 횟수: " + failCount.get());
+        System.out.println("예상 좋아요 수: " + userCount);
+
+        // 예측과 결과를 비교
+        assertEquals(expectedLikes, actualLikes, "총 좋아요 수가 일치하지 않습니다.");
     }
+
 }

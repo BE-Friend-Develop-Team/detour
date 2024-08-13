@@ -1,8 +1,11 @@
 spring:
   datasource:
-    url: jdbc:mysql://${DB_HOST}/detour
-    username: ${USERNAME}
-    password: ${PASSWORD}
+   # url: jdbc:mysql://${DB_HOST}/detour
+    url: jdbc:mysql://localhost:3308/detour
+   # username: ${USERNAME}
+    username: root
+   # password: ${PASSWORD}
+    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -27,10 +30,14 @@ spring:
     connection-timeout: 30000
   data:
     redis:
+      # EC2 Redis 설정 (다른 곳에서 사용)
       auth:
-        host: ${CACHE_REDIS_HOST} # Redis 서버의 호스트(EC2와 연결)
-        port: ${CACHE_REDIS_PORT} # Redis 서버의 포트
+        host: ${CACHE_REDIS_HOST}
+        port: ${CACHE_REDIS_PORT}
         password: ${REDIS_PASSWORD}
+      # 로컬 Redis 설정 (테스트에서 사용)
+      host: localhost
+      port: 6379
 
   security:
     oauth2:

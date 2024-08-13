@@ -11,19 +11,26 @@ import com.befriend.detour.domain.user.repository.UserRepository;
 import com.befriend.detour.global.exception.CustomException;
 import com.befriend.detour.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LikeService {
 
     private final LikeRepository likeRepository;
     private final ScheduleService scheduleService;
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
+    private final RedissonClient redissonClient;
+
+    private static final String LOCK_KEY_PREFIX = "like_lock_";
 
     @Transactional
     public LikeResponseDto createScheduleLike(Long scheduleId, User user) {
@@ -40,38 +47,88 @@ public class LikeService {
         return new LikeResponseDto(like, true);
     }
 
+    public LikeResponseDto createScheduleLikeWithLock(Long scheduleId, User user) {
+        String lockKey = LOCK_KEY_PREFIX + scheduleId;
+        RLock lock = redissonClient.getLock(lockKey);
+
+        try {
+            boolean isLocked = lock.tryLock(20, 30, TimeUnit.SECONDS);
+            if (!isLocked) {
+                throw new CustomException(ErrorCode.LOCK_ACQUISITION_FAILED);
+            }
+
+            try {
+
+                return createScheduleLikeTransactional(scheduleId, user);
+            } finally {
+                if (lock.isHeldByCurrentThread()) {
+                    lock.unlock();
+                }
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Lock acquisition interrupted", e);
+        }
+    }
+
+    @Transactional
+    public LikeResponseDto createScheduleLikeTransactional(Long scheduleId, User user) {
+        Schedule foundSchedule = scheduleService.findById(scheduleId);
+
+        if (likeRepository.existsByUserAndSchedule(user, foundSchedule)) {
+            throw new CustomException(ErrorCode.ALREADY_LIKED);
+        }
+
+        Like like = new Like(user, foundSchedule);
+        likeRepository.save(like);
+
+        foundSchedule.addLikeCount();
+        scheduleRepository.saveAndFlush(foundSchedule);
+
+        return new LikeResponseDto(like, true);
+    }
+
     @Transactional
     public LikeResponseDto deleteScheduleLike(Long likeId, User user) {
-        Like foundLike = likeRepository.findLikeWithSchedule(likeId);
+        RLock lock = redissonClient.getLock(LOCK_KEY_PREFIX + likeId);
+        try {
+            boolean isLocked = lock.tryLock(10, 60, TimeUnit.SECONDS);
+            if (!isLocked) {
+                throw new CustomException(ErrorCode.LOCK_ACQUISITION_FAILED);
+            }
 
-        if (foundLike == null) {
-            throw new CustomException(ErrorCode.LIKE_NOT_EXIST);
+            try {
+                Like foundLike = likeRepository.findLikeWithSchedule(likeId);
+
+                if (foundLike == null) {
+                    throw new CustomException(ErrorCode.LIKE_NOT_EXIST);
+                }
+
+                Schedule foundSchedule = foundLike.getSchedule();
+
+                if (!user.getId().equals(foundLike.getUser().getId())) {
+                    throw new CustomException(ErrorCode.CANNOT_CANCEL_OTHERS_LIKE);
+                }
+
+                likeRepository.delete(foundLike);
+                foundSchedule.minusLikeCount();
+
+                return new LikeResponseDto(null, false);
+            } finally {
+                lock.unlock();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Lock acquisition interrupted", e);
         }
-
-        Schedule foundSchedule = foundLike.getSchedule();
-
-        if (!user.getId().equals(foundLike.getUser().getId())) {
-            throw new CustomException(ErrorCode.CANNOT_CANCEL_OTHERS_LIKE);
-        }
-
-        likeRepository.delete(foundLike);
-        foundSchedule.minusLikeCount();
-
-        return new LikeResponseDto(null, false);
     }
 
     public LikeResponseDto getLike(Long scheduleId, User user) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PLACE_NOT_FOUND));
 
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
-                new CustomException(ErrorCode.PLACE_NOT_FOUND));
-
-        System.out.println(schedule.getId());
-        System.out.println(user.getId());
-
-        Like like = likeRepository.findByScheduleAndUser(schedule, user).orElseThrow(() ->
-                new CustomException(ErrorCode.ALREADY_INVITED));
-
-        System.out.println(like);
+        Like like = likeRepository.findByScheduleAndUser(schedule, user)
+                .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_INVITED));
 
         return new LikeResponseDto(like, false);
     }

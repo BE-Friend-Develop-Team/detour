@@ -16,22 +16,14 @@ public class RedissonConfig {
     @Value("${spring.data.redis.port}")
     private String redisPort;
 
-    private static final String REDISSON_PREFIX = "redis://";
-
-    public static final Long WAIT_TIME = 30L;
-
-    public static final Long LEASE_TIME = 10L;
 
     @Bean
     public RedissonClient redissonClient() {
-
         Config config = new Config();
-
         config.useSingleServer()
-                .setAddress(REDISSON_PREFIX + redisHost + ":" + redisPort);
+                .setAddress("redis://" + redisHost + ":" + redisPort);
 
         return Redisson.create(config);
-
     }
 
 }

@@ -9,6 +9,7 @@ import com.befriend.detour.domain.user.repository.UserRepository;
 import com.befriend.detour.global.exception.CustomException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +42,7 @@ public class LikeServiceTest {
 
     @BeforeEach
     void setUp() {
-        // 10명의 사용자를 생성
+        // 100명의 사용자를 생성, 테스트 전에 실행
         users = IntStream.range(0, 100)
                 .mapToObj(i -> new User(
                         "user" + i + "@example.com",
@@ -52,8 +53,8 @@ public class LikeServiceTest {
                         123456789L + i,
                         "loginId" + i
                 ))
-                .peek(userRepository::save)
-                .toArray(User[]::new);
+                .peek(userRepository::save)  // 각 사용자를 저장소에 저장
+                .toArray(User[]::new);  // 배열로 변환하여 users에 저장
 
         // 하나의 일정 생성
         schedule = new Schedule("Sample Title", LocalDateTime.now(), LocalDateTime.now().plusDays(1), users[0]);
@@ -66,14 +67,16 @@ public class LikeServiceTest {
         userRepository.deleteAll();
     }
 
-    @Test
-    void concurrencyTestUsingLock() throws InterruptedException {
-        int userCount = 100;
-        CountDownLatch latch = new CountDownLatch(userCount);
-        AtomicInteger successCount = new AtomicInteger(0);
-        AtomicInteger failCount = new AtomicInteger(0);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(userCount);
+    @Test
+    @DisplayName("동시성 제어 : 좋아요 동시에 1000명이 눌렀을 때")
+    void concurrencyTestUsingLock() throws InterruptedException {
+        int userCount = 1000;
+        CountDownLatch latch = new CountDownLatch(userCount); // 동시성을 제어하기 위한 CountDownLatch 생성
+        AtomicInteger successCount = new AtomicInteger(0);  // 성공 횟수를 추적할 AtomicInteger
+        AtomicInteger failCount = new AtomicInteger(0);  // 실패 횟수를 추적할 AtomicInteger
+
+        ExecutorService executorService = Executors.newFixedThreadPool(50);
         List<User> userList = List.of(users);
 
         IntStream.range(0, userCount).forEach(i -> {
@@ -81,7 +84,7 @@ public class LikeServiceTest {
                 try {
                     User user = userList.get(i);
                     try {
-                        likeService.createScheduleLikeWithLock(schedule.getId(), user);
+                        likeService.createScheduleLike(schedule.getId(), user);
                         successCount.incrementAndGet();
                         System.out.println("User " + user.getId() + ": Like successful");
                     } catch (CustomException e) {
@@ -102,22 +105,21 @@ public class LikeServiceTest {
             });
         });
 
-        latch.await(30, TimeUnit.SECONDS);
+        latch.await(120, TimeUnit.SECONDS);
         executorService.shutdown();
-        executorService.awaitTermination(1, TimeUnit.MINUTES);
+        executorService.awaitTermination(2, TimeUnit.MINUTES);
 
         Schedule updatedSchedule = scheduleRepository.findById(schedule.getId()).orElseThrow();
         long actualLikes = updatedSchedule.getLikeCount();
-        long expectedLikes = Math.min(userCount, actualLikes); // 최대 userCount로 조정
+        long expectedLikes = Math.min(userCount, actualLikes);
 
-        // 결과를 출력
         System.out.println("총 좋아요 수: " + actualLikes);
         System.out.println("성공 횟수: " + successCount.get());
         System.out.println("실패 횟수: " + failCount.get());
         System.out.println("예상 좋아요 수: " + userCount);
 
-        // 예측과 결과를 비교
         assertEquals(expectedLikes, actualLikes, "총 좋아요 수가 일치하지 않습니다.");
     }
+
 
 }

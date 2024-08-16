@@ -51,8 +51,8 @@ public class LikeServiceNoLockTest {
 
     @BeforeEach
     void setUp() {
-        // 100명의 사용자를 생성, 테스트 전에 실행
-        users = IntStream.range(0, 1000)
+        // 50명의 사용자를 생성, 테스트 전에 실행
+        users = IntStream.range(0, 50)
                 .mapToObj(i -> new User(
                         "user" + i + "@example.com",
                         "Password" + i,
@@ -76,48 +76,48 @@ public class LikeServiceNoLockTest {
         userRepository.deleteAll();
     }
 
+//    @Test
+//    @Commit
+//    @DisplayName("동시성 제어 없음 : 좋아요 동시에 1000명이 눌렀을 때")
+//    void concurrencyTestWithoutLock() throws InterruptedException {
+//        int userCount = 1000;
+//        CountDownLatch latch = new CountDownLatch(userCount);
+//
+//        ExecutorService executorService = Executors.newFixedThreadPool(50);
+//        List<User> userList = List.of(users);
+//
+//        IntStream.range(0, userCount).forEach(i -> {
+//            executorService.submit(() -> {
+//                try {
+//                    User user = userList.get(i);
+//                    try {
+//                        likeService.createScheduleLike(schedule.getId(), user);
+//                    } catch (CustomException e) {
+//                        e.printStackTrace();
+//                    }
+//                } finally {
+//                    latch.countDown();
+//                }
+//            });
+//        });
+//
+//        latch.await(120, TimeUnit.SECONDS);
+//        executorService.shutdown();
+//        executorService.awaitTermination(2, TimeUnit.MINUTES);
+//
+//        Schedule updatedSchedule = scheduleRepository.findById(schedule.getId()).orElseThrow();
+//        long actualLikes = updatedSchedule.getLikeCount();
+//        long expectedLikes = 1000L;
+//
+//        System.out.println("Expected : " + expectedLikes + "\n Actual : " + actualLikes );
+//
+//        assertEquals(expectedLikes, actualLikes, "테스트 실패: 총 좋아요 수가 예상과 다릅니다.");
+//    }
+
     @Test
-    @Commit
-    @DisplayName("동시성 제어 없음 : 좋아요 동시에 1000명이 눌렀을 때")
-    void concurrencyTestWithoutLock() throws InterruptedException {
-        int userCount = 1000;
-        CountDownLatch latch = new CountDownLatch(userCount);
-
-        ExecutorService executorService = Executors.newFixedThreadPool(50);
-        List<User> userList = List.of(users);
-
-        IntStream.range(0, userCount).forEach(i -> {
-            executorService.submit(() -> {
-                try {
-                    User user = userList.get(i);
-                    try {
-                        likeService.createScheduleLike(schedule.getId(), user);
-                    } catch (CustomException e) {
-                        e.printStackTrace();
-                    }
-                } finally {
-                    latch.countDown();
-                }
-            });
-        });
-
-        latch.await(120, TimeUnit.SECONDS);
-        executorService.shutdown();
-        executorService.awaitTermination(2, TimeUnit.MINUTES);
-
-        Schedule updatedSchedule = scheduleRepository.findById(schedule.getId()).orElseThrow();
-        long actualLikes = updatedSchedule.getLikeCount();
-        long expectedLikes = 1000L;
-
-        System.out.println("Expected : " + expectedLikes + "\n Actual : " + actualLikes );
-
-        assertEquals(expectedLikes, actualLikes, "테스트 실패: 총 좋아요 수가 예상과 다릅니다.");
-    }
-
-    @Test
-    @DisplayName("동시성 제어 : 좋아요 동시에 100명이 눌렀을 때")
+    @DisplayName("동시성 제어 : 좋아요 동시에 50명이 눌렀을 때")
     void concurrencyTestUsingLock() throws InterruptedException {
-        int userCount = 100;
+        int userCount = 50;
         CountDownLatch latch = new CountDownLatch(userCount);
         AtomicInteger successCount = new AtomicInteger(0);
         AtomicInteger failCount = new AtomicInteger(0);

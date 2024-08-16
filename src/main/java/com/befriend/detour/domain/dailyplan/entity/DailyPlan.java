@@ -25,7 +25,7 @@ public class DailyPlan extends TimeStamped {
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
 
-    @Column(nullable = false, name = "`day`")
+    @Column(nullable = false)
     private Long day;
 
     @OneToMany(mappedBy = "dailyPlan", cascade = CascadeType.ALL, orphanRemoval = true)

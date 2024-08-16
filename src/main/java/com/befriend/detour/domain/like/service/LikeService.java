@@ -125,7 +125,7 @@ public class LikeService {
 
     public LikeResponseDto getLike(Long scheduleId, User user) {
         Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new CustomException(ErrorCode.PLACE_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         Like like = likeRepository.findByScheduleAndUser(schedule, user)
                 .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_INVITED));

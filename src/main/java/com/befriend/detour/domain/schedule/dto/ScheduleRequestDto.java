@@ -2,11 +2,15 @@ package com.befriend.detour.domain.schedule.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ScheduleRequestDto {
 
     @NotBlank(message = "일정의 제목을 입력해주세요.")

@@ -87,6 +87,14 @@ public class Schedule extends TimeStamped {
         this.user = user;
     }
 
+    public Schedule(String title, LocalDateTime departureDate, LocalDateTime arrivalDate, User user) {
+        this.title = title;
+        this.departureDate = departureDate;
+        this.arrivalDate = arrivalDate;
+        this.user = user;
+        this.imageUrl = "";
+    }
+
     public void updateScheduleTitle(String title) {
         this.title = title;
     }

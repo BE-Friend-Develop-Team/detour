@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
+    // redisson
+    LOCK_ACQUISITION_FAILED(409,"잠금 획득을 실패했습니다."),
     //s3
     PUT_OBJECT_EXCEPTION(500, "s3 업로드에 문제가 발생했습니다."),
     FILE_NAME_INVALID(400, "잘못된 파일명입니다."),

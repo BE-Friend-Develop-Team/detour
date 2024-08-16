@@ -90,4 +90,7 @@ public class User extends TimeStamped {
         this.status = status;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

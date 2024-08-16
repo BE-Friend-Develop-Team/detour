@@ -20,7 +20,7 @@ public class LikeController {
     @PostMapping("/{scheduleId}/likes")
     public ResponseEntity<CommonResponseDto<LikeResponseDto>> createScheduleLike(@PathVariable(value = "scheduleId") Long scheduleId,
                                                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        LikeResponseDto likeResponseDto = likeService.createScheduleLike(scheduleId, userDetails.getUser());
+        LikeResponseDto likeResponseDto = likeService.createScheduleLikeWithLock(scheduleId, userDetails.getUser());
 
         return new ResponseEntity<>(new CommonResponseDto<>(201, scheduleId + "번 일정에 대한 좋아요 등록을 성공하였습니다. 🎉", likeResponseDto), HttpStatus.CREATED);
     }

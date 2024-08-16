@@ -93,7 +93,6 @@ public class LikeServiceNoLockTest {
                     try {
                         likeService.createScheduleLike(schedule.getId(), user);
                     } catch (CustomException e) {
-                        // 예외가 발생할 수 있으므로 무시하고 로그 남김
                         e.printStackTrace();
                     }
                 } finally {

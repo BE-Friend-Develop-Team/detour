@@ -94,7 +94,7 @@ public class ScheduleService {
             Page<Schedule> schedules = scheduleRepository.findSchedulesByCreatedUserBySearch(userId, pageable, search);
 
             List<ScheduleResponseDto> schedulesDto = schedules.stream()
-                    .map(ScheduleResponseDto::new)
+                    .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(userId, schedule.getId())))
                     .collect(Collectors.toList());
 
             return new PageImpl<>(schedulesDto, pageable, schedules.getTotalElements());
@@ -113,7 +113,7 @@ public class ScheduleService {
         } else {
             Page<Schedule> schedules = likeRepository.getUserLikedSchedulesBySearch(user, pageable, search);
             List<ScheduleResponseDto> schedulesDto = schedules.stream()
-                    .map(ScheduleResponseDto::new)
+                    .map(schedule -> new ScheduleResponseDto(schedule, getLikeResponseDto(user.getId(), schedule.getId())))
                     .collect(Collectors.toList());
 
             return new PageImpl<>(schedulesDto, pageable, schedules.getTotalElements());

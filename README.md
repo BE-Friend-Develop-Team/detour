@@ -4,7 +4,7 @@
   
 # [2024] 🛫detour
 
-*˝detour: 당신의 여행을 더 특별하게 만드는 방법”*
+『 ${\textsf{\color{green}detour}}$ - 당신의 여행을 더 특별하게 만드는 방법 』
 
 현대인의 바쁜 일상 속에서 여유를 찾고 여행을 더욱 특별하게 즐길 수 있도록 돕는 여행 일정 관리 프로젝트 👒 🛍
 
@@ -18,6 +18,9 @@
 📜 커뮤니티 기능 : 여행자들 간의 여행 경험을 공유하고 추천할 수 있는 커뮤니티 공간을 제공합니다. 
 <br>
 
+🧚🏻‍♀️ 일행과의 일정 공유 : 여행을 함께하는 일행을 초대하여 해당 일정을 함께 수정하고 관리할 수 있습니다!
+<br>
+
 💌 추억 기록 : 여행의 순간을 사진과 글로 기록하고 나만의 여행을 저장해 보세요!
    
 </div>
@@ -26,11 +29,11 @@
 ## 목차
 - [👩‍👩‍👧👨‍👦 Team 🥓](#team)
 - [🎨 Tech Stack](#tech-stack)
-- [🎯 핵심 기능](#rngus)
+- [🎯 MVP](#rngus)
 - [🛫 Features](#features)
-- [🛠 troubleshooting](#dlskdud)
+- [🛠 Trouble Shooting](#dlskdud)
 - [📑 Technical Documentation](#tech)
-- [🌌환경변수](#ghksrud)
+- [🌌 Environment Variable](#ghksrud)
 
 <br>
 
@@ -67,7 +70,7 @@
           <img src="https://avatars.githubusercontent.com/u/107848521?v=4" width="100px;" alt=""/><br />
           <sub><b> 팀원 : 이나영 </b></sub>
         </a><br />
-        <a href="https://leenayoung240.github.io/ ">🦥</a>
+        <a href="https://leenayoung240.github.io/ ">🍀</a>
       </td>
       <td align="center">
         <a href="https://github.com/wondo8449">
@@ -149,16 +152,18 @@
 
 # 🎨 Tech Stack
 
-| Type         | Tech                                                                                                                | Version                                                                                             |
-| ------------ | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| **IDE**      | ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) |                                                                                                     |
-| **Framework**| ![Spring Boot](https://img.shields.io/badge/SpringBoot-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) | 3.3.2                                                                                               |
-| **Language** | ![Java](https://img.shields.io/badge/Java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)           | JDK 17                                                                                              |
-| **Database** | ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) <br/> ![Redis](https://img.shields.io/badge/redis-%23DC382D.svg?style=for-the-badge&logo=redis&logoColor=white) <br/> | 8.0.35 <br/> 7.2.5 <br/>                                                 |
-| **DevOps**   | ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) <br/> ![Jenkins](https://img.shields.io/badge/jenkins-%23D24939.svg?style=for-the-badge&logo=jenkins&logoColor=white) <br/> ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazonwebservices&logoColor=white)  | 27.1.1 <br/> 2.462.1 <br/> AWS (EC2, S3, Route53, RDS, IAM, VPC)                               |
-| **Security** | ![Spring Security](https://img.shields.io/badge/SpringSecurity-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) <br/> ![OAuth 2.0](https://img.shields.io/badge/OAuth%202.0-%234E9A06.svg?style=for-the-badge&logo=oauth&logoColor=white) |                                                                                                     |                                                                                           |
-| **Collaborative Tools** | ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) <br/> ![Slack](https://img.shields.io/badge/slack-%234A154B.svg?style=for-the-badge&logo=slack&logoColor=white)  <br/> ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)  <br/> [![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://www.notion.so/teamsparta/BE-Friend-f6229adc3c4249a792cbed8b597e5eb8)  <br/> ![Cacoo](https://img.shields.io/badge/cacoo-4479A1.svg?style=for-the-badge&logo=c&logoColor=white) 
+| Type         | Tech                                                                                                                | Version                                                                                             | Link |
+| ------------ | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ---- |
+| **IDE**      | ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) |                                                                                                     |      |
+| **Framework**| ![Spring Boot](https://img.shields.io/badge/SpringBoot-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) | 3.3.2                                                                                               |      |
+| **Language** | ![Java](https://img.shields.io/badge/Java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)           | JDK 17                                                                                              |      |
+| **Database** | ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) <br/> ![Redis](https://img.shields.io/badge/redis-%23DC382D.svg?style=for-the-badge&logo=redis&logoColor=white) <br/> | 8.0.35 <br/> 7.2.5 <br/> |      |
+| **DevOps**   | ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) <br/> ![Jenkins](https://img.shields.io/badge/jenkins-%23D24939.svg?style=for-the-badge&logo=jenkins&logoColor=white) <br/> ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazonwebservices&logoColor=white)  | 27.1.1 <br/> 2.462.1 <br/> AWS (EC2, S3, Route53, RDS, IAM, VPC)                               |      |
+| **Security** | ![Spring Security](https://img.shields.io/badge/SpringSecurity-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) <br/> ![OAuth 2.0](https://img.shields.io/badge/OAuth%202.0-%234E9A06.svg?style=for-the-badge&logo=oauth&logoColor=white) |                                                                                                     |      |                                                                                           |
+| **Collaborative Tools** | ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) <br/> ![Slack](https://img.shields.io/badge/slack-%234A154B.svg?style=for-the-badge&logo=slack&logoColor=white)  <br/> ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)  <br/> ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)  <br/> ![Cacoo](https://img.shields.io/badge/cacoo-4479A1.svg?style=for-the-badge&logo=c&logoColor=white) |  | [🔗 Notion](https://www.notion.so/teamsparta/BE-Friend-f6229adc3c4249a792cbed8b597e5eb8) 
+| **Video**   |  <img align="left" alt="SOKURI_CODE  YouTube" width="48px" src="https://img.icons8.com/color/48/000000/youtube-play.png" /> | | [🔗 Youtube](https://youtu.be/QC6cOnhgit0) |
 
+     
 
 
 
@@ -166,7 +171,9 @@
 
 <br>
 
-# 🎯 핵심기능
+<div id="rngus">
+  
+# 🎯 MVP
 
 > 영상 재생 : 사진 클릭
 - 🔥 Jenkins + Docker Out of Docker를 통한 CI/CD 구현
@@ -189,6 +196,8 @@
 <summary>🔥 Redission을 활용한 동시성 제어</summary>
 <div markdown="1">
 
+![레디슨4](https://github.com/user-attachments/assets/ba435b02-7969-4e46-a723-8e43d4c6e68a)
+
 
 </div>
 </details>
@@ -196,6 +205,8 @@
 <details>
 <summary>🔥 Redis 캐싱 통한 랭킹 시스템 구현</summary>
 <div markdown="1">
+
+![랭킹1](https://github.com/user-attachments/assets/9fe01e29-a258-4f06-b570-1ac4decceb93)
 
 
 </div>
@@ -214,12 +225,73 @@
 
 <br>
 
+
 <div id="features">
 
 
 # 🛫 Features
 
-
+- 사용자 관련 기능
+  
+  - 회원가입 : 인증 코드를 통한 이메일 인증 기능
+    
+    - 일반 사용자
+      
+    - 관리자
+      
+  - 로그인
+    
+    - 일반 로그인
+      
+    - 카카오 로그인
+  - 로그아웃
+    
+  - 회원 정보 수정
+    
+    - 닉네임
+      
+    - 이메일
+    - 비밀번호
+      
+  - 탈퇴
+    
+- 일정 관리 기능
+  
+  - 일정 생성 - 각 날짜에 대한 마커 생성 (장소 등록)
+    
+  - 일정 수정
+    
+    - 제목
+      
+    - 대표 이미지
+      
+      - 마커
+        
+        - 파일 및 글 작성/수정
+          
+        - 파일 삭제
+        - drag & drop을 통한 순서 변경
+        - 삭제
+          
+      - 일행 초대 및 취소
+  - 일정 조회
+    
+      - 랭킹
+        
+      - 최신순 / 좋아요순
+      - 내 일정 모음
+      - 내가 좋아요한 일정 모음
+  - 일정 검색
+    
+  - 일정 삭제
+    
+- 리뷰 작성, 평균 점수 조회
+  
+- 사용자 간 커뮤니케이션 기능
+  
+  - 댓글 작성, 수정, 삭제
+    
+  - 일정에 대한 좋아요 등록 및 취소
 
 
 
@@ -227,11 +299,12 @@
 
 <div id="dlskdud">
 
-# 🛠 troubleshooting
+# 🛠 Trouble Shooting
 
 <details>
 <summary>💢 메인페이지(랭킹) 조회가 느려요</summary>
 <div markdown="1"> 
+
 
 **🔥 문제 발생**
 
@@ -315,7 +388,7 @@
 </details>
 
 
-
+<br>
 
 <div id="tech">
 
@@ -323,7 +396,7 @@
 # 📑 Technical Documentation
 
 <details>
-<summary>🏗 architecture</summary>
+<summary>🏗 Architecture</summary>
 <div markdown="1">
   
 ## 🏗
@@ -343,7 +416,7 @@
 <div markdown="1">
   
 
-![image](https://github.com/user-attachments/assets/c16c1c40-f9ab-4d1a-ac72-8b0ba75fdbcd)
+![image](https://github.com/user-attachments/assets/00f43a8d-f1c6-40ba-b277-b33813302ea5)
 
 
 
@@ -355,8 +428,101 @@
 <summary> 🔨 API 명세서</summary>
 <div markdown="1">
   
+  <details>
+  <summary> User </summary>
+  <div markdown="1">
+  
+  ![image](https://github.com/user-attachments/assets/8a537967-552f-4b93-a2c1-0d7fa174f2c3)
 
 
+
+  </div>
+  </details>
+
+<details>
+<summary> Schedule </summary>
+<div markdown="1">
+  
+![image](https://github.com/user-attachments/assets/618f64c1-9b76-465c-a3ae-cacf262e75dc)
+
+
+</div>
+  </details>
+
+<details>
+<summary> DailyPlan </summary>
+<div markdown="1">
+  
+![image](https://github.com/user-attachments/assets/2013ac6b-3647-4996-a672-98ed0924bd31)
+
+
+</div>
+</details>
+
+  <details>
+<summary> Marker </summary>
+<div markdown="1">
+  
+![image](https://github.com/user-attachments/assets/1170e6fe-a658-44e4-a3e1-a29130b46f74)
+
+
+
+</div>
+</details>
+
+  <details>
+<summary> Place </summary>
+<div markdown="1">
+  
+![image](https://github.com/user-attachments/assets/3b16493b-9023-496f-8078-b3ec24be2146)
+
+
+</div>
+  </details>
+
+
+  <details>
+<summary> Like </summary>
+<div markdown="1">
+  
+![image](https://github.com/user-attachments/assets/a84227f1-8ff6-4502-a6cd-bec625b3ca0e)
+
+
+
+</div>
+</details>
+
+  <details>
+<summary> Invitation </summary>
+<div markdown="1">
+  
+
+![image](https://github.com/user-attachments/assets/b0ae98e0-4dd7-479d-adc1-52ef9de9d321)
+
+
+</div>
+</details>
+
+  <details>
+<summary> Comment </summary>
+<div markdown="1">
+  
+
+![image](https://github.com/user-attachments/assets/82b36ff5-3294-4923-82d4-209b115b2d20)
+
+
+</div>
+</details>
+
+  <details>
+<summary> Review </summary>
+<div markdown="1">
+  
+![image](https://github.com/user-attachments/assets/bf450161-b1cb-49fa-8a55-00a40104788c)
+
+
+</div>
+</details>
 
 </div>
 </details>
@@ -365,12 +531,13 @@
 
 </div>
 </details>
+
 
 <details>
 <summary>💬 코드 리뷰 pn rule</summary>
 <div markdown="1">
   
-## 💬 코드 리뷰 pn rule
+## 💬 코드 리뷰 Pn rule
 
 - **P1: 꼭 반영해주세요 (Request changes)**
 
@@ -397,6 +564,8 @@
 작성자는 질문에 대해 답변해주는 것을 권장합니다.
 
 ex) P5 - 코드 확인했어요 고생하셨습니다!
+
+![image](https://github.com/user-attachments/assets/0ab10e46-622d-46da-8ea1-cfcefd5073f3)
 
 </div>
 </details>
@@ -445,7 +614,7 @@ ex) P5 - 코드 확인했어요 고생하셨습니다!
 
 <div id="ghksrud">
   
-# 🌌환경변수
+# 🌌 Environment Variable
 ```env
 ACCESS_TOKEN_EXPIRATION=6000000
 ADMIN_TOKEN={admin_token}
